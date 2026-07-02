@@ -52,15 +52,15 @@ Here’s a comparison on a dictionary of ~160 000 English words (we kept only wo
 
 #### Overall Accuracy and Speed
 
-| Method | Top-1 (%) | Top-3 (%) | Top-5 (%) | Duration (s) | Build (s) | Size (MB) |
+| Method | Top-1 | Top-3 | Top-5 | Duration (s) | Build (s) | Size (MB) |
 |---|---|---|---|---|---|---|
-| VecFuzz              | 83.40% 🥇   | 93.10% 🥇   | 95.38% 🥇   | 0.365s 🥈   | 25.360s  | 111.38    |
-| SymSpell             | 78.53%     | 90.76%     | 92.94%     | 0.170s 🥇   | 1.982s  | 190.1    |
-| RapidFuzz            | 80.10% 🥈   | 91.85%     | 94.72% 🥉   | 55.423s    | 0.0     | 0.0      |
-| Jaro-Winkler         | 79.68% 🥉   | 92.33% 🥈   | 94.76% 🥈   | 71.860s    | 0.0    | 0.0      |
-| Damerau-Levenshtein  | 79.06%     | 91.95% 🥉   | 94.47%     | 528.623s   | 0.0     | 0.0      |
-| Levenshtein          | 69.53%     | 85.02%     | 88.98%     | 62.813s    | 0.0     | 0.0      |
-| Norvig               | 78.40%     | 89.90%     | 92.10%     | 44.230s 🥉  | 0.0     | 0.0      |
+| VecFuzz              | 83.40% 🥇   | 93.10% 🥇   | 95.38% 🥇   | 0.365 🥈   | 25.360  | 111.38    |
+| SymSpell             | 78.53%     | 90.76%     | 92.94%     | 0.170 🥇   | 1.982  | 190.1    |
+| RapidFuzz            | 80.10% 🥈   | 91.85%     | 94.72% 🥉   | 55.423    | 0.0     | 0.0      |
+| Jaro-Winkler         | 79.68% 🥉   | 92.33% 🥈   | 94.76% 🥈   | 71.860    | 0.0    | 0.0      |
+| Damerau-Levenshtein  | 79.06%     | 91.95% 🥉   | 94.47%     | 528.623   | 0.0     | 0.0      |
+| Levenshtein          | 69.53%     | 85.02%     | 88.98%     | 62.813    | 0.0     | 0.0      |
+| Norvig               | 78.40%     | 89.90%     | 92.10%     | 44.230 🥉  | 0.0     | 0.0      |
 
 #### Top‑1 Accuracy by Error Type
 
@@ -90,15 +90,15 @@ Here’s a comparison on a dictionary of ~160 000 English words (we kept only wo
 ### Real-World Human Error Benchmark (Birkbeck Spelling Error Corpus)
 Here’s a comparison on the same dictionary of ~160 000 English words (all of it), tested with the Birkbeck Spelling Error Corpus. This dataset consists of non-synthetic human misspellings including heavy phonetic mutations, dysgraphia and multi-error handwriting slips. Tested on a Ryzen 9 365.
 
-| Method | Top-1 (%) | Top-5 (%) | Top-10 (%) | Top-25 (%) | Top-100 (%) | Duration (s) | Build (s) | Size (MB) |
+| Method | Top-1 | Top-5 | Top-10 | Top-25 | Top-100 | Duration (s) | Build (s) | Size (MB) |
 |--------|-----------|-----------|------------|------------|-------------|--------------|-----------|-----------|
-| VecFuzz              | 30.64%     | 48.58%     | 55.23%     | 63.35%     | 72.69%      | 3.725s 🥇      | 26.840s   | 112.52    |
-| SymSpell             | 34.06% 🥇   | 48.92% 🥉   | 51.94%     | 54.58%     | 57.70%      | 12.596s 🥈     | 37.902s   | 3568.23   |
-| RapidFuzz            | 32.65% 🥉   | 51.74% 🥇   | 58.54% 🥇   | 66.56% 🥇   | 76.67% 🥇    | 412.887s 🥉    | 0.0       | 0.0       |
-| Jaro-Winkler         | 30.27%     | 50.72% 🥈   | 57.66% 🥈   | 65.43% 🥈   | 75.86% 🥈    | 518.326s      | 0.0       | 0.0       |
-| Damerau-Levenshtein  | 29.20%     | 48.10%     | 55.56% 🥉   | 63.92% 🥉   | 73.18% 🥉    | 3431.185s     | 0.0       | 0.0       |
-| Levenshtein          | 28.10%     | 46.73%     | 54.20%     | 62.64%     | 72.35%      | 463.465s      | 0.0       | 0.0       |
-| Norvig               | 33.77% 🥈   | 40.80%     | 41.33%     | 41.48%     | 41.48%      | 746.374s      | 0.0       | 0.0       |
+| VecFuzz              | 30.64%     | 48.58%     | 55.23%     | 63.35%     | 72.69%      | 3.725 🥇      | 26.840   | 112.52    |
+| SymSpell             | 34.06% 🥇   | 48.92% 🥉   | 51.94%     | 54.58%     | 57.70%      | 12.596 🥈     | 37.902   | 3568.23   |
+| RapidFuzz            | 32.65% 🥉   | 51.74% 🥇   | 58.54% 🥇   | 66.56% 🥇   | 76.67% 🥇    | 412.887 🥉    | 0.0       | 0.0       |
+| Jaro-Winkler         | 30.27%     | 50.72% 🥈   | 57.66% 🥈   | 65.43% 🥈   | 75.86% 🥈    | 518.326      | 0.0       | 0.0       |
+| Damerau-Levenshtein  | 29.20%     | 48.10%     | 55.56% 🥉   | 63.92% 🥉   | 73.18% 🥉    | 3431.185     | 0.0       | 0.0       |
+| Levenshtein          | 28.10%     | 46.73%     | 54.20%     | 62.64%     | 72.35%      | 463.465      | 0.0       | 0.0       |
+| Norvig               | 33.77% 🥈   | 40.80%     | 41.33%     | 41.48%     | 41.48%      | 746.374      | 0.0       | 0.0       |
 
 ---
 
