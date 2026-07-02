@@ -7,7 +7,7 @@ A **fast approximate string matching library** that turns words into compact vec
 
 ## Why VecFuzz?
 
-Fuzzy search techniques usually suffer from a three-way trade-off: speed, accuracy, and memory. Many approaches are excel at one, but degrade sharply on another, especially as typo tolerance increases.
+Fuzzy matching techniques usually suffer from a three-way trade-off: speed, accuracy, and memory. Many approaches are excel at one, but degrade sharply on another, especially as typo tolerance increases.
 
 VecFuzz is designed to improve them together rather than trading one off against another, placing it on the Pareto frontier:
 
