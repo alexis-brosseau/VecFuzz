@@ -38,7 +38,7 @@ def candidates_rapidfuzz(query, vocab, k=100):
     return [match[0] for match in results]
 
 def candidates_symspell(query, vocab, symspell_instance, k=100):
-    """SymSpell: use its built-in lookup, return top-k candidates."""
+    """SymSpell: use its built-in lookup, return Recall@k candidates."""
     suggestions = symspell_instance.lookup(query, Verbosity.ALL, max_edit_distance=2)
     # suggestions are already sorted by (distance, frequency)
     return [s.term for s in suggestions[:k]]
@@ -244,7 +244,7 @@ def run_birkbeck_benchmark(save_to_file=False):
             if i < len(sorted_res):
                 medals[sorted_res[i]['name']][key] = " " + rank_medal
 
-    headers = ["Method", "Top-1 (%)", "Top-5 (%)", "Top-10 (%)", "Top-25 (%)", "Top-100 (%)", "Duration (s)", "Iter/s", "Build (s)", "Size (MB)"]
+    headers = ["Method", "Recall@1 (%)", "Recall@5 (%)", "Recall@10 (%)", "Recall@25 (%)", "Recall@100 (%)", "Duration (s)", "Iter/s", "Build (s)", "Size (MB)"]
     rows = []
     for r in results:
         rows.append([

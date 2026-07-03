@@ -116,7 +116,7 @@ def candidates_rapidfuzz(query, vocab, k=5):
     return [match[0] for match in results]
 
 def candidates_symspell(query, vocab, symspell_instance, k=5):
-    """SymSpell: use its built-in lookup, return top-k candidates."""
+    """SymSpell: use its built-in lookup, return Recall@k candidates."""
     suggestions = symspell_instance.lookup(query, Verbosity.CLOSEST, max_edit_distance=2)
     # suggestions are already sorted by (distance, frequency)
     return [s.term for s in suggestions[:k]]
@@ -421,7 +421,7 @@ def run_benchmark(freq_dict, n_trials, n_per_trial, seed=0, save_to_file=False):
 
     # Print in the requested three-table markdown format (no iters/sec column)
     print("\n#### Overall Accuracy and Speed\n")
-    overall_headers = ["Method", "Top-1 (%)", "Top-3 (%)", "Top-5 (%)", "Duration (s)", "Build (s)", "Size (MB)"]
+    overall_headers = ["Method", "Recall@1 (%)", "Recall@3 (%)", "Recall@5 (%)", "Duration (s)", "Build (s)", "Size (MB)"]
     overall_rows = []
     for r in aggregated_results:
         overall_rows.append([
@@ -440,7 +440,7 @@ def run_benchmark(freq_dict, n_trials, n_per_trial, seed=0, save_to_file=False):
     for row in overall_body:
         print(row)
 
-    # Top-1 by error type
+    # Recall@1 by error type
     print("\n#### Top‑1 Accuracy by Error Type\n")
     type_header, type_separator, type_rows = format_table(error_type_headers, error_type_rows)
     print(type_header)
@@ -448,7 +448,7 @@ def run_benchmark(freq_dict, n_trials, n_per_trial, seed=0, save_to_file=False):
     for row in type_rows:
         print(row)
 
-    # Top-1 by error count and position
+    # Recall@1 by error count and position
     print("\n#### Top‑1 Accuracy by Error Count and Error Position\n")
     count_header, count_separator, count_rows = format_table(error_count_headers, error_count_rows)
     print(count_header)
