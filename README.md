@@ -55,7 +55,7 @@ Here’s a comparison on a dictionary of ~160 000 English words (we kept only wo
 | Method | Top-1 | Top-3 | Top-5 | Duration (s) | Build (s) | Size (MB) |
 |---|---|---|---|---|---|---|
 | VecFuzz              | 83.40% 🥇   | 93.10% 🥇   | 95.38% 🥇   | 0.365 🥈   | 25.360  | 111.38    |
-| SymSpell             | 78.53%     | 90.76%     | 92.94%     | 0.170 🥇   | 1.982  | 190.1    |
+| SymSpell             | 78.53%     | 90.76%     | 92.94%     | 0.170 🥇   | 1.982  | 190.10    |
 | RapidFuzz            | 80.10% 🥈   | 91.85%     | 94.72% 🥉   | 55.423    | 0.0     | 0.0      |
 | Jaro-Winkler         | 79.68% 🥉   | 92.33% 🥈   | 94.76% 🥈   | 71.860    | 0.0    | 0.0      |
 | Damerau-Levenshtein  | 79.06%     | 91.95% 🥉   | 94.47%     | 528.623   | 0.0     | 0.0      |
