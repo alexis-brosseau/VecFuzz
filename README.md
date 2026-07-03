@@ -52,7 +52,7 @@ Here’s a comparison on a dictionary of ~160 000 English words (we kept only wo
 
 #### Overall Accuracy and Speed
 
-| Method | Top-1 | Top-3 | Top-5 | Duration (s) | Build (s) | Size (MB) |
+| Method | Recall@1 | Recall@3 | Recall@5 | Duration (s) | Build (s) | Size (MB) |
 |---|---|---|---|---|---|---|
 | VecFuzz              | 84.05% 🥇   | 93.39% 🥇   | 95.61% 🥇   | 0.382 🥈   | 24.090  | 111.37    |
 | SymSpell             | 78.53%     | 90.76%     | 92.94%     | 0.170 🥇   | 1.982  | 190.17    |
@@ -90,7 +90,7 @@ Here’s a comparison on a dictionary of ~160 000 English words (we kept only wo
 ### Real-World Human Error Benchmark (Birkbeck Spelling Error Corpus)
 Here’s a comparison on the same dictionary of ~160 000 English words (all of it), tested with the Birkbeck Spelling Error Corpus. This dataset consists of non-synthetic human misspellings including heavy phonetic mutations, dysgraphia and multi-error handwriting slips. Tested on a Ryzen 9 365.
 
-| Method | Top-1 | Top-5 | Top-10 | Top-25 | Top-100 | Duration (s) | Build (s) | Size (MB) |
+| Method | Recall@1 | Recall@5 | Recall@10 | Recall@25 | Recall@100 | Duration (s) | Build (s) | Size (MB) |
 |--------|-----------|-----------|------------|------------|-------------|--------------|-----------|-----------|
 | VecFuzz              | 31.77%     | 49.62% 🥉  | 56.16% 🥉  | 64.05% 🥉 | 73.15%      | 3.413 🥇      | 24.107   | 112.51    |
 | SymSpell             | 34.06% 🥇   | 48.92%    | 51.94%     | 54.58%     | 57.70%      | 12.596 🥈     | 37.902   | 3568.23   |
