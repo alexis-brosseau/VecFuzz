@@ -38,7 +38,7 @@ class FaissIndex:
             entries (list[str]): A list of strings to vectorize and index.
         """
         self.entries = entries
-        self.vectors = np.vstack([ self.vectorize(e.strip().lower()) for e in entries ])
+        self.vectors = np.vstack([ self.vectorize(e) for e in entries ])
         self.index = FaissIndex._build_index(self.vectors, self.metric, self.ef_construction, self.M, self.ef)
         
         return self

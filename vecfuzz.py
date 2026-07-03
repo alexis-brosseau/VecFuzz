@@ -70,7 +70,7 @@ class VecFuzz:
         Returns:
             np.ndarray: A numpy array of type float32 representing the word.
         """
-        word = word.lower()
+        word = word.strip().lower()
         w_len = len(word)
         
         if w_len == 0:
@@ -86,7 +86,7 @@ class VecFuzz:
                 vec_pos[idx]  += i / w_len
 
         # Context-based vectors
-        DECAY = 0.75    # Reduces the influence of farther characters
+        DECAY = 0.9     # Reduces the influence of farther characters
         BOOST = 3.5     # Amplifies the influence of neighboring characters
         
         vec_pre = np.zeros(self._chars_len, dtype=np.float32)     # Vector based on preceding chars
@@ -96,19 +96,15 @@ class VecFuzz:
             if ch in self._char_idx:
                 idx = self._char_idx[ch]
                         
-                for j in range(i - 1):
-                    pre = word[j]
-                    if pre in self._char_idx:
-                        pos = (j + 1) / w_len
-                        weight = (pos + BOOST) * (DECAY ** (i - j))
-                        vec_pre[idx] += weight / w_len
+                for j in range(1, i):
+                    pos = j / w_len
+                    weight = (pos + BOOST) * (DECAY ** (i - j))
+                    vec_pre[idx] += weight / w_len
 
-                for j in range(i + 1, len(word)):
-                    suc = word[j]
-                    if suc in self._char_idx:
-                        pos = (j + 1) / w_len
-                        weight = (pos + BOOST) * (DECAY ** (j - i))
-                        vec_suc[idx] += weight / w_len
-        
+                for j in range(i + 1, w_len + 1):
+                    pos = (w_len - j) / w_len
+                    weight = (pos + BOOST) * (DECAY ** (j - i))
+                    vec_suc[idx] += weight / w_len
+
         vector = np.concatenate([vec_frq, vec_pos, vec_pre, vec_suc])
         return vector

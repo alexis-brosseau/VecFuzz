@@ -1,5 +1,4 @@
 import os
-import sys
 from time import time
 from unicodedata import normalize
 from tqdm import tqdm
@@ -12,13 +11,10 @@ import matplotlib.pyplot as plt
 from time import time
 from spellchecker import SpellChecker
 from tqdm import tqdm
-import jellyfish
 from rapidfuzz import fuzz, process
 from rapidfuzz.distance import Levenshtein, DamerauLevenshtein, JaroWinkler
 from symspellpy import SymSpell, Verbosity
-import pybktree
 from unicodedata import normalize, combining, east_asian_width
-import json
 from pympler import asizeof
 
 # ---------------------------
