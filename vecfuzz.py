@@ -42,12 +42,12 @@ class VecFuzz:
         self._index = FaissIndex(self.vectorize, faiss.METRIC_L1, self._ef_construction, self._M, self._ef).build(entries)
         return self._index
     
-    def load(self, filepath: str="index.pkl"):
+    def load(self, filepath = "index.zip"):
         """
         Load a previously saved FAISS index from a file.
 
         Args:
-            filepath (str, optional): The path to the file from which the index should be loaded. Defaults to "index.pkl".
+            filepath (str, optional): The path to the file from which the index should be loaded. Defaults to "index.zip".
         """
         self._index = FaissIndex(self.vectorize, faiss.METRIC_L1, self._ef_construction, self._M, self._ef).load(filepath)
         return self._index

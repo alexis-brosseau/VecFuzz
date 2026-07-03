@@ -1,5 +1,7 @@
 from typing import Callable
 import pickle
+import io
+import zipfile
 import numpy as np
 import faiss
 
@@ -43,28 +45,45 @@ class FaissIndex:
         
         return self
 
-    def save(self, filepath: str="index.pkl"):
+    def save(self, filepath: str="index.zip"):
         """
         Save the vector representations and the FAISS index to a file for later use.
 
         Args:
-            filepath (str, optional): The path to the file where the index should be saved. Defaults to "index.pkl".
+            filepath (str, optional): The path to the file where the index should be saved. Defaults to "index.zip".
         """
-        with open(filepath, 'wb') as f:
-            pickle.dump({'entries': self.entries, 'vectors': self.vectors}, f)
+        # Serialize the FAISS index to an in-memory byte buffer
+        faiss_buffer = io.BytesIO()
+        writer = faiss.PyCallbackIOWriter(faiss_buffer.write)
+        faiss.write_index(self.index, writer)
+        
+        # Serialize the text data and vectors via pickle
+        metadata_buffer = io.BytesIO()
+        pickle.dump({'entries': self.entries, 'vectors': self.vectors}, metadata_buffer)
+        
+        # Zip them together into the single destination file
+        with zipfile.ZipFile(filepath, 'w', zipfile.ZIP_DEFLATED) as zf:
+            zf.writestr('metadata.pkl', metadata_buffer.getvalue())
+            zf.writestr('faiss.index', faiss_buffer.getvalue())
 
-    def load(self, filepath: str="index.pkl"):
+    def load(self, filepath: str="index.zip"):
         """
         Load the vector representations from a file and reconstruct the FAISS index.
 
         Args:
-            filepath (str, optional): The path to the file from which the index should be loaded. Defaults to "index.pkl".
+            filepath (str, optional): The path to the file from which the index should be loaded. Defaults to "index.zip".
         """
-        with open(filepath, 'rb') as f:
-            data = pickle.load(f)
-        self.entries = data['entries']
-        self.vectors = data['vectors']
-        self.index = FaissIndex._build_index(self.vectors, self.metric, self.ef_construction, self.M, self.ef)
+        with zipfile.ZipFile(filepath, 'r') as zf:
+            # Load the text data and vectors
+            metadata_bytes = zf.read('metadata.pkl')
+            data = pickle.loads(metadata_bytes)
+            self.entries = data['entries']
+            self.vectors = data['vectors']
+            
+            # 2. Load the compiled FAISS index
+            faiss_bytes = zf.read('faiss.index')
+            reader = faiss.PyCallbackIOReader(io.BytesIO(faiss_bytes).read)
+            self.index = faiss.read_index(reader)
         
         return self
 
