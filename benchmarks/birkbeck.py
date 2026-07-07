@@ -274,7 +274,7 @@ def run_birkbeck_benchmark(save_to_file=False):
             for row in body_rows:
                 f.write(row + "\n")
             
-    print("\nSaved benchmark data to birkbeck_results.md")
+        print("\nSaved benchmark data to birkbeck_results.md")
 
 if __name__ == "__main__":
     run_birkbeck_benchmark(save_to_file=True)

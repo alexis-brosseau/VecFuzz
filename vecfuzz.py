@@ -92,16 +92,16 @@ class VecFuzz:
         vec_pre = np.zeros(self._chars_len, dtype=np.float32)     # Vector based on preceding chars
         vec_suc = np.zeros(self._chars_len, dtype=np.float32)     # Vector based on succeeding chars
         
-        for i, ch in enumerate(word, start=1):
+        for i, ch in enumerate(word):
             if ch in self._char_idx:
                 idx = self._char_idx[ch]
-                        
-                for j in range(1, i):
-                    pos = j / w_len
+
+                for j in range(i):
+                    pos = (j + 1) / w_len
                     weight = (pos + BOOST) * (DECAY ** (i - j))
                     vec_pre[idx] += weight / w_len
 
-                for j in range(i + 1, w_len + 1):
+                for j in range(i + 1, w_len):
                     pos = (w_len - j) / w_len
                     weight = (pos + BOOST) * (DECAY ** (j - i))
                     vec_suc[idx] += weight / w_len
