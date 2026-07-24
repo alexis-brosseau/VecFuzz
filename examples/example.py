@@ -3,8 +3,8 @@ from vecfuzz import VecFuzz
 # Build a small list of words
 words = ["apple", "banana", "orange", "peach", "pineapple"]
 
-# Create the index and build it
-index = VecFuzz().index(words)
+# Create the index
+index = VecFuzz().build_index(words)
 
 # Look up 3 nearest neighbours for each fuzzy query
 queries = ["aple", "bannana", "orng"]

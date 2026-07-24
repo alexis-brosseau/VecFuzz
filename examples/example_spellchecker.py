@@ -7,7 +7,7 @@ if __name__ == "__main__":
     typos = ["teh", "recieve", "definately", "occured", "publically"]
     
     print(f"Building vector index for {len(words)} words...")
-    index = VecFuzz().index(words)
+    index = VecFuzz().build_index(words)
     
     print(f"Looking up candidates...\n")
     results = index.lookup(typos, k=3)

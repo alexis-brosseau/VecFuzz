@@ -20,22 +20,12 @@ SWAP_WEIGHT = 0.25
 DEL_WEIGHT = 0.25
 INS_WEIGHT = 0.25
 
-def get_pos_label(i, length):
-    if length <= 3:
-        return "middle"
-    if i == 0 or i == 1:
-        return "prefix"
-    elif i >= length - 2:
-        return "suffix"
-    else:
-        return "middle"
-
 def typo_substitution(word):
     if len(word) < 2:
         return word, "middle"
     i = random.randint(0, len(word)-1)
     c = random.choice("abcdefghijklmnopqrstuvwxyz".replace(word[i], ""))
-    return word[:i] + c + word[i+1:], get_pos_label(i, len(word))
+    return word[:i] + c + word[i+1:]
 
 
 def typo_swap(word):
@@ -44,20 +34,20 @@ def typo_swap(word):
     i = random.randint(0, len(word)-2)
     lst = list(word)
     lst[i], lst[i+1] = lst[i+1], lst[i]
-    return "".join(lst), get_pos_label(i, len(word))
+    return "".join(lst)
 
 
 def typo_deletion(word):
     if len(word) < 2:
         return word, "middle"
     i = random.randint(0, len(word)-1)
-    return word[:i] + word[i+1:], get_pos_label(i, len(word))
+    return word[:i] + word[i+1:]
 
 
 def typo_insertion(word):
     i = random.randint(0, len(word))
     c = random.choice("abcdefghijklmnopqrstuvwxyz")
-    return word[:i] + c + word[i:], get_pos_label(i, len(word))
+    return word[:i] + c + word[i:]
 
 
 def generate_typos(vocab, n=5000, get_num_edits=lambda: 1):
@@ -82,13 +72,12 @@ def generate_typos(vocab, n=5000, get_num_edits=lambda: 1):
         current_w = w
         pos_label = "middle"
         for _ in range(num_edits):
-            current_w, pos_label = t_func(current_w)
+            current_w = t_func(current_w)
 
         test_cases.append({
             "query": current_w,
             "target": w,
             "error_type": t_name,
-            "error_pos": pos_label,
             "edits": num_edits
         })
 
@@ -167,7 +156,6 @@ def evaluate_accuracy(method_func, name, test_cases, vocab, args=[], trial_info=
     # Stratified metrics
     stats = {
         "error_type": {"substitution": {"count": 0, "top1": 0}, "swap": {"count": 0, "top1": 0}, "deletion": {"count": 0, "top1": 0}, "insertion": {"count": 0, "top1": 0}},
-        "error_pos": {"prefix": {"count": 0, "top1": 0}, "middle": {"count": 0, "top1": 0}, "suffix": {"count": 0, "top1": 0}},
         "edits": {1: {"count": 0, "top1": 0}, 2: {"count": 0, "top1": 0}}
     }
 
@@ -200,16 +188,11 @@ def evaluate_accuracy(method_func, name, test_cases, vocab, args=[], trial_info=
             
         # Update stratified stats
         e_type = tc["error_type"]
-        e_pos = tc["error_pos"]
         e_edits = tc["edits"]
         
         if e_type in stats["error_type"]:
             stats["error_type"][e_type]["count"] += 1
             if is_top1: stats["error_type"][e_type]["top1"] += 1
-            
-        if e_pos in stats["error_pos"]:
-            stats["error_pos"][e_pos]["count"] += 1
-            if is_top1: stats["error_pos"][e_pos]["top1"] += 1
             
         if e_edits in stats["edits"]:
             stats["edits"][e_edits]["count"] += 1
@@ -236,7 +219,7 @@ def run_benchmark(freq_dict, n_trials, n_per_trial, seed=0, save_to_file=False):
     vocab = list(freq_dict.keys())
 
     #Build SymSpell dictionary and measure build time (preprocessing)
-    print("\nInitializing SymSpell dictionary (preprocessing)...")
+    print("\nBuilding SymSpell dictionary (preprocessing)...")
     t0_build = time()
     
     symspell_instance = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
@@ -256,7 +239,7 @@ def run_benchmark(freq_dict, n_trials, n_per_trial, seed=0, save_to_file=False):
     vecfuzz_build_time = t1_vecfuzz - t0_vecfuzz
     vecfuzz_size = asizeof.asizeof(vecfuzz_instance) / (1024 * 1024)
 
-    # Define methods to benchmark
+    #region Methods to benchmark
     methods = [
         (candidates_vecfuzz_batch, "VecFuzz", [vecfuzz_instance], True),
         (candidates_symspell, "SymSpell", [symspell_instance], False),
@@ -266,6 +249,7 @@ def run_benchmark(freq_dict, n_trials, n_per_trial, seed=0, save_to_file=False):
         (candidates_levenshtein, "Levenshtein", [], False),
         (candidates_norvig, "Norvig", [freq_dict], False),
     ]
+    #endregion
 
     results = {name: {"top1": [], "top3": [], "top5": [], "time_sec": [], "iters_sec": [], "build_time": [], "build_size": [], "stats": []} for _, name, _, _ in methods}
 
@@ -382,12 +366,9 @@ def run_benchmark(freq_dict, n_trials, n_per_trial, seed=0, save_to_file=False):
     rank_metric("error_type_swap", "error_type", "swap")
     rank_metric("edits_1", "edits", 1)
     rank_metric("edits_2", "edits", 2)
-    rank_metric("error_pos_prefix", "error_pos", "prefix")
-    rank_metric("error_pos_middle", "error_pos", "middle")
-    rank_metric("error_pos_suffix", "error_pos", "suffix")
 
     error_type_headers = ["Method", "Substitution", "Insertion", "Deletion", "Transposition"]
-    error_count_headers = ["Method", "1-Error", "2-Errors", "Prefix", "Middle", "Suffix"]
+    error_count_headers = ["Method", "1-Error", "2-Errors"]
 
     error_type_rows = []
     error_count_rows = []
@@ -398,9 +379,6 @@ def run_benchmark(freq_dict, n_trials, n_per_trial, seed=0, save_to_file=False):
         swap_acc = agg_stats(name, "error_type", "swap")
         e1_acc = agg_stats(name, "edits", 1)
         e2_acc = agg_stats(name, "edits", 2)
-        pref_acc = agg_stats(name, "error_pos", "prefix")
-        mid_acc = agg_stats(name, "error_pos", "middle")
-        suf_acc = agg_stats(name, "error_pos", "suffix")
 
         error_type_rows.append([
             name,
@@ -414,9 +392,6 @@ def run_benchmark(freq_dict, n_trials, n_per_trial, seed=0, save_to_file=False):
             name,
             f"{e1_acc:.1f}%{medals[name].get('edits_1', '')}",
             f"{e2_acc:.1f}%{medals[name].get('edits_2', '')}",
-            f"{pref_acc:.1f}%{medals[name].get('error_pos_prefix', '')}",
-            f"{mid_acc:.1f}%{medals[name].get('error_pos_middle', '')}",
-            f"{suf_acc:.1f}%{medals[name].get('error_pos_suffix', '')}",
         ])
 
     # Print in the requested three-table markdown format (no iters/sec column)
@@ -441,7 +416,7 @@ def run_benchmark(freq_dict, n_trials, n_per_trial, seed=0, save_to_file=False):
         print(row)
 
     # Recall@1 by error type
-    print("\n#### Top‑1 Accuracy by Error Type\n")
+    print("\n#### Top-1 Accuracy by Error Type\n")
     type_header, type_separator, type_rows = format_table(error_type_headers, error_type_rows)
     print(type_header)
     print(type_separator)
@@ -449,7 +424,7 @@ def run_benchmark(freq_dict, n_trials, n_per_trial, seed=0, save_to_file=False):
         print(row)
 
     # Recall@1 by error count and position
-    print("\n#### Top‑1 Accuracy by Error Count and Error Position\n")
+    print("\n#### Top-1 Accuracy by Error Count\n")
     count_header, count_separator, count_rows = format_table(error_count_headers, error_count_rows)
     print(count_header)
     print(count_separator)
@@ -464,13 +439,13 @@ def run_benchmark(freq_dict, n_trials, n_per_trial, seed=0, save_to_file=False):
             for row in overall_body:
                 f.write(row + "\n")
 
-            f.write("\n#### Top‑1 Accuracy by Error Type\n\n")
+            f.write("\n#### Top-1 Accuracy by Error Type\n\n")
             f.write(type_header + "\n")
             f.write(type_separator + "\n")
             for row in type_rows:
                 f.write(row + "\n")
 
-            f.write("\n#### Top‑1 Accuracy by Error Count and Error Position\n\n")
+            f.write("\n#### Top-1 Accuracy by Error Count and Error Position\n\n")
             f.write(count_header + "\n")
             f.write(count_separator + "\n")
             for row in count_rows:

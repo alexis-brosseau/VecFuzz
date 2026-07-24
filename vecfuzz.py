@@ -29,7 +29,7 @@ class VecFuzz:
 
         self._index = None
 
-    def index(self, entries: list[str]):
+    def build_index(self, entries: list[str]):
         """
         Create a FAISS index from a list of string entries.
 
@@ -42,7 +42,7 @@ class VecFuzz:
         self._index = FaissIndex(self.vectorize, faiss.METRIC_L1, self._ef_construction, self._M, self._ef).build(entries)
         return self._index
     
-    def load(self, filepath = "index.zip"):
+    def load_index(self, filepath = "index.zip"):
         """
         Load a previously saved FAISS index from a file.
 
@@ -89,8 +89,8 @@ class VecFuzz:
         DECAY = 0.9     # Reduces the influence of farther characters
         BOOST = 3.5     # Amplifies the influence of neighboring characters
         
-        vec_pre = np.zeros(self._chars_len, dtype=np.float32)     # Vector based on preceding chars
-        vec_suc = np.zeros(self._chars_len, dtype=np.float32)     # Vector based on succeeding chars
+        vec_pre = np.zeros(self._chars_len, dtype=np.float32)     # Vector based on preceding chars position
+        vec_suc = np.zeros(self._chars_len, dtype=np.float32)     # Vector based on succeeding chars position
         
         for i, ch in enumerate(word):
             if ch in self._char_idx:
@@ -98,12 +98,16 @@ class VecFuzz:
 
                 for j in range(i):
                     pos = (j + 1) / w_len
-                    weight = (pos + BOOST) * (DECAY ** (i - j))
+                    dist = i - j
+                    
+                    weight = (pos + BOOST) * (DECAY ** dist)
                     vec_pre[idx] += weight / w_len
 
                 for j in range(i + 1, w_len):
                     pos = (w_len - j) / w_len
-                    weight = (pos + BOOST) * (DECAY ** (j - i))
+                    dist = j - i
+                    
+                    weight = (pos + BOOST) * (DECAY ** dist)
                     vec_suc[idx] += weight / w_len
 
         vector = np.concatenate([vec_frq, vec_pos, vec_pre, vec_suc])

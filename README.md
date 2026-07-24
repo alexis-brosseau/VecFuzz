@@ -76,15 +76,15 @@ Here’s a comparison on a dictionary of ~160 000 English words (we kept only wo
 
 #### Top‑1 Accuracy by Error Count and Error Position
 
-| Method | 1‑Error | 2‑Errors | Prefix | Middle | Suffix |
-|----------------------|---------|----------|--------|--------|--------|
-| VecFuzz              |   88.4% 🥇 |    67.5% 🥇 |   80.8% 🥇 |   89.7% 🥇|   75.7% 🥇 |
-| SymSpell             |   82.7% |    61.7% |         74.4% 🥉|   85.9% |   66.5% |
-| RapidFuzz            |   83.8% 🥈|    65.5% 🥉 |   73.8% |   86.7% 🥉|   72.1% 🥈 |
-| Jaro-Winkler         |   83.1% 🥉 |    65.9% 🥈 |   71.8% |   87.1% 🥈|   71.6% 🥉 |
-| Damerau-Levenshtein  |   83.0% |        62.8% |   76.0% 🥈|   86.3% |   66.3% |
-| Levenshtein          |   73.3% |        54.6% |   63.9% |   76.5% |   60.1% |
-| Norvig               |   82.6% |        61.5% |   74.1% |   85.9% |   66.4% |
+| Method | 1‑Error | 2‑Errors |
+|----------------------|---------|----------|
+| VecFuzz              |   88.4% 🥇 |    67.5% 🥇 |
+| SymSpell             |   82.7% |    61.7% |
+| RapidFuzz            |   83.8% 🥈|    65.5% 🥉 |
+| Jaro-Winkler         |   83.1% 🥉 |    65.9% 🥈 |
+| Damerau-Levenshtein  |   83.0% |        62.8% |
+| Levenshtein          |   73.3% |        54.6% |
+| Norvig               |   82.6% |        61.5% |
 
 
 ### Real-World Human Error Benchmark (Birkbeck Spelling Error Corpus)
