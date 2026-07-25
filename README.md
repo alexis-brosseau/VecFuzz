@@ -93,8 +93,7 @@ from vecfuzz import VecFuzz
 
 words = ["apple", "banana", "orange", "peach", "pineapple"]
 
-vf = VecFuzz()
-index = vf.build_index(words)
+index = VecFuzz().build_index(words)
 
 queries = ["aple", "bannana", "orng"]
 results = index.lookup(queries, k=3)
