@@ -8,7 +8,7 @@ class VecFuzz:
     It allows for efficient similarity search and retrieval of nearest neighbors based on vector representations of strings.
     """
 
-    def __init__(self, chars: str="abcdefghijklmnopqrstuvwxyz0123456789-̧ '. ", ef_construction: int=200, M: int=32, ef: int=50):
+    def __init__(self, chars: str="aàbcçdeéèêëfghiïjklmnñoöpqrstuvwxyz0123456789-̧ '. ", ef_construction: int=200, M: int=32, ef: int=50):
         """
         Initialize the VecFuzz instance with a set of valid characters for vectorization.
 
@@ -59,8 +59,8 @@ class VecFuzz:
         It generates a concatenated vector with 4 distinct sub-vectors:
         1. Character frequencies
         2. Average character position
-        3. Preceding characters proximity-weights
-        4. Succeeding characters proximity-weights
+        3. Preceding characters influence
+        4. Succeeding characters influence
         
         All sub-vectors are normalized by the length of the word to ensure scale invariance.
 
@@ -89,8 +89,8 @@ class VecFuzz:
         DECAY = 0.9     # Reduces the influence of farther characters
         BOOST = 3.5     # Amplifies the influence of neighboring characters
         
-        vec_pre = np.zeros(self._chars_len, dtype=np.float32)     # Vector based on preceding chars position
-        vec_suc = np.zeros(self._chars_len, dtype=np.float32)     # Vector based on succeeding chars position
+        vec_pre = np.zeros(self._chars_len, dtype=np.float32)     # Vector based on preceding chars influence
+        vec_suc = np.zeros(self._chars_len, dtype=np.float32)     # Vector based on succeeding chars influence
         
         for i, ch in enumerate(word):
             if ch in self._char_idx:

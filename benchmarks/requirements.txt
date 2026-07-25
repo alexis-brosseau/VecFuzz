@@ -1,0 +1,6 @@
+faiss-cpu
+matplotlib
+numpy
+pympler
+pyspellchecker
+symspellpy

@@ -13,6 +13,8 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from rapidfuzz import fuzz, process
+from rapidfuzz.distance import Levenshtein
 from pympler import asizeof
 from spellchecker import SpellChecker
 from symspellpy import SymSpell, Verbosity
@@ -188,6 +190,22 @@ def lookup_symspell(index: SymSpell, queries: Sequence[str], max_edit_distance: 
 	return predictions
 
 
+def lookup_rapidfuzz(vocabulary: Sequence[str], queries: Sequence[str], k: int = 5) -> List[List[str]]:
+	predictions: List[List[str]] = []
+	for query in queries:
+		suggestions = process.extract(query, vocabulary, scorer=fuzz.ratio, limit=k)
+		predictions.append([match[0] for match in suggestions])
+	return predictions
+
+
+def lookup_levenshtein(vocabulary: Sequence[str], queries: Sequence[str], k: int = 5) -> List[List[str]]:
+	predictions: List[List[str]] = []
+	for query in queries:
+		suggestions = process.extract(query, vocabulary, scorer=Levenshtein.distance, limit=k)
+		predictions.append([match[0] for match in suggestions])
+	return predictions
+
+
 def _accuracy_from_predictions(test_cases: Sequence[Dict[str, object]], predictions: Sequence[Sequence[str]]) -> Dict[str, Dict[str, float]]:
 	summary: Dict[str, Dict[str, float]] = {
 		"overall": {"count": 0.0, "recall1": 0.0},
@@ -248,6 +266,44 @@ def evaluate_lookup(
 			"qps": len(test_cases) / symspell_seconds if symspell_seconds > 0 else 0.0,
 			"accuracy": _accuracy_from_predictions(test_cases, symspell_predictions),
 		},
+	}
+
+
+def evaluate_accuracy_baselines(
+	test_cases: Sequence[Dict[str, object]],
+	vecfuzz_index: object,
+	vocabulary: Sequence[str],
+	k: int = 5,
+) -> Dict[str, Dict[str, object]]:
+	queries = [str(case["query"]) for case in test_cases]
+
+	vecfuzz_predictions = lookup_vecfuzz(vecfuzz_index, queries, k=k)
+	rapidfuzz_predictions = lookup_rapidfuzz(vocabulary, queries, k=k)
+	levenshtein_predictions = lookup_levenshtein(vocabulary, queries, k=k)
+
+	return {
+		"vecfuzz": _accuracy_from_predictions(test_cases, vecfuzz_predictions),
+		"rapidfuzz": _accuracy_from_predictions(test_cases, rapidfuzz_predictions),
+		"levenshtein": _accuracy_from_predictions(test_cases, levenshtein_predictions),
+	}
+
+
+def evaluate_symspell_accuracy(
+	test_cases: Sequence[Dict[str, object]],
+	symspell_index: SymSpell,
+	symspell_config: SymSpellConfig,
+	k: int = 5,
+) -> Dict[str, object]:
+	queries = [str(case["query"]) for case in test_cases]
+
+	t0 = perf_counter()
+	symspell_predictions = lookup_symspell(symspell_index, queries, symspell_config.max_edit_distance, k=k)
+	symspell_seconds = perf_counter() - t0
+
+	return {
+		"seconds": symspell_seconds,
+		"qps": len(test_cases) / symspell_seconds if symspell_seconds > 0 else 0.0,
+		"accuracy": _accuracy_from_predictions(test_cases, symspell_predictions),
 	}
 
 
@@ -342,11 +398,17 @@ def sweep_accuracy(
 
 	accuracy_rows = {
 		"vecfuzz": {},
+		"rapidfuzz": {},
+		"levenshtein": {},
 		"symspell": [],
 	}
+	baseline_scores = evaluate_accuracy_baselines(cases, vecfuzz.index, vocabulary)
+	accuracy_rows["vecfuzz"] = baseline_scores["vecfuzz"]
+	accuracy_rows["rapidfuzz"] = baseline_scores["rapidfuzz"]
+	accuracy_rows["levenshtein"] = baseline_scores["levenshtein"]
 
 	for artifact, config in zip(symspell_pool, configs):
-		scores = evaluate_lookup(cases, vecfuzz.index, artifact.index, config)
+		scores = evaluate_symspell_accuracy(cases, artifact.index, config)
 		accuracy_rows["symspell"].append(
 			{
 				"label": artifact.config_label,
@@ -354,12 +416,11 @@ def sweep_accuracy(
 			}
 		)
 
-	vec_scores = evaluate_lookup(cases, vecfuzz.index, symspell_pool[0].index, configs[0])
-	accuracy_rows["vecfuzz"] = vec_scores["vecfuzz"]["accuracy"]
-
 	return {
 		"cases": cases,
 		"vecfuzz": accuracy_rows["vecfuzz"],
+		"rapidfuzz": accuracy_rows["rapidfuzz"],
+		"levenshtein": accuracy_rows["levenshtein"],
 		"symspell": accuracy_rows["symspell"],
 	}
 
@@ -371,6 +432,8 @@ def _figure_path(output_dir: Path, stem: str) -> Path:
 def _plot_lines(ax, x_values: Sequence[int], series: Sequence[Tuple[str, Sequence[float]]], title: str, xlabel: str, ylabel: str) -> None:
 	color_map = {
 		"VecFuzz": "#1D4ED8",
+		"RapidFuzz": "#EA580C",
+		"Levenshtein": "#059669",
 		"SymSpell d2/p7": "#FCA5A5",
 		"SymSpell d3/p9": "#EF4444",
 		"SymSpell d4/p12": "#7F1D1D",
@@ -464,6 +527,8 @@ def plot_lookup_by_vocab_size(results: Sequence[Dict[str, object]], output_dir: 
 
 def plot_accuracy(results: Dict[str, object], output_dir: Path) -> Path:
 	vec_acc = results["vecfuzz"]
+	rapidfuzz_acc = results["rapidfuzz"]
+	levenshtein_acc = results["levenshtein"]
 	symspell_results = results["symspell"]
 
 	fig, axes = plt.subplots(2, 2, figsize=(14, 10), sharex=True, sharey=True)
@@ -480,6 +545,18 @@ def plot_accuracy(results: Dict[str, object], output_dir: Path) -> Path:
 		vec_series = [
 			("VecFuzz", [
 				(vecfuzz_accuracy[str(edit)]["recall1"] / vecfuzz_accuracy[str(edit)]["count"]) if vecfuzz_accuracy[str(edit)]["count"] else 0.0
+				for edit in DEFAULT_EDIT_LEVELS
+			])
+		]
+		rapidfuzz_series = [
+			("RapidFuzz", [
+				(rapidfuzz_acc["by_error_and_edits"][error_type][str(edit)]["recall1"] / rapidfuzz_acc["by_error_and_edits"][error_type][str(edit)]["count"]) if rapidfuzz_acc["by_error_and_edits"][error_type][str(edit)]["count"] else 0.0
+				for edit in DEFAULT_EDIT_LEVELS
+			])
+		]
+		levenshtein_series = [
+			("Levenshtein", [
+				(levenshtein_acc["by_error_and_edits"][error_type][str(edit)]["recall1"] / levenshtein_acc["by_error_and_edits"][error_type][str(edit)]["count"]) if levenshtein_acc["by_error_and_edits"][error_type][str(edit)]["count"] else 0.0
 				for edit in DEFAULT_EDIT_LEVELS
 			])
 		]
@@ -500,7 +577,7 @@ def plot_accuracy(results: Dict[str, object], output_dir: Path) -> Path:
 		_plot_lines(
 			ax,
 			x_values,
-			vec_series + symspell_series,
+			vec_series + rapidfuzz_series + levenshtein_series + symspell_series,
 			f"{error_type.capitalize()} errors",
 			"Number of edits",
 			"Recall@1 accuracy",
@@ -536,7 +613,7 @@ def run_benchmark(
 
 	print("[benchmark] Running build/memory sweep...", flush=True)
 	build_rows = sweep_build_and_memory(vocab, frequencies, vocab_sizes, configs)
-	print("[benchmark] Running lookup speed by dictionary size...", flush=True)
+	print("[benchmark] Running lookup sweep by dictionary size...", flush=True)
 	lookup_vocab_rows = sweep_lookup_by_vocab_size(vocab, frequencies, vocab_sizes, configs, queries_per_case=query_count, seed=seed + 10)
 	print("[benchmark] Running accuracy sweep...", flush=True)
 	accuracy_rows = sweep_accuracy(vocab[: max(vocab_sizes)], frequencies, configs, cases_per_combo=query_count, seed=seed + 30)
@@ -583,7 +660,7 @@ def main() -> None:
 	parser.add_argument("--seed", type=int, default=0, help="Random seed for vocabulary sampling and typo generation.")
 	parser.add_argument("--max-words", type=int, default=None, help="Optional cap on the vocabulary size loaded from SpellChecker.")
 	parser.add_argument("--vocab-sizes", type=int, nargs="+", default=[5_000, 10_000, 20_000, 40_000, 60_000, 80_000, 100_000], help="Dictionary sizes to sweep.")
-	parser.add_argument("--query-count", type=int, nargs="+", default=10_000, help="Query batch size to sweep.")
+	parser.add_argument("--query-count", type=int, nargs="+", default=100_000, help="Query batch size to sweep.")
 	parser.add_argument("--no-json", action="store_true", help="Do not write the raw JSON results file.")
 	args = parser.parse_args()
 

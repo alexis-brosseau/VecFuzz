@@ -5,102 +5,63 @@
 
 A **fast approximate string matching library** that turns words into compact vectors so you can find the closest match, even when the query is riddled with typos! It’s a fuzzy matching on steroids: sub‑millisecond lookup times and linear memory scaling.
 
-## Why VecFuzz?
 
-Fuzzy matching techniques usually suffer from a three-way trade-off: speed, accuracy, and memory. Many approaches are excel at one, but degrade sharply on another, especially as typo tolerance increases.
+## The trade-off
 
-VecFuzz is designed to improve them together rather than trading one off against another, placing it on the Pareto frontier:
+Fuzzy matching has a three-way tension between speed, memory, and accuracy. VecFuzz dominate on speed and memory, while remaining competitive on accuracy. What it does:
 
-- **Speed:** FAISS‑powered HNSW index gives you ~14 000 queries per second **on a laptop CPU** (and even faster with a GPU!).
-- **Accuracy:** It correctly catches ~99 % of transpositions errors, beating all other algorithms by a wide margin.
-- **Memory:** The index size grows **linearly** with dictionary size. No exponential blow‑up from edit distance.
+- **Memory stays flat** as typo-tolerance increases. SymSpell's index size grows combinatorially with max edit distance (its d4/p12 config hits ~3.5GB at 160k words); VecFuzz's stays under ~135MB regardless of how many edits you want to tolerate.
+- **Query speed stays high** relative to brute-force comparison methods. RapidFuzz and raw Levenshtein score every candidate per query; VecFuzz searches an ANN index instead, ~100x+ faster in my tests.
+- **Accuracy is competitive** but not best-in-class. On real human misspellings, both RapidFuzz and SymSpell beat VecFuzz on Recall@1. VecFuzz's real strength shows up on insertion and transposition-heavy errors, where it clearly outperforms SymSpell.
 
-If you’ve ever wished for a fuzzy matching distance algorithm that runs at hash‑table speed, VecFuzz is for you!
+If your dictionary is large, your memory budget is tight, and your queries need to be fast, VecFuzz gives up a few points of recall for a large win on the other two axes. If you have the memory and time budget for SymSpell d4 or RapidFuzz, they'll edge it out on pure accuracy.
 
----
 
-## Features
+## How it works
 
-- **Deterministic vectorisation:** Same word always gives the same vector.
-- **FAISS‑backed:** Choose between CPU or GPU indexing for massive throughput.
-- **Linear memory:** Index size is `O(dictionary_size * vector_size)`, regardless of error tolerance.
-- **Multilingual by design:** Built to stay language-neutral and work across different writing systems without built-in bias.
-- **Simple API:** Build, save, load, and query with a few lines of Python.
-- **Typo‑tolerant, not a typo‑corrector:** Use it anywhere you need approximate string matching: record linkage, OCR post‑processing, fuzzy search, or duplicate detection.
+Each word is converted into a fixed-length vector with four sub-components:
 
----
+1. **Character frequency:** how often each letter appears.
+2. **Average character position:** where each character tends to appear in the word.
+3. **Preceding-character influence:** a distance-decayed contribution from earlier characters.
+4. **Succeeding-character influence:** a distance-decayed contribution from later characters.
 
-## How It Works
+All four are normalized by word length, so "apple" and "apples" land close together. The sub-vectors are concatenated and indexed with FAISS HNSW under Manhattan (L1) distance; a query is vectorized the same way and the nearest neighbours in the index become your top-k candidates.
 
-VecFuzz converts each word into a fixed‑length vector that encodes four complementary views of the string. A frequency and position vector to handle small local perturbations (insertions and transpositions), and a preceding and succeeding vector to handle character-identity loss (substitutions and deletions).
-
-1. **Character frequency:** How often each letter appears.
-2. **Average position:** Where each letter tends to sit in the word.
-3. **Preceding characters:** Weighted influence of letters that come before.
-4. **Succeeding characters:** Weighted influence of letters that come after.
-
-All vectors are normalized by word length, so "apple" and "apples" end up close together.
-
-After vectorizing the dictionary, we build a **FAISS HNSW index** using Manhattan (L1) distance. A query vector is searched in this index, and the nearest neighbours become your top‑k candidates. The whole process is deterministic, interpretable, and very, very fast.
-
----
 
 ## Benchmark Highlights
 
-### Synthetic Dataset
-Here’s a comparison on a dictionary of ~160 000 English words (we kept only words with 4+ characters), tested with 5 000 randomly generated misspellings (25% of substitutions, insertions, deletions, and transposition). 80% of misspelled words contains 1 error, 20% contains 2 errors. All measurements are averaged over 5 trials. Tested on a Ryzen 9 365.
+### Synthetic edit-distance sweep
 
-#### Overall Accuracy and Speed
+Dictionary sizes 5k–100k words, compared against SymSpell at three delete-distance/prefix-length configs (d2/p7, d3/p9, d4/p12):
 
-| Method | Recall@1 | Recall@3 | Recall@5 | Duration (s) | Build (s) | Size (MB) |
-|---|---|---|---|---|---|---|
-| VecFuzz              | 84.22% 🥇   | 93.60% 🥇   | 95.73% 🥇   | 0.382 🥈   | 24.090  | 111.37    |
-| SymSpell             | 78.53%     | 90.76%     | 92.94%     | 0.170 🥇   | 1.982  | 190.17    |
-| RapidFuzz            | 80.10% 🥈   | 91.85%     | 94.72% 🥉   | 55.423    | 0.0     | 0.0      |
-| Jaro-Winkler         | 79.68% 🥉   | 92.33% 🥈   | 94.76% 🥈   | 71.860    | 0.0    | 0.0      |
-| Damerau-Levenshtein  | 79.06%     | 91.95% 🥉   | 94.47%     | 528.623   | 0.0     | 0.0      |
-| Levenshtein          | 69.53%     | 85.02%     | 88.98%     | 62.813    | 0.0     | 0.0      |
-| Norvig               | 78.40%     | 89.90%     | 92.10%     | 44.230 🥉  | 0.0     | 0.0      |
+- **Memory**: VecFuzz grows roughly linearly and stays lowest across all sizes tested; SymSpell d4/p12 grows the fastest, reaching ~2.7GB at 100k words vs VecFuzz's <100MB.
+- **Build time**: VecFuzz is faster to build than SymSpell d4/p12, slower than the lower-order SymSpell configs.
+- **Lookup speed**: SymSpell d2/p7 is fastest by a wide margin; VecFuzz sits in the middle, ahead of SymSpell d3/p9 and d4/p12.
+- **Recall@1 by error type and edit count**:
+  - *Insertions*: VecFuzz clearly wins and degrades gracefully, still >40% recall at 9 insertion edits, where every SymSpell config has already dropped to 0 once edits exceed its configured max distance.
+  - *Swaps/transpositions*: VecFuzz starts near-perfect and stays well above all SymSpell configs at every edit count.
+  - *Deletions*: Roughly comparable to SymSpell, both degrade quickly past 2–3 edits.
+  - *Substitutions*: This is VecFuzz's weak point, SymSpell d3/d4 clearly outperform it, especially at 1–3 edits.
 
-#### Top‑1 Accuracy by Error Type
+*(Charts: `benchmarks/memory_footprint_vs_vocab_size.png`, `benchmarks/build_time_vs_vocab_size.png`, `benchmarks/lookup_speed_vs_vocab_size.png`, `benchmarks/accuracy_by_error_type_and_edits.png`)*
 
-| Method | Substitution | Insertion | Deletion | Transposition |
-|----------------------|--------------|-----------|----------|---------------|
-| VecFuzz              |   72.8%     |   96.3% 🥈  |   68.3% 🥉 |   98.9% 🥇    |
-| SymSpell             |   80.8% 🥉    |   94.9%   |   53.9%  |   84.4%     |
-| RapidFuzz            |   71.3%     |   97.8% 🥇  |   79.8% 🥇 |   71.0%     |
-| Jaro-Winkler         |   60.2%     |   95.3% 🥉  |   73.5% 🥈 |   88.9% 🥈    |
-| Damerau-Levenshtein  |   81.7% 🥇    |   94.5%   |   55.4%  |   84.7% 🥉    |
-| Levenshtein          |   81.7% 🥇    |   94.5%   |   55.5%  |   46.4%     |
-| Norvig               |   79.9%     |   95.1%   |   54.6%  |   83.9%     |
+### Real-world human errors (Birkbeck Spelling Error Corpus)
 
-#### Top‑1 Accuracy by Error Count and Error Position
+~160,000-word English dictionary, non-synthetic human misspellings (includes phonetic errors, dysgraphia, multi-error handwriting slips). Single machine, Ryzen 9 365.
 
-| Method | 1‑Error | 2‑Errors |
-|----------------------|---------|----------|
-| VecFuzz              |   88.4% 🥇 |    67.5% 🥇 |
-| SymSpell             |   82.7% |    61.7% |
-| RapidFuzz            |   83.8% 🥈|    65.5% 🥉 |
-| Jaro-Winkler         |   83.1% 🥉 |    65.9% 🥈 |
-| Damerau-Levenshtein  |   83.0% |        62.8% |
-| Levenshtein          |   73.3% |        54.6% |
-| Norvig               |   82.6% |        61.5% |
+| Method          | Recall@1 (%) | Recall@5 (%) | Recall@10 (%) | Recall@25 (%) | Recall@100 (%) | Duration (s) | Build (s) | Size (MB) |
+|-----------------|--------------|--------------|---------------|---------------|----------------|--------------|-----------|-----------|
+| SymSpell d2/p7  | 34.05% 🥇    | 48.92% 🥉   | 51.94%        | 54.58%        | 57.70%         | 7.047s 🥈    | 1.857s    | 190.88 MB |
+| VecFuzz         | 31.94% 🥉    | 49.92% 🥈   | 56.36% 🥈     | 64.29% 🥈    | 73.51% 🥈      | 3.297s 🥇    | 26.546s   | 134.60 MB |
+| RapidFuzz       | 32.64% 🥈    | 51.74% 🥇   | 58.54% 🥇     | 66.56% 🥇    | 76.67% 🥇      | 409.564s 🥉  | N/A       | N/A       |
+| Levenshtein     | 28.10%       | 46.73%       | 54.20% 🥉     | 62.64% 🥉    | 72.35% 🥉      | 454.533s     | N/A       | N/A       |
 
+Takeaways:
+- RapidFuzz has the best recall at every k, but takes ~124x longer per query than VecFuzz here.
+- VecFuzz has the smallest memory footprint and the fastest query time of any method.
+- VecFuzz sits second-best on Recall@5 through Recall@100, ahead of SymSpell.
 
-### Real-World Human Error Benchmark (Birkbeck Spelling Error Corpus)
-Here’s a comparison on the same dictionary of ~160 000 English words (all of it), tested with the Birkbeck Spelling Error Corpus. This dataset consists of non-synthetic human misspellings including heavy phonetic mutations, dysgraphia and multi-error handwriting slips. Tested on a Ryzen 9 365.
-
-| Method | Recall@1 | Recall@5 | Recall@10 | Recall@25 | Recall@100 | Duration (s) | Build (s) | Size (MB) |
-|--------|-----------|-----------|------------|------------|-------------|--------------|-----------|-----------|
-| VecFuzz              | 31.94%     | 49.93% 🥉  | 56.37% 🥉  | 64.32% 🥉 | 73.55% 🥉   | 3.413 🥇      | 24.107   | 112.51    |
-| SymSpell             | 34.06% 🥇   | 48.92%    | 51.94%     | 54.58%     | 57.70%      | 12.596 🥈     | 37.902   | 3568.23   |
-| RapidFuzz            | 32.65% 🥉   | 51.74% 🥇   | 58.54% 🥇   | 66.56% 🥇   | 76.67% 🥇    | 412.887 🥉    | 0.0       | 0.0       |
-| Jaro-Winkler         | 30.27%     | 50.72% 🥈   | 57.66% 🥈   | 65.43% 🥈   | 75.86% 🥈    | 518.326      | 0.0       | 0.0       |
-| Damerau-Levenshtein  | 29.20%     | 48.10%     | 55.56%   | 63.92%      | 73.18%    | 3431.185     | 0.0       | 0.0       |
-| Levenshtein          | 28.10%     | 46.73%     | 54.20%     | 62.64%     | 72.35%      | 463.465      | 0.0       | 0.0       |
-| Norvig               | 33.77% 🥈   | 40.80%     | 41.33%     | 41.48%     | 41.48%      | 746.374      | 0.0       | 0.0       |
-
----
 
 ## Installation
 
@@ -115,10 +76,8 @@ Clone or download this repository, make sure you have Python 3.8 or newer, and i
 Install everything with:
 
 ```bash
-pip install faiss-cpu numpy
+pip install -r requirements.txt
 ```
-
----
 
 ## Quick Start
 
@@ -127,48 +86,68 @@ The repository includes examples files that you can run immediately under `/exam
 ```python
 from vecfuzz import VecFuzz
 
-# Build a small list of words
 words = ["apple", "banana", "orange", "peach", "pineapple"]
 
-# Create the index and build it
-index = VecFuzz().index(words)
+vf = VecFuzz()
+index = vf.build_index(words)
 
-# Look up 3 nearest neighbours for each fuzzy query
 queries = ["aple", "bannana", "orng"]
 results = index.lookup(queries, k=3)
 
 for query, candidates in results:
     print(f"Candidates for '{query}':")
     for candidate, distance in candidates:
-        print(f"  → {candidate} (L1 distance: {distance:.4f})")
-
-# Expected output:
-#    Candidates for 'aple':
-#      → apple (L1 distance: 2.7016)
-#      → pineapple (L1 distance: 10.7789)
-#      → peach (L1 distance: 12.5534)
-#    Candidates for 'bannana':
-#      → banana (L1 distance: 2.5323)
-#      → orange (L1 distance: 18.1574)
-#      → peach (L1 distance: 20.7256)
-#    Candidates for 'orng':
-#      → orange (L1 distance: 6.9839)
-#      → banana (L1 distance: 17.3495)
-#      → apple (L1 distance: 19.3234)
+        print(f"  -> {candidate} (L1 distance: {distance:.4f})")
 ```
 
----
+Actual output on this repo's code:
+
+```
+Candidates for 'aple':
+  -> apple (L1 distance: 4.0879)
+  -> pineapple (L1 distance: 18.8328)
+  -> peach (L1 distance: 19.9901)
+Candidates for 'bannana':
+  -> banana (L1 distance: 3.5214)
+  -> orange (L1 distance: 29.2208)
+  -> peach (L1 distance: 32.7987)
+Candidates for 'orng':
+  -> orange (L1 distance: 9.7637)
+  -> banana (L1 distance: 26.2858)
+  -> apple (L1 distance: 30.1436)
+```
+
+To save and load an index:
+
+```python
+from faiss_index import FaissIndex
+index = VecFuzz().build_index(["..."])
+index.save("index.zip")
+
+# later, or in another process
+from faiss_index import FaissIndex
+index = VecFuzz().load_index("index.zip")
+```
+
+
+## When to use this
+
+- Large dictionaries where SymSpell-style precomputed edit indexes get too large to fit in memory.
+- Interactive/high-QPS fuzzy search where brute-force comparison (RapidFuzz, raw Levenshtein) is too slow.
+- Workloads dominated by insertions or transpositions.
+
+
+## When not to use this
+
+- Workloads dominated by substitution errors, where SymSpell or RapidFuzz will give meaningfully better recall.
+- Small dictionaries where memory isn't a constraint and you can afford brute-force accuracy.
+
 
 ## Contributing
 
-This is an early‑stage tool, and I’d love your ideas. Open an issue or pull request if you find a bug, have a feature request, or want to improve performance.
+Early-stage project — issues and PRs welcome, especially around closing the substitution-error gap. Keep the code clean, the docs plain, and the benchmarks honest.
 
-Please keep the code clean, the documentation human‑friendly, and the benchmarks honest.
-
----
 
 ## License
 
-VecFuzz is provided under the MIT License. Use it, modify it, ship it in your product. Just retain the copyright notice.
-
-If you build something interesting with it, I’d love to hear from you!
+MIT. Use it, modify it, ship it. Keep the copyright notice.
