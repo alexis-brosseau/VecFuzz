@@ -22,7 +22,7 @@ If your dictionary is large, your memory budget is tight, and your queries need 
 Each word is converted into a fixed-length vector with four sub-components contributing to different error types:
 
 1. **Character frequency:** how often each letter appears. `(++insertions ++transpositions)`
-2. **Average character position:** where each character sits in the word. `(+insertions +substitutions +deletions)`
+2. **Average character position:** where each character tends to sit in the word. `(+insertions +substitutions +deletions)`
 3. **Preceding-character influence:** a distance-decayed contribution from earlier characters. `(+substitutions +deletions)`
 4. **Succeeding-character influence:** a distance-decayed contribution from later characters. `(+substitutions +deletions)`
 
