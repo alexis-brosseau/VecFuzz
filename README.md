@@ -150,7 +150,7 @@ index = VecFuzz().load_index("index.zip")
 
 ## Contributing
 
-Early-stage project — issues and PRs welcome, especially around closing the substitution-error gap. Keep the code clean, the docs plain, and the benchmarks honest.
+Early-stage project. Issues and PRs are welcome, especially around closing the substitution-error gap.
 
 
 ## License
