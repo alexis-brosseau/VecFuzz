@@ -406,7 +406,7 @@ def plot_build_time(results: Sequence[Dict[str, object]], output_dir: Path) -> P
 		ax,
 		vocab_sizes,
 		[("VecFuzz", vec_build)] + list(zip(symspell_labels, symspell_builds)),
-		"Construction time vs dictionary size (Lower is better)",
+		"Build time vs dictionary size (Lower is better)",
 		"Dictionary size",
 		"Build time (s)",
 	)
