@@ -33,18 +33,23 @@ All four are normalized by word length, so "apple" and "apples" land close toget
 
 ### Synthetic edit-distance sweep
 
-Dictionary sizes 5k–100k words, compared against SymSpell at three delete-distance/prefix-length configs (d2/p7, d3/p9, d4/p12):
+Dictionary of 100k words, compared against SymSpell at three delete-distance/prefix-length configs (d2/p7, d3/p9, d4/p12):
 
-- **Memory**: VecFuzz grows roughly linearly and stays lowest across all sizes tested; SymSpell d4/p12 grows the fastest, reaching ~2.7GB at 100k words vs VecFuzz's <100MB.
-- **Build time**: VecFuzz is faster to build than SymSpell d4/p12, slower than the lower-order SymSpell configs.
-- **Lookup speed**: SymSpell d2/p7 is fastest by a wide margin; VecFuzz sits in the middle, ahead of SymSpell d3/p9 and d4/p12.
 - **Recall@1 by error type and edit count**:
   - *Insertions*: VecFuzz clearly wins and degrades gracefully, still >40% recall at 9 insertion edits, where every SymSpell config has already dropped to 0 once edits exceed its configured max distance.
   - *Swaps/transpositions*: VecFuzz starts near-perfect and stays well above all SymSpell configs at every edit count.
   - *Deletions*: Roughly comparable to SymSpell, both degrade quickly past 2–3 edits.
   - *Substitutions*: This is VecFuzz's weak point, SymSpell d3/d4 clearly outperform it, especially at 1–3 edits.
+![Accuracy by Error Type Chart](benchmark_outputs/accuracy_by_error_type_and_edits.png)
 
-*(Charts: `benchmarks/memory_footprint_vs_vocab_size.png`, `benchmarks/build_time_vs_vocab_size.png`, `benchmarks/lookup_speed_vs_vocab_size.png`, `benchmarks/accuracy_by_error_type_and_edits.png`)*
+- **Lookup speed**: SymSpell d2/p7 is fastest by a wide margin; VecFuzz sits in the middle, ahead of SymSpell d3/p9 and d4/p12.
+![Lookup Speed Chart](benchmark_outputs/lookup_speed_vs_vocab_size.png)
+
+- **Memory**: VecFuzz grows roughly linearly and stays lowest across all sizes tested; SymSpell d4/p12 grows the fastest, reaching ~2.7GB at 100k words vs VecFuzz's <100MB.
+![Memory Footprint Chart](benchmark_outputs/memory_footprint_vs_vocab_size.png)
+
+- **Build time**: VecFuzz is faster to build than SymSpell d4/p12, slower than the lower-order SymSpell configs.
+![Build Time Chart](benchmark_outputs/build_time_vs_vocab_size.png)
 
 ### Real-world human errors (Birkbeck Spelling Error Corpus)
 
