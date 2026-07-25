@@ -86,7 +86,7 @@ pip install -r requirements.txt
 
 ## Quick Start
 
-The repository includes examples files that you can run immediately under `/examples`. Note that `vecfuzz.py` must be in the same directory. Below is a compact walk‑through.
+The repository includes examples files that you can run immediately under `/examples`. Note that `vecfuzz.py` and `faiss_index.py` must be in the same directory. Below is a compact walk‑through.
 
 ```python
 from vecfuzz import VecFuzz
