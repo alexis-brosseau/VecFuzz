@@ -19,12 +19,12 @@ If your dictionary is large, your memory budget is tight, and your queries need 
 
 ## How it works
 
-Each word is converted into a fixed-length vector with four sub-components:
+Each word is converted into a fixed-length vector with four sub-components contributing to different error types:
 
-1. **Character frequency:** how often each letter appears.
-2. **Average character position:** where each character tends to appear in the word.
-3. **Preceding-character influence:** a distance-decayed contribution from earlier characters.
-4. **Succeeding-character influence:** a distance-decayed contribution from later characters.
+1. **Character frequency:** how often each letter appears. `(++insertions ++transpositions)`
+2. **Average character position:** where each character sits in the word. `(+insertions +substitutions +deletions)`
+3. **Preceding-character influence:** a distance-decayed contribution from earlier characters. `(+substitutions +deletions)`
+4. **Succeeding-character influence:** a distance-decayed contribution from later characters. `(+substitutions +deletions)`
 
 All four are normalized by word length, so "apple" and "apples" land close together. The sub-vectors are concatenated and indexed with FAISS HNSW under Manhattan (L1) distance; a query is vectorized the same way and the nearest neighbours in the index become your top-k candidates.
 
