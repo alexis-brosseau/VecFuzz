@@ -62,7 +62,7 @@ Dictionary ~160k words, non-synthetic human misspellings (includes phonetic erro
 | **VecFuzz**         | 31.94%    | 49.92%   | 56.36%     | 64.29%    | 73.51%      | **3.297s**    | 26.546s   | **134.60** |
 | Levenshtein     | 28.10%       | 46.73%    | 54.20%     | 62.64%    | 72.35%      | 454.533s     | N/A       | N/A       |
 
-Takeaways:
+**Takeaways:**
 - RapidFuzz has the best recall at every k, but takes ~124x longer per query than VecFuzz here.
 - VecFuzz has the smallest memory footprint and the fastest query time of any method.
 - VecFuzz sits second-best on Recall@5 through Recall@100, ahead of SymSpell.
