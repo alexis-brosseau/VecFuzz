@@ -14,7 +14,7 @@ Fuzzy matching has a three-way tension between speed, memory, and accuracy. VecF
 - **Query speed stays high** relative to brute-force comparison methods. RapidFuzz and raw Levenshtein score every candidate per query; VecFuzz searches an ANN index instead, ~100x+ faster in my tests.
 - **Accuracy is competitive** but not best-in-class. On real human misspellings, both RapidFuzz and SymSpell beat VecFuzz on Recall@1. VecFuzz's real strength shows up on insertion and transposition-heavy errors, where it clearly outperforms SymSpell.
 
-If your dictionary is large, your memory budget is tight, and your queries need to be fast, VecFuzz gives up a few points of recall for a large win on the other two axes. If you have the memory and time budget for SymSpell d4 or RapidFuzz, they'll edge it out on pure accuracy.
+If your dictionary is large, your memory budget is tight, and your queries need to be fast, VecFuzz gives up a few points of recall for a large win on the other two axes.
 
 
 ## How it works
@@ -57,12 +57,12 @@ Dictionary ~160k words, non-synthetic human misspellings (includes phonetic erro
 
 | Method          | Recall@1 (%) | Recall@5 (%) | Recall@10 (%) | Recall@25 (%) | Recall@100 (%) | Duration (s) | Build (s) | Size (MB) |
 |-----------------|--------------|--------------|---------------|---------------|----------------|--------------|-----------|-----------|
-| SymSpell d2/p7  | **34.05%**    | 48.92%   | 51.94%        | 54.58%        | 57.70%         | 7.047s    | **1.857s**    | **190.88** |
+| SymSpell d2/p7  | **34.05%**    | 48.92%   | 51.94%        | 54.58%        | 57.70%         | 7.047s    | **1.857s**    | 190.88 |
 | RapidFuzz       | 32.64%    | **51.74%**   | **58.54%**     | **66.56%**    | **76.67%**      | 409.564s  | N/A       | N/A       |
 | **VecFuzz**         | 31.94%    | 49.92%   | 56.36%     | 64.29%    | 73.51%      | **3.297s**    | 26.546s   | **134.60** |
 | Levenshtein     | 28.10%       | 46.73%    | 54.20%     | 62.64%    | 72.35%      | 454.533s     | N/A       | N/A       |
 
-Takeaways:
+**Takeaways:**
 - RapidFuzz has the best recall at every k, but takes ~124x longer per query than VecFuzz here.
 - VecFuzz has the smallest memory footprint and the fastest query time of any method.
 - VecFuzz sits second-best on Recall@5 through Recall@100, ahead of SymSpell.
