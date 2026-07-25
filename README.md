@@ -33,7 +33,7 @@ All four are normalized by word length, so "apple" and "apples" land close toget
 
 ### Synthetic edit-distance sweep
 
-Dictionary of 100k words, compared against SymSpell at three delete-distance/prefix-length configs (d2/p7, d3/p9, d4/p12):
+Dictionary of 100k words, compared against SymSpell at three delete-distance/prefix-length configs (d2/p7, d3/p9, d4/p12). Tested on a Ryzen 9 365.
 
 - **Recall@1 by error type and edit count**:
   - *Insertions*: VecFuzz clearly wins and degrades gracefully, still >40% recall at 9 insertion edits, where every SymSpell config has already dropped to 0 once edits exceed its configured max distance.
@@ -53,7 +53,7 @@ Dictionary of 100k words, compared against SymSpell at three delete-distance/pre
 
 ### Real-world human errors (Birkbeck Spelling Error Corpus)
 
-~160,000-word English dictionary, non-synthetic human misspellings (includes phonetic errors, dysgraphia, multi-error handwriting slips). Single machine, Ryzen 9 365.
+Dictionary ~160k words, non-synthetic human misspellings (includes phonetic errors, dysgraphia, multi-error handwriting slips). Tested on a Ryzen 9 365.
 
 | Method          | Recall@1 (%) | Recall@5 (%) | Recall@10 (%) | Recall@25 (%) | Recall@100 (%) | Duration (s) | Build (s) | Size (MB) |
 |-----------------|--------------|--------------|---------------|---------------|----------------|--------------|-----------|-----------|
