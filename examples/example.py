@@ -13,4 +13,4 @@ results = index.lookup(queries, k=3)
 for query, candidates in results:
     print(f"Candidates for '{query}':")
     for candidate, distance in candidates:
-        print(f"  → {candidate} (L1 distance: {distance:.4f})")
+        print(f"  -> {candidate} (L1 distance: {distance:.4f})")
