@@ -86,15 +86,14 @@ pip install -r requirements.txt
 
 ## Quick Start
 
-The repository includes examples files that you can run immediately under `/examples`. Note that `vecfuzz.py` must be in the same directory. Below is a compact walk‑through.
+The repository includes examples files that you can run immediately under `/examples`. Note that `vecfuzz.py` and `faiss_index.py` must be in the same directory. Below is a compact walk‑through.
 
 ```python
 from vecfuzz import VecFuzz
 
 words = ["apple", "banana", "orange", "peach", "pineapple"]
 
-vf = VecFuzz()
-index = vf.build_index(words)
+index = VecFuzz().build_index(words)
 
 queries = ["aple", "bannana", "orng"]
 results = index.lookup(queries, k=3)
@@ -150,7 +149,7 @@ index = VecFuzz().load_index("index.zip")
 
 ## Contributing
 
-Early-stage project — issues and PRs welcome, especially around closing the substitution-error gap. Keep the code clean, the docs plain, and the benchmarks honest.
+Early-stage project. Issues and PRs are welcome, especially around closing the substitution-error gap.
 
 
 ## License
