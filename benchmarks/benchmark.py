@@ -219,13 +219,10 @@ def _accuracy_from_predictions(test_cases: Sequence[Dict[str, object]], predicti
 
 	return summary
 
-
-def evaluate_lookup(
+def evaluate_vecfuzz_lookup(
 	test_cases: Sequence[Dict[str, object]],
 	vecfuzz_index: object,
-	symspell_index: SymSpell,
-	symspell_config: SymSpellConfig,
-	k: int = 5,
+	k: int = 1
 ) -> Dict[str, object]:
 	queries = [str(case["query"]) for case in test_cases]
 
@@ -233,21 +230,29 @@ def evaluate_lookup(
 	vecfuzz_predictions = lookup_vecfuzz(vecfuzz_index, queries, k=k)
 	vecfuzz_seconds = perf_counter() - t0
 
+	return {
+		"seconds": vecfuzz_seconds,
+		"qps": len(test_cases) / vecfuzz_seconds if vecfuzz_seconds > 0 else 0.0,
+		"accuracy": _accuracy_from_predictions(test_cases, vecfuzz_predictions),
+	}
+ 
+
+def evaluate_symspell_lookup(
+	test_cases: Sequence[Dict[str, object]],
+	symspell_index: SymSpell,
+	symspell_config: SymSpellConfig,
+	k: int = 1,
+) -> Dict[str, object]:
+	queries = [str(case["query"]) for case in test_cases]
+
 	t0 = perf_counter()
 	symspell_predictions = lookup_symspell(symspell_index, queries, symspell_config.max_edit_distance, k=k)
 	symspell_seconds = perf_counter() - t0
 
 	return {
-		"vecfuzz": {
-			"seconds": vecfuzz_seconds,
-			"qps": len(test_cases) / vecfuzz_seconds if vecfuzz_seconds > 0 else 0.0,
-			"accuracy": _accuracy_from_predictions(test_cases, vecfuzz_predictions),
-		},
-		"symspell": {
-			"seconds": symspell_seconds,
-			"qps": len(test_cases) / symspell_seconds if symspell_seconds > 0 else 0.0,
-			"accuracy": _accuracy_from_predictions(test_cases, symspell_predictions),
-		},
+		"seconds": symspell_seconds,
+		"qps": len(test_cases) / symspell_seconds if symspell_seconds > 0 else 0.0,
+		"accuracy": _accuracy_from_predictions(test_cases, symspell_predictions),
 	}
 
 
@@ -304,23 +309,23 @@ def sweep_lookup_by_vocab_size(
 
 		symspell_results = []
 		for artifact, config in zip(symspell_pool, configs):
-			lookup_results = evaluate_lookup(cases, vecfuzz.index, artifact.index, config)
+			lookup_results = evaluate_symspell_lookup(cases, artifact.index, config)
 			symspell_results.append(
 				{
 					"label": artifact.config_label,
-					"qps": lookup_results["symspell"]["qps"],
-					"seconds": lookup_results["symspell"]["seconds"],
+					"qps": lookup_results["qps"],
+					"seconds": lookup_results["seconds"],
 				}
 			)
 
-		vecfuzz_lookup = evaluate_lookup(cases, vecfuzz.index, symspell_pool[0].index, configs[0])
+		vecfuzz_lookup = evaluate_vecfuzz_lookup(cases, vecfuzz.index)
 		rows.append(
 			{
 				"vocab_size": vocab_size,
 				"query_count": len(cases),
 				"vecfuzz": {
-					"qps": vecfuzz_lookup["vecfuzz"]["qps"],
-					"seconds": vecfuzz_lookup["vecfuzz"]["seconds"],
+					"qps": vecfuzz_lookup["qps"],
+					"seconds": vecfuzz_lookup["seconds"],
 				},
 				"symspell": symspell_results,
 			}
@@ -346,19 +351,18 @@ def sweep_accuracy(
 	}
 
 	for artifact, config in zip(symspell_pool, configs):
-		scores = evaluate_lookup(cases, vecfuzz.index, artifact.index, config)
+		scores = evaluate_symspell_lookup(cases, artifact.index, config)
 		accuracy_rows["symspell"].append(
 			{
 				"label": artifact.config_label,
-				"accuracy": scores["symspell"]["accuracy"],
+				"accuracy": scores["accuracy"],
 			}
 		)
 
-	vec_scores = evaluate_lookup(cases, vecfuzz.index, symspell_pool[0].index, configs[0])
-	accuracy_rows["vecfuzz"] = vec_scores["vecfuzz"]["accuracy"]
+	vec_scores = evaluate_vecfuzz_lookup(cases, vecfuzz.index)
+	accuracy_rows["vecfuzz"] = vec_scores["accuracy"]
 
 	return {
-		"cases": cases,
 		"vecfuzz": accuracy_rows["vecfuzz"],
 		"symspell": accuracy_rows["symspell"],
 	}
@@ -537,9 +541,9 @@ def run_benchmark(
 	print("[benchmark] Running build/memory sweep...", flush=True)
 	build_rows = sweep_build_and_memory(vocab, frequencies, vocab_sizes, configs)
 	print("[benchmark] Running lookup speed by dictionary size...", flush=True)
-	lookup_vocab_rows = sweep_lookup_by_vocab_size(vocab, frequencies, vocab_sizes, configs, queries_per_case=query_count, seed=seed + 10)
+	lookup_vocab_rows = sweep_lookup_by_vocab_size(vocab, frequencies, vocab_sizes, configs, queries_per_case=query_count, seed=seed)
 	print("[benchmark] Running accuracy sweep...", flush=True)
-	accuracy_rows = sweep_accuracy(vocab[: max(vocab_sizes)], frequencies, configs, cases_per_combo=query_count, seed=seed + 30)
+	accuracy_rows = sweep_accuracy(vocab[: max(vocab_sizes)], frequencies, configs, cases_per_combo=query_count, seed=seed)
 
 	print("[benchmark] Rendering figures...", flush=True)
 	figures = {
@@ -583,7 +587,7 @@ def main() -> None:
 	parser.add_argument("--seed", type=int, default=0, help="Random seed for vocabulary sampling and typo generation.")
 	parser.add_argument("--max-words", type=int, default=None, help="Optional cap on the vocabulary size loaded from SpellChecker.")
 	parser.add_argument("--vocab-sizes", type=int, nargs="+", default=[5_000, 10_000, 20_000, 40_000, 60_000, 80_000, 100_000], help="Dictionary sizes to sweep.")
-	parser.add_argument("--query-count", type=int, nargs="+", default=10_000, help="Query batch size to sweep.")
+	parser.add_argument("--query-count", type=int, nargs="+", default=100_000, help="Query batch size to sweep.")
 	parser.add_argument("--no-json", action="store_true", help="Do not write the raw JSON results file.")
 	args = parser.parse_args()
 
