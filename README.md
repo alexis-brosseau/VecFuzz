@@ -10,7 +10,7 @@ A **fast approximate string matching library** that turns words into compact vec
 
 Fuzzy matching has a three-way tension between speed, memory, and accuracy. VecFuzz dominate on speed and memory, while remaining competitive on accuracy. What it does:
 
-- **Memory stays flat** as typo-tolerance increases. SymSpell's index size grows combinatorially with max edit distance (its d4/p12 config hits ~3.5GB at 160k words); VecFuzz's stays under ~135MB regardless of how many edits you want to tolerate.
+- **Memory stays flat** as typo-tolerance increases. SymSpell's index size grows combinatorially with max edit distance while VecFuzz grows linearly **O(N)**.
 - **Query speed stays high** relative to brute-force comparison methods. RapidFuzz and raw Levenshtein score every candidate per query; VecFuzz searches an ANN index instead, ~100x+ faster in my tests.
 - **Accuracy is competitive** but not best-in-class. On real human misspellings, both RapidFuzz and SymSpell beat VecFuzz on Recall@1. VecFuzz's real strength shows up on insertion and transposition-heavy errors, where it clearly outperforms SymSpell.
 
