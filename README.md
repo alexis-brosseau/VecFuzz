@@ -70,7 +70,7 @@ Dictionary ~160k words, non-synthetic human misspellings (includes phonetic erro
 
 ## Installation
 
-No pip package yet, the project is under active development. Import it directly as `from vecfuzz import VecFuzz` after placing `vecfuzz.py` and `faiss_index.py` in your working directory.
+No pip package yet, the project is under active development. Import it directly as `from vecfuzz import VecFuzz` after placing `vecfuzz.py` in your working directory.
 Clone or download this repository, make sure you have Python 3.8 or newer, and install the required dependencies.
 
 ### Dependencies:
@@ -86,7 +86,7 @@ pip install -r requirements.txt
 
 ## Quick Start
 
-The repository includes examples files that you can run immediately under `/examples`. Note that `vecfuzz.py` and `faiss_index.py` must be in the same directory. Below is a compact walk‑through.
+The repository includes examples files that you can run immediately under `/examples`. Note that `vecfuzz.py` must be in the same directory. Below is a compact walk‑through.
 
 ```python
 from vecfuzz import VecFuzz
