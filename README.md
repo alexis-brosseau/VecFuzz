@@ -124,12 +124,12 @@ Candidates for 'orng':
 To save and load an index:
 
 ```python
-from faiss_index import FaissIndex
+from vecfuzz import VecFuzz
 index = VecFuzz().build_index(["..."])
 index.save("index.zip")
 
 # later, or in another process
-from faiss_index import FaissIndex
+from vecfuzz import VecFuzz
 index = VecFuzz().load_index("index.zip")
 ```
 
