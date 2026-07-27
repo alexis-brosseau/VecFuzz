@@ -144,7 +144,7 @@ index = VecFuzz().load_index("index.zip")
 ## When not to use this
 
 - Workloads dominated by substitution errors, where SymSpell or RapidFuzz will give meaningfully better recall.
-- Small dictionaries where memory isn't a constraint and you can afford brute-force accuracy.
+- Small dictionaries where memory and speed aren't a constraint.
 
 
 ## Contributing
