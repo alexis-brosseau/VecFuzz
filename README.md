@@ -104,7 +104,7 @@ for query, candidates in results:
         print(f"  -> {candidate} (L1 distance: {distance:.4f})")
 ```
 
-Actual output on this repo's code:
+Expected output:
 
 ```
 Candidates for 'aple':
