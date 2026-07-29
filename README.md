@@ -75,7 +75,7 @@ Clone or download this repository, make sure you have Python 3.8 or newer, and i
 
 ### Dependencies:
 
-- `faiss-cpu` (or `faiss-gpu` if you have an NVIDIA GPU and CUDA)
+- `faiss-cpu`
 - `numpy`
 
 Install everything with:
