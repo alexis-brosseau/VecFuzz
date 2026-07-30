@@ -115,6 +115,10 @@ class VecFuzz:
                     weight = (pos + BOOST) * (DECAY ** dist)
                     vec_suc[idx] += weight / w_len
 
+        # TODO: In a seperacte vectorization function, consider adding additional phonetic and linguistic features to the vector representation of the word.
+        # - Consider adding a voyel/consonant ratio vector to capture phonetic characteristics of the word.
+        # - Consider adding an International Phonetic Alphabet (IPA) vector to capture pronunciation features of the word.
+        
         vector = np.concatenate([vec_frq, vec_pos, vec_pre, vec_suc])
         return vector
 

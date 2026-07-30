@@ -21,7 +21,7 @@ from unicodedata import normalize
 from vecfuzz import VecFuzz
 
 
-TYPO_TYPES = ("substitution", "swap", "deletion", "insertion")
+TYPO_TYPES = ("substitution", "transposition", "deletion", "insertion")
 DEFAULT_EDIT_LEVELS = (1, 2, 3, 4, 5 , 6, 7, 8, 9)
 DEFAULT_SYMSPELL_CONFIGS = (
 	{"label": "SymSpell d2/p7", "max_edit_distance": 2, "prefix_length": 7},
@@ -91,7 +91,7 @@ def _apply_single_typo(word: str, typo_type: str, rng: random.Random) -> str:
 		replacement = rng.choice(replacement_choices or alphabet)
 		return word[:idx] + replacement + word[idx + 1 :]
 
-	if typo_type == "swap":
+	if typo_type == "transposition":
 		if len(word) < 2:
 			return word
 		idx = rng.randrange(len(word) - 1)

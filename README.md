@@ -37,7 +37,7 @@ Dictionary of 100k words, compared against SymSpell at three delete-distance/pre
 
 - **Recall@1 by error type and edit count**:
   - *Insertions*: VecFuzz clearly wins and degrades gracefully, still >40% recall at 9 insertion edits, where every SymSpell config has already dropped to 0 once edits exceed its configured max distance.
-  - *Swaps/transpositions*: VecFuzz starts near-perfect and stays well above all SymSpell configs at every edit count.
+  - *Transpositions*: VecFuzz starts near-perfect and stays well above all SymSpell configs at every edit count.
   - *Deletions*: Ahead of SymSpell, but both degrade quickly past 2–3 edits.
   - *Substitutions*: This is VecFuzz's weak point, SymSpell d3/d4 clearly outperform it, especially at 1–3 edits.
 ![Accuracy by Error Type Chart](benchmark_outputs/accuracy_by_error_type_and_edits.png)
