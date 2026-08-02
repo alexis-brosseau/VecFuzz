@@ -7,10 +7,10 @@ if __name__ == "__main__":
     typos = ["teh", "recieve", "definately", "occured", "publically"]
     
     print(f"Building vector index for {len(words)} words...")
-    index = VecFuzz().build_index(words)
+    vecfuzz = VecFuzz().build(words)
     
     print(f"Looking up candidates...\n")
-    results = index.lookup(typos, k=3)
+    results = vecfuzz.lookup(typos, k=3)
 
     for query, candidates in results:
         print(f"Candidates for '{query}':")

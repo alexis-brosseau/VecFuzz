@@ -163,15 +163,14 @@ def build_symspell(vocab: Sequence[str], config: SymSpellConfig, frequencies: Di
 
 def build_vecfuzz(vocab: Sequence[str]) -> IndexArtifact:
 	t0 = perf_counter()
-	vecfuzz = VecFuzz()
-	index = vecfuzz.build_index(list(vocab))
+	vecfuzz = VecFuzz().build(list(vocab))
 	build_seconds = perf_counter() - t0
 	return IndexArtifact(
 		name="VecFuzz",
 		config_label="default",
-		index=index,
+		index=vecfuzz,
 		build_seconds=build_seconds,
-		size_mb=_safe_size_mb(index),
+		size_mb=_safe_size_mb(vecfuzz),
 	)
 
 

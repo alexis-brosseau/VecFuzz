@@ -15,7 +15,7 @@ class VecFuzz:
 
     def __init__(self, chars: str="aàbcçdeéèêëfghiïjklmnñoöpqrstuvwxyz0123456789-̧ '. ", ef_construction: int=200, M: int=32, ef: int=50):
         """
-        Initialize the VecFuzz instance with a set of valid characters for vectorization.
+        Initialize the FAISS index parameters.
 
         Args:
             chars (str): A string containing all valid characters for vectorization.
@@ -28,35 +28,15 @@ class VecFuzz:
         self._chars_len = len(chars)
         self._char_idx = {c: i for i, c in enumerate(chars)}
         
-        self._ef_construction = ef_construction
-        self._M = M
-        self._ef = ef
-
-        self._index = None
-
-    def build_index(self, entries: list[str]):
-        """
-        Create a FAISS index from a list of string entries.
-
-        Args:
-            entries (list[str]): A list of strings to vectorize and index.
-            ef_construction (int, optional): The depth of the search during index construction for FAISS HNSW. Defaults to 200.
-            M (int, optional): The number of bi-directional links created for every new element during HNSW index construction. Defaults to 32.
-            ef (int, optional): The depth of the search for FAISS HNSW. Defaults to 50.
-        """
-        self._index = FaissIndex(self.vectorize, faiss.METRIC_L1, self._ef_construction, self._M, self._ef).build(entries)
-        return self._index
-    
-    def load_index(self, filepath = "index.zip"):
-        """
-        Load a previously saved FAISS index from a file.
-
-        Args:
-            filepath (str, optional): The path to the file from which the index should be loaded. Defaults to "index.zip".
-        """
-        self._index = FaissIndex(self.vectorize, faiss.METRIC_L1, self._ef_construction, self._M, self._ef).load(filepath)
-        return self._index
-
+        self.metric = faiss.METRIC_L1
+        self.ef_construction = ef_construction
+        self.M = M
+        self.ef = ef
+        
+        self.entries = None
+        self.vectors = None
+        self.index = None
+        
     def vectorize(self, word: str):
         """
         Convert a given word into an overlapping positional, count, and neighbor-based representation float vector.
@@ -114,52 +94,20 @@ class VecFuzz:
                     
                     weight = (pos + BOOST) * (DECAY ** dist)
                     vec_suc[idx] += weight / w_len
-
-        # TODO: In a seperacte vectorization function, consider adding additional phonetic and linguistic features to the vector representation of the word.
-        # - Consider adding a voyel/consonant ratio vector to capture phonetic characteristics of the word.
-        # - Consider adding an International Phonetic Alphabet (IPA) vector to capture pronunciation features of the word.
         
         vector = np.concatenate([vec_frq, vec_pos, vec_pre, vec_suc])
         return vector
-
-
-class FaissIndex:
-    """
-    This class handles the vectorization of strings and stores them 
-    in an indexing structure (FAISS HNSW) for efficient similarity search.
-    """
-
-    def __init__(self, vectorize: Callable, metric: int, ef_construction: int=200, M: int=32, ef: int=50):
-        """
-        Initialize the FAISS index parameters.
-
-        Args:
-            vectorize (Callable): A function that takes a string and returns its vector representation.
-            ef_construction (int, optional): The depth of the search during index construction for FAISS HNSW. Defaults to 200.
-            M (int, optional): The number of bi-directional links created for every new element during HNSW index construction. Defaults to 32.
-            ef (int, optional): The depth of the search for FAISS HNSW. Defaults to 50.
-        """
-        self.vectorize = vectorize
-        
-        self.metric = metric
-        self.ef_construction = ef_construction
-        self.M = M
-        self.ef = ef
-        
-        self.entries = None
-        self.vectors = None
-        self.index = None
     
     def build(self, entries: list[str]):
         """
-        Build the FAISS index using the provided entries and vectorization function.
+        Build the FAISS index using the provided entries.
         
         Args:
             entries (list[str]): A list of strings to vectorize and index.
         """
         self.entries = entries
         self.vectors = np.vstack([ self.vectorize(e) for e in entries ])
-        self.index = FaissIndex._build_index(self.vectors, self.metric, self.ef_construction, self.M, self.ef)
+        self._build_index()
         
         return self
 
@@ -183,6 +131,8 @@ class FaissIndex:
         with zipfile.ZipFile(filepath, 'w', zipfile.ZIP_DEFLATED) as zf:
             zf.writestr('metadata.pkl', metadata_buffer.getvalue())
             zf.writestr('faiss.index', faiss_buffer.getvalue())
+            
+        return self
 
     def load(self, filepath: str="index.zip"):
         """
@@ -234,7 +184,7 @@ class FaissIndex:
         
         return results
     
-    def _build_index(vectors: np.ndarray, metric: int, ef_construction: int, M: int, ef: int):
+    def _build_index(self):
         """
         Construct the FAISS HNSW Index based on the built corpus vectors.
         
@@ -248,11 +198,12 @@ class FaissIndex:
             faiss.Index: The constructed FAISS index.
         """ 
         
-        dim = vectors.shape[1]
+        dim = self.vectors.shape[1]
         
-        index = faiss.index_factory(dim, f"HNSW{M}", metric)
-        index.hnsw.efConstruction = ef_construction
-        index.hnsw.efSearch = ef
-        index.add(vectors)
+        index = faiss.index_factory(dim, f"HNSW{self.M}", self.metric)
+        index.hnsw.efConstruction = self.ef_construction
+        index.hnsw.efSearch = self.ef
+        index.add(self.vectors)
         
+        self.index = index
         return index

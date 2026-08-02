@@ -160,7 +160,7 @@ def run_birkbeck_benchmark(save_to_file=False):
     # Build VecFuzz index
     print("Building VecFuzz index (preprocessing)...")
     t0_vecfuzz = time()
-    vecfuzz_instance = VecFuzz().build_index(vocab)
+    vecfuzz_instance = VecFuzz().build(vocab)
     t1_vecfuzz = time()
     vecfuzz_build_time = t1_vecfuzz - t0_vecfuzz
     vecfuzz_size = asizeof.asizeof(vecfuzz_instance) / (1024 * 1024)
