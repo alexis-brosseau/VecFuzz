@@ -125,12 +125,11 @@ To save and load an index:
 
 ```python
 from vecfuzz import VecFuzz
-index = VecFuzz().build_index(["..."])
-index.save("index.zip")
+vecfuzz = VecFuzz().build(["..."]).save("index.zip")
 
 # later, or in another process
 from vecfuzz import VecFuzz
-index = VecFuzz().load_index("index.zip")
+vecfuzz = VecFuzz().load("index.zip")
 ```
 
 
