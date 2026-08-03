@@ -69,11 +69,10 @@ class VecFuzz:
             raise ValueError("The input word is empty and cannot be vectorized.")
 
         vec_frq = np.zeros(self._chars_len, dtype=np.float32)  # char frequency
-        vec_pos = np.zeros(self._chars_len, dtype=np.float32)  # mean char position
         vec_pre = np.zeros(self._chars_len, dtype=np.float32)  # preceding-position density
         vec_suc = np.zeros(self._chars_len, dtype=np.float32)  # succeeding-position density
 
-        PHASE_FREQS = (1.0, 2.0) # frequency bands (in units of pi) for phase encoding
+        PHASE_FREQS = [1.0, 2.0] # frequency bands (in units of pi) for phase encoding
         num_bands = len(PHASE_FREQS)
         vec_phase = np.zeros(2 * num_bands * self._chars_len, dtype=np.float32) # phase-encoded position
 
@@ -84,7 +83,6 @@ class VecFuzz:
                 idx = self._char_idx[ch]
 
                 vec_frq[idx] += 1 / w_len
-                vec_pos[idx] += pos / w_len
                 vec_pre[idx] += i               * (i + 1)       / (2 * w_len ** 2)
                 vec_suc[idx] += (w_len - 1 - i) * (w_len - i)   / (2 * w_len ** 2)
 
@@ -93,7 +91,7 @@ class VecFuzz:
                     vec_phase[(2 * k) * self._chars_len + idx] += np.cos(theta) / w_len
                     vec_phase[(2 * k + 1) * self._chars_len + idx] += np.sin(theta) / w_len
 
-        vector = np.concatenate([vec_frq, vec_pos, vec_pre, vec_suc, vec_phase])
+        vector = np.concatenate([vec_frq, vec_pre, vec_suc, vec_phase])
         return vector
     
     def vectorize_batch(self, words: list[str]) -> np.ndarray:
@@ -105,7 +103,7 @@ class VecFuzz:
         """
         words = [w.strip().lower() for w in words]
 
-        PHASE_FREQS = (1.0, 2.0)
+        PHASE_FREQS = [1.0, 2.0]
         chars_len = self._chars_len
 
         n = len(words)
@@ -130,12 +128,10 @@ class VecFuzz:
         flat = word_id * chars_len + idx  # flat index into a (n, chars_len) row-major array
 
         vec_frq = np.zeros((n, chars_len), dtype=np.float32)
-        vec_pos = np.zeros((n, chars_len), dtype=np.float32)
         vec_pre = np.zeros((n, chars_len), dtype=np.float32)
         vec_suc = np.zeros((n, chars_len), dtype=np.float32)
 
         np.add.at(vec_frq.reshape(-1), flat, (1.0 / wl).astype(np.float32))
-        np.add.at(vec_pos.reshape(-1), flat, (pos / wl).astype(np.float32))
         np.add.at(vec_pre.reshape(-1), flat,
                 (i_valid * (i_valid + 1) / (2 * wl ** 2)).astype(np.float32))
         np.add.at(vec_suc.reshape(-1), flat,
@@ -155,7 +151,7 @@ class VecFuzz:
 
         vec_phase = np.concatenate(phase_parts, axis=1)
 
-        return np.concatenate([vec_frq, vec_pos, vec_pre, vec_suc, vec_phase], axis=1)
+        return np.concatenate([vec_frq, vec_pre, vec_suc, vec_phase], axis=1)
     
     def build(self, entries: list[str]):
         """

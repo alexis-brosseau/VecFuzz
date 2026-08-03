@@ -23,10 +23,9 @@ If your dictionary is large, your memory budget is tight, queries need to be fas
 Each word is converted into a fixed-length vector with four sub-components:
 
 1. **Character frequency:** how often each letter appears.
-2. **Average character position:** the mean normalized position at which each character occurs.
-3. **Preceding-position density:** for each character, the sum of normalized positions of all characters before it. This captures *how much of the word has already gone by*.
-4. **Succeeding-position density:** for each character, the sum of normalized positions of all characters after it. This captures *how much of the word is still ahead*.
-5. **Phase-encoded position:** a small sinusoidal (cos/sin) expansion of each character's position across a few frequency bands. Unlike (2), repeated occurrences of the same character don't collapse to a single mean, they interfere constructively or destructively across bands, preserving more of the position *distribution* than a plain average can.
+2. **Preceding-position density:** for each character, the sum of normalized positions of all characters before it. This captures *how much of the word has already gone by*.
+3. **Succeeding-position density:** for each character, the sum of normalized positions of all characters after it. This captures *how much of the word is still ahead*.
+4. **Phase-encoded position:** a small sinusoidal (cos/sin) expansion of each character's position across a few frequency bands. Unlike (2), repeated occurrences of the same character don't collapse to a single mean, they interfere constructively or destructively across bands, preserving more of the position *distribution* than a plain average can.
 
 All sub-vectors are normalized by word length, so "apple" and "apples" land close together. The sub-vectors are concatenated and indexed with FAISS HNSW under Manhattan (L1) distance; a query is vectorized the same way and the nearest neighbours in the index become your top-k candidates.
 
@@ -60,7 +59,7 @@ Dictionary ~160k words, non-synthetic human misspellings (includes phonetic erro
 
 | Method          | Recall@1 (%) | Recall@5 (%) | Recall@10 (%) | Recall@25 (%) | Recall@100 (%) | Duration (s) | Build (s) | Size (MB) |
 |-----------------|--------------|--------------|---------------|---------------|----------------|--------------|-----------|-----------|
-| **VecFuzz**     | **35.28%**   | **54.34%**   | **60.91%**    | **68.41%**    | **77.78%**     | **4.062s**   | 46.884s   | 259.77 MB |
+| **VecFuzz**     | **35.29%**   | **54.88%**   | **61.58%**    | **69.08%**    | **78.39%**     | **3.762s**   | 43.479s   | 228.48 MB |
 | SymSpell d2/p7  | 34.05%       | 48.92%       | 51.94%        | 54.58%        | 57.70%         | 7.675s       | **1.889s**| **190.88 MB** |
 | RapidFuzz       | 32.64%       | 51.74%       | 58.54%        | 66.56%        | 76.67%         | 409.564s     | N/A       | N/A       |
 | Levenshtein     | 28.10%       | 46.73%       | 54.20%        | 62.64%        | 72.35%         | 454.533s     | N/A       | N/A       |
