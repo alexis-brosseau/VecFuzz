@@ -105,7 +105,7 @@ class VecFuzz:
         """
         words = [w.strip().lower() for w in words]
 
-        PHASE_FREQS = [0.01, 0.1, 0.5, 1.0, 2.0]
+        PHASE_FREQS = [0.1, 0.5, 1.0, 2.0]
         chars_len = self._chars_len
 
         n = len(words)
