@@ -82,6 +82,9 @@ class VecFuzz:
         num_bands = len(PHASE_FREQS)
         vec_phase = np.zeros(2 * num_bands * self._chars_len, dtype=np.float32) # phase-encoded position
 
+        ADJ_DIM = 64
+        vec_adj = np.zeros(ADJ_DIM, dtype=np.float32)  # adjacency-hash of (char, next-char) pairs
+
         for i, ch in enumerate(word):
             pos = (i + 1) / w_len
 
@@ -97,7 +100,15 @@ class VecFuzz:
                     vec_phase[(2 * k) * self._chars_len + idx] += np.cos(theta) / w_len
                     vec_phase[(2 * k + 1) * self._chars_len + idx] += np.sin(theta) / w_len
 
-        vector = np.concatenate([vec_frq, vec_pre, vec_suc, vec_phase])
+                if i + 1 < w_len:
+                    next_ch = word[i + 1]
+                    if next_ch in self._char_idx:
+                        next_idx = self._char_idx[next_ch]
+                        pair_id = idx * self._chars_len + next_idx
+                        bucket = pair_id % ADJ_DIM
+                        vec_adj[bucket] += 1 / w_len
+
+        vector = np.concatenate([vec_frq, vec_pre, vec_suc, vec_phase, vec_adj])
         return vector
     
     def vectorize_batch(self, words: list[str]) -> np.ndarray:
@@ -110,13 +121,14 @@ class VecFuzz:
         words = [w.strip().lower() for w in words]
 
         PHASE_FREQS = [1.0, 2.0]
+        ADJ_DIM = 64
         chars_len = self._chars_len
 
         n = len(words)
         lens = np.array([len(w) for w in words], dtype=np.int64)
         max_len = int(lens.max())
 
-        # char -> idx lookup, -1 for unknown/padding (unavoidable Python loop, dict-based)
+        # char -> idx lookup, -1 for unknown/padding
         idx_all = np.full((n, max_len), -1, dtype=np.int64)
         for r, w in enumerate(words):
             for c, ch in enumerate(w):
@@ -134,12 +146,10 @@ class VecFuzz:
         flat = word_id * chars_len + idx  # flat index into a (n, chars_len) row-major array
 
         vec_frq = np.zeros((n, chars_len), dtype=np.float32)
-        vec_pos = np.zeros((n, chars_len), dtype=np.float32)
         vec_pre = np.zeros((n, chars_len), dtype=np.float32)
         vec_suc = np.zeros((n, chars_len), dtype=np.float32)
 
         np.add.at(vec_frq.reshape(-1), flat, (1.0 / wl).astype(np.float32))
-        np.add.at(vec_pos.reshape(-1), flat, (pos / wl).astype(np.float32))
         np.add.at(vec_pre.reshape(-1), flat,
                 (i_valid * (i_valid + 1) / (2 * wl ** 2)).astype(np.float32))
         np.add.at(vec_suc.reshape(-1), flat,
@@ -159,7 +169,24 @@ class VecFuzz:
 
         vec_phase = np.concatenate(phase_parts, axis=1)
 
-        return np.concatenate([vec_frq, vec_pre, vec_suc, vec_phase], axis=1)
+        idx_i = idx_all[:, :-1]
+        idx_j = idx_all[:, 1:]
+        valid_pair = (idx_i >= 0) & (idx_j >= 0)
+
+        word_id2, i2 = np.nonzero(valid_pair)
+        ii = idx_i[word_id2, i2]
+        jj = idx_j[word_id2, i2]
+        wl2 = lens[word_id2].astype(np.float32)
+
+        pair_id = ii * chars_len + jj
+        bucket = pair_id % ADJ_DIM
+
+        flat_adj = word_id2 * ADJ_DIM + bucket
+
+        vec_adj = np.zeros((n, ADJ_DIM), dtype=np.float32)
+        np.add.at(vec_adj.reshape(-1), flat_adj, (1.0 / wl2).astype(np.float32))
+
+        return np.concatenate([vec_frq, vec_pre, vec_suc, vec_phase, vec_adj], axis=1)
     
     def build(self, entries: list[str]):
         """
