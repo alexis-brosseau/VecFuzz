@@ -59,7 +59,7 @@ class VecFuzz:
         2. Preceding-position density: for each character, a sum of positions that came before it.
         3. Succeeding-position density: for each character, a sum of positions that came after it.
         4. Phase-encoded position: sinusoidal expansion of each character's position(s) at a few frequencies (cos/sin pairs per band).
-
+        5. Adjacency-hash: fixed-size hashed counts of (char, next-char) bigrams, normalized by word length. Captures local ordering.
         All sub-vectors are normalized by word length for scale invariance.
 
         Args:
