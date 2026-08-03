@@ -39,15 +39,22 @@ class VecFuzz:
         
     def vectorize(self, word: str):
         """
-        Convert a given word into an overlapping positional, count, and neighbor-based representation float vector.
-
-        It generates a concatenated vector with 4 distinct sub-vectors:
-        1. Character frequencies
-        2. Average character position
-        3. Preceding characters influence
-        4. Succeeding characters influence
+        Warning: This method is not optimized for batch processing and may be slow for large datasets. 
+        Use vectorize_batch() for better performance. 
+        This method is provided for convenience.
         
-        All sub-vectors are normalized by the length of the word to ensure scale invariance.
+        Convert a given word into a concatenated positional/frequency representation.
+
+        Produces 5 sub-vectors, each of length self._chars_len (except the phase
+        block, which is 2*K*self._chars_len):
+
+        1. Character frequency: count of each character, normalized by word length.
+        2. Average character position: mean normalized position (i/w_len) at which each character occurs.
+        3. Preceding-position density: for each character, a sum of positions that came before it.
+        4. Succeeding-position density: for each character, a sum of positions that came after it.
+        5. Phase-encoded position: sinusoidal expansion of each character's position(s) at a few frequencies (cos/sin pairs per band).
+
+        All sub-vectors are normalized by word length for scale invariance.
 
         Args:
             word (str): The string to vectorize.
@@ -57,46 +64,98 @@ class VecFuzz:
         """
         word = word.strip().lower()
         w_len = len(word)
-        
+
         if w_len == 0:
             raise ValueError("The input word is empty and cannot be vectorized.")
-        
-        vec_frq = np.zeros(self._chars_len, dtype=np.float32)     # Vector based on char frequency
-        vec_pos  = np.zeros(self._chars_len, dtype=np.float32)    # Vector based on char position
 
-        for i, ch in enumerate(word, start=1):
-            if ch in self._char_idx:
-                idx = self._char_idx[ch]
-                vec_frq[idx] += 1 / w_len
-                vec_pos[idx]  += i / w_len
+        vec_frq = np.zeros(self._chars_len, dtype=np.float32)  # char frequency
+        vec_pos = np.zeros(self._chars_len, dtype=np.float32)  # mean char position
+        vec_pre = np.zeros(self._chars_len, dtype=np.float32)  # preceding-position density
+        vec_suc = np.zeros(self._chars_len, dtype=np.float32)  # succeeding-position density
 
-        # Context-based vectors
-        DECAY = 0.9     # Reduces the influence of farther characters
-        BOOST = 3.5     # Amplifies the influence of neighboring characters
-        
-        vec_pre = np.zeros(self._chars_len, dtype=np.float32)     # Vector based on preceding chars influence
-        vec_suc = np.zeros(self._chars_len, dtype=np.float32)     # Vector based on succeeding chars influence
-        
+        PHASE_FREQS = (1.0, 2.0) # frequency bands (in units of pi) for phase encoding
+        num_bands = len(PHASE_FREQS)
+        vec_phase = np.zeros(2 * num_bands * self._chars_len, dtype=np.float32) # phase-encoded position
+
         for i, ch in enumerate(word):
+            pos = (i + 1) / w_len
+
             if ch in self._char_idx:
                 idx = self._char_idx[ch]
 
-                for j in range(i):
-                    pos = (j + 1) / w_len
-                    dist = i - j
-                    
-                    weight = (pos + BOOST) * (DECAY ** dist)
-                    vec_pre[idx] += weight / w_len
+                vec_frq[idx] += 1 / w_len
+                vec_pos[idx] += pos / w_len
+                vec_pre[idx] += i               * (i + 1)       / (2 * w_len ** 2)
+                vec_suc[idx] += (w_len - 1 - i) * (w_len - i)   / (2 * w_len ** 2)
 
-                for j in range(i + 1, w_len):
-                    pos = (w_len - j) / w_len
-                    dist = j - i
-                    
-                    weight = (pos + BOOST) * (DECAY ** dist)
-                    vec_suc[idx] += weight / w_len
-        
-        vector = np.concatenate([vec_frq, vec_pos, vec_pre, vec_suc])
+                for k, freq in enumerate(PHASE_FREQS):
+                    theta = freq * np.pi * pos
+                    vec_phase[(2 * k) * self._chars_len + idx] += np.cos(theta) / w_len
+                    vec_phase[(2 * k + 1) * self._chars_len + idx] += np.sin(theta) / w_len
+
+        vector = np.concatenate([vec_frq, vec_pos, vec_pre, vec_suc, vec_phase])
         return vector
+    
+    def vectorize_batch(self, words: list[str]) -> np.ndarray:
+        """
+        Batch version of vectorize(). Used for building the index and looking up queries.
+        
+        Returns:
+            np.ndarray: A 2D numpy array of shape (len(words), vector_length) containing the vector representations of the input words.
+        """
+        words = [w.strip().lower() for w in words]
+
+        PHASE_FREQS = (1.0, 2.0)
+        chars_len = self._chars_len
+
+        n = len(words)
+        lens = np.array([len(w) for w in words], dtype=np.int64)
+        max_len = int(lens.max())
+
+        # char -> idx lookup, -1 for unknown/padding (unavoidable Python loop, dict-based)
+        idx_all = np.full((n, max_len), -1, dtype=np.int64)
+        for r, w in enumerate(words):
+            for c, ch in enumerate(w):
+                idx_all[r, c] = self._char_idx.get(ch, -1)
+
+        i = np.arange(max_len)[None, :]          # (1, max_len)
+        w_len_col = lens[:, None]                # (n, 1)
+        mask = (i < w_len_col) & (idx_all >= 0)  # valid, in-vocab positions
+
+        word_id, i_valid = np.nonzero(mask)      # flat lists of (row, col) for valid entries
+        idx = idx_all[word_id, i_valid]
+        wl = lens[word_id].astype(np.float32)
+        pos = (i_valid + 1) / wl
+
+        flat = word_id * chars_len + idx  # flat index into a (n, chars_len) row-major array
+
+        vec_frq = np.zeros((n, chars_len), dtype=np.float32)
+        vec_pos = np.zeros((n, chars_len), dtype=np.float32)
+        vec_pre = np.zeros((n, chars_len), dtype=np.float32)
+        vec_suc = np.zeros((n, chars_len), dtype=np.float32)
+
+        np.add.at(vec_frq.reshape(-1), flat, (1.0 / wl).astype(np.float32))
+        np.add.at(vec_pos.reshape(-1), flat, (pos / wl).astype(np.float32))
+        np.add.at(vec_pre.reshape(-1), flat,
+                (i_valid * (i_valid + 1) / (2 * wl ** 2)).astype(np.float32))
+        np.add.at(vec_suc.reshape(-1), flat,
+                ((wl - 1 - i_valid) * (wl - i_valid) / (2 * wl ** 2)).astype(np.float32))
+
+        # phase blocks: each band's cos/sin built as its own contiguous array,
+        # then concatenated (avoids the non-contiguous-slice pitfall)
+        phase_parts = []
+        for freq in PHASE_FREQS:
+            theta = freq * np.pi * pos
+            cos_arr = np.zeros((n, chars_len), dtype=np.float32)
+            sin_arr = np.zeros((n, chars_len), dtype=np.float32)
+            np.add.at(cos_arr.reshape(-1), flat, (np.cos(theta) / wl).astype(np.float32))
+            np.add.at(sin_arr.reshape(-1), flat, (np.sin(theta) / wl).astype(np.float32))
+            phase_parts.append(cos_arr)
+            phase_parts.append(sin_arr)
+
+        vec_phase = np.concatenate(phase_parts, axis=1)
+
+        return np.concatenate([vec_frq, vec_pos, vec_pre, vec_suc, vec_phase], axis=1)
     
     def build(self, entries: list[str]):
         """
@@ -106,7 +165,7 @@ class VecFuzz:
             entries (list[str]): A list of strings to vectorize and index.
         """
         self.entries = entries
-        self.vectors = np.vstack([ self.vectorize(e) for e in entries ])
+        self.vectors = self.vectorize_batch(entries)
         self._build_index()
         
         return self
@@ -174,7 +233,7 @@ class VecFuzz:
         if self.index is None:
             raise ValueError("The index has not been built yet. Please call the `build` method before performing lookups.")
         
-        query_vectors = np.array([self.vectorize(q) for q in queries], dtype=np.float32)
+        query_vectors = self.vectorize_batch(queries)
         distances, labels = self.index.search(query_vectors, k)
         
         results = []

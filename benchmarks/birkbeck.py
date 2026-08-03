@@ -145,6 +145,14 @@ def run_birkbeck_benchmark(save_to_file=False):
             
     vocab = list(filtered_dict.keys())
     print(f"Using {len(vocab)} words for the benchmark vocabulary.")
+
+    # Build VecFuzz index
+    print("Building VecFuzz index (preprocessing)...")
+    t0_vecfuzz = time()
+    vecfuzz_instance = VecFuzz().build(vocab)
+    t1_vecfuzz = time()
+    vecfuzz_build_time = t1_vecfuzz - t0_vecfuzz
+    vecfuzz_size = asizeof.asizeof(vecfuzz_instance) / (1024 * 1024)
     
     # Build SymSpell dictionary and measure build time
     print("Building SymSpell d2/p7 dictionary (preprocessing)...")
@@ -157,18 +165,10 @@ def run_birkbeck_benchmark(save_to_file=False):
     symspell_build_time_d2 = t1_build - t0_build
     symspell_size_d2 = asizeof.asizeof(symspell_instance_d2) / (1024 * 1024)
 
-    # Build VecFuzz index
-    print("Building VecFuzz index (preprocessing)...")
-    t0_vecfuzz = time()
-    vecfuzz_instance = VecFuzz().build(vocab)
-    t1_vecfuzz = time()
-    vecfuzz_build_time = t1_vecfuzz - t0_vecfuzz
-    vecfuzz_size = asizeof.asizeof(vecfuzz_instance) / (1024 * 1024)
-
     # Define methods to benchmark
     methods = [
-        (candidates_symspell, "SymSpell d2/p7", [symspell_instance_d2], False),
         (candidates_vecfuzz_batch, "VecFuzz", [vecfuzz_instance], True),
+        (candidates_symspell, "SymSpell d2/p7", [symspell_instance_d2], False),
         (candidates_rapidfuzz, "RapidFuzz", [], False),
         (candidates_levenshtein, "Levenshtein", [], False),
     ]
