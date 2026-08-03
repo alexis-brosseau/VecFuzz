@@ -154,15 +154,18 @@ class VecFuzz:
 
         return np.concatenate([vec_frq, vec_pre, vec_suc, vec_phase], axis=1)
     
-    def build(self, entries: list[str]):
+    def build(self, entries: list[str], num_threads=os.cpu_count()):
         """
         Build the FAISS index using the provided entries.
         
         Args:
             entries (list[str]): A list of strings to vectorize and index.
+            num_threads: Number of thread used to build the index. Default to the maximum available on the system.
         """
         self.entries = entries
         self.vectors = self.vectorize_batch(entries)
+
+        faiss.omp_set_num_threads(num_threads)
         self._build_index()
         
         return self
@@ -253,9 +256,6 @@ class VecFuzz:
         Returns:
             faiss.Index: The constructed FAISS index.
         """ 
-
-        max_threads = os.cpu_count()
-        faiss.omp_set_num_threads(max_threads)
         
         dim = self.vectors.shape[1]
         
