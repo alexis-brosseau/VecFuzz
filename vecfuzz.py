@@ -14,7 +14,7 @@ class VecFuzz:
     It allows for efficient similarity search and retrieval of nearest neighbors based on vector representations of strings.
     """
 
-    def __init__(self, chars: str="aàbcçdeéèêëfghiïjklmnñoöpqrstuvwxyz0123456789-̧ '. ", ef_construction: int=200, M: int=32, ef: int=50):
+    def __init__(self, chars: str="aàbcçdeéèêëfghiïjklmnñoöpqrstuvwxyz0123456789-̧ '. ", ef_construction: int=200, M: int=32, ef: int=64):
         """
         Initialize the FAISS index parameters.
 
