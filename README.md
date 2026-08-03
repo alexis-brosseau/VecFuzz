@@ -46,7 +46,7 @@ Dictionary of 100k words, compared against SymSpell at three delete-distance/pre
 - **Lookup speed**: SymSpell d2/p7 is fastest by a wide margin; VecFuzz sits in the middle, ahead of SymSpell d3/p9 and d4/p12.
 ![Lookup Speed Chart](benchmark_outputs/lookup_speed_vs_vocab_size.png)
 
-- **Memory**: VecFuzz grows roughly linearly and stays far below SymSpell d3/p9 and d4/p12 at every size tested (SymSpell d4/p12 reaches ~3.4GB at 150k words vs VecFuzz's ~213MB). It is only slightly larger than SymSpell d2/p7 at 150k words.
+- **Memory**: VecFuzz grows roughly linearly and stays far below SymSpell d3/p9 and d4/p12 at every size tested. It is only slightly larger than SymSpell d2/p7 at 150k words.
 ![Memory Footprint Chart](benchmark_outputs/memory_footprint_vs_vocab_size.png)
 
 - **Build time**: VecFuzz is slower to build than SymSpell d2/p7 and d3/p9 at every size tested, and is only a bit faster than SymSpell d4/p12.
