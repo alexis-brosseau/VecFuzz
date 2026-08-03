@@ -259,19 +259,31 @@ def _build_symspell_pool(vocab: Sequence[str], frequencies: Dict[str, int], conf
 	return [build_symspell(vocab, config, frequencies) for config in configs]
 
 
-def sweep_build_and_memory(
+def sweep(
 	vocabulary: Sequence[str],
 	frequencies: Dict[str, int],
 	vocab_sizes: Sequence[int],
 	configs: Sequence[SymSpellConfig],
-) -> List[Dict[str, object]]:
-	rows: List[Dict[str, object]] = []
-	for vocab_size in vocab_sizes:
+	query_count: int,
+	seed: int,
+):
+	build_rows: List[Dict[str, object]] = []
+	lookup_rows: List[Dict[str, object]] = []
+	accuracy_rows = {
+		"vecfuzz": {},
+		"symspell": [],
+	}
+
+	cases = generate_error_cases(vocabulary, cases_per_combo=query_count, edit_levels=DEFAULT_EDIT_LEVELS, seed=seed)
+
+	for offset, vocab_size in enumerate(vocab_sizes):
+
+		# Sweep Build Speed & Memory
 		subset = list(vocabulary[:vocab_size])
 		vecfuzz = build_vecfuzz(subset)
 		symspell_pool = _build_symspell_pool(subset, frequencies, configs)
 
-		rows.append(
+		build_rows.append(
 			{
 				"vocab_size": vocab_size,
 				"vecfuzz": {"build_seconds": vecfuzz.build_seconds, "size_mb": vecfuzz.size_mb},
@@ -286,25 +298,9 @@ def sweep_build_and_memory(
 			}
 		)
 
-	return rows
-
-
-def sweep_lookup_by_vocab_size(
-	vocabulary: Sequence[str],
-	frequencies: Dict[str, int],
-	vocab_sizes: Sequence[int],
-	configs: Sequence[SymSpellConfig],
-	queries_per_case: int,
-	seed: int,
-) -> List[Dict[str, object]]:
-	rows: List[Dict[str, object]] = []
-	for offset, vocab_size in enumerate(vocab_sizes):
-		subset = list(vocabulary[:vocab_size])
-		vecfuzz = build_vecfuzz(subset)
-		symspell_pool = _build_symspell_pool(subset, frequencies, configs)
-
-		cases = generate_error_cases(subset, cases_per_combo=max(1, queries_per_case // (len(TYPO_TYPES) * len(DEFAULT_EDIT_LEVELS))), edit_levels=DEFAULT_EDIT_LEVELS, seed=seed + offset)
-		cases = cases[:queries_per_case]
+		# Sweep Lookup Speed
+		cases = generate_error_cases(subset, cases_per_combo=max(1, query_count // (len(TYPO_TYPES) * len(DEFAULT_EDIT_LEVELS))), edit_levels=DEFAULT_EDIT_LEVELS, seed=seed + offset)
+		cases = cases[:query_count]
 
 		symspell_results = []
 		for artifact, config in zip(symspell_pool, configs):
@@ -318,7 +314,7 @@ def sweep_lookup_by_vocab_size(
 			)
 
 		vecfuzz_lookup = evaluate_vecfuzz_lookup(cases, vecfuzz.index)
-		rows.append(
+		lookup_rows.append(
 			{
 				"vocab_size": vocab_size,
 				"query_count": len(cases),
@@ -330,41 +326,21 @@ def sweep_lookup_by_vocab_size(
 			}
 		)
 
-	return rows
+		# Sweep Accuracy
+		if vocab_size == max(vocab_sizes):
+			for artifact, config in zip(symspell_pool, configs):
+				scores = evaluate_symspell_lookup(cases, artifact.index, config)
+				accuracy_rows["symspell"].append(
+					{
+						"label": artifact.config_label,
+						"accuracy": scores["accuracy"],
+					}
+				)
 
+			vec_scores = evaluate_vecfuzz_lookup(cases, vecfuzz.index)
+			accuracy_rows["vecfuzz"] = vec_scores["accuracy"]
 
-def sweep_accuracy(
-	vocabulary: Sequence[str],
-	frequencies: Dict[str, int],
-	configs: Sequence[SymSpellConfig],
-	cases_per_combo: int,
-	seed: int,
-) -> Dict[str, object]:
-	vecfuzz = build_vecfuzz(vocabulary)
-	symspell_pool = _build_symspell_pool(vocabulary, frequencies, configs)
-	cases = generate_error_cases(vocabulary, cases_per_combo=cases_per_combo, edit_levels=DEFAULT_EDIT_LEVELS, seed=seed)
-
-	accuracy_rows = {
-		"vecfuzz": {},
-		"symspell": [],
-	}
-
-	for artifact, config in zip(symspell_pool, configs):
-		scores = evaluate_symspell_lookup(cases, artifact.index, config)
-		accuracy_rows["symspell"].append(
-			{
-				"label": artifact.config_label,
-				"accuracy": scores["accuracy"],
-			}
-		)
-
-	vec_scores = evaluate_vecfuzz_lookup(cases, vecfuzz.index)
-	accuracy_rows["vecfuzz"] = vec_scores["accuracy"]
-
-	return {
-		"vecfuzz": accuracy_rows["vecfuzz"],
-		"symspell": accuracy_rows["symspell"],
-	}
+	return (build_rows, lookup_rows, accuracy_rows)
 
 
 def _figure_path(output_dir: Path, stem: str) -> Path:
@@ -537,18 +513,14 @@ def run_benchmark(
 	vocab_sizes = [size for size in vocab_sizes if size <= len(vocab)] or [len(vocab)]
 	print(f"[benchmark] Loaded {len(vocab)} words; sweeps={vocab_sizes}; query_count={query_count}", flush=True)
 
-	print("[benchmark] Running build/memory sweep...", flush=True)
-	build_rows = sweep_build_and_memory(vocab, frequencies, vocab_sizes, configs)
-	print("[benchmark] Running lookup speed by dictionary size...", flush=True)
-	lookup_vocab_rows = sweep_lookup_by_vocab_size(vocab, frequencies, vocab_sizes, configs, queries_per_case=query_count, seed=seed)
-	print("[benchmark] Running accuracy sweep...", flush=True)
-	accuracy_rows = sweep_accuracy(vocab[: max(vocab_sizes)], frequencies, configs, cases_per_combo=query_count, seed=seed)
+	print("[benchmark] Running sweeps...", flush=True)
+	(build_rows, lookup_rows, accuracy_rows) = sweep(vocab, frequencies, vocab_sizes, configs, query_count, seed)
 
 	print("[benchmark] Rendering figures...", flush=True)
 	figures = {
 		"build_time": str(plot_build_time(build_rows, output_path)),
 		"memory_footprint": str(plot_memory_footprint(build_rows, output_path)),
-		"lookup_vocab_size": str(plot_lookup_by_vocab_size(lookup_vocab_rows, output_path)),
+		"lookup_vocab_size": str(plot_lookup_by_vocab_size(lookup_rows, output_path)),
 		"accuracy": str(plot_accuracy(accuracy_rows, output_path)),
 	}
 	print("[benchmark] Figures rendered.", flush=True)
@@ -562,7 +534,7 @@ def run_benchmark(
 			"configs": [asdict(config) for config in configs],
 		},
 		"build_and_memory": build_rows,
-		"lookup_by_vocab_size": lookup_vocab_rows,
+		"lookup_by_vocab_size": lookup_rows,
 		"accuracy": accuracy_rows,
 		"figures": figures,
 	}
