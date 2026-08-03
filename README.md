@@ -12,7 +12,7 @@ Fuzzy matching has a three-way tension between speed, memory, and accuracy. VecF
 
 - **Memory stays flat** as typo-tolerance increases. SymSpell's index size grows combinatorially with max edit distance while VecFuzz grows linearly **O(N)**.
 - **Query speed stays high** relative to brute-force comparison methods. RapidFuzz and raw Levenshtein score every candidate per query; VecFuzz searches an ANN index instead, ~100x+ faster in my tests.
-- **Accuracy is strong**, including on real human misspellings (see the Birkbeck results below). Substitution-heavy errors are the hardest case, where SymSpell's higher-order configs hold an edge.
+- **Accuracy is strong**, including on real human misspellings (see the Birkbeck results below). Deletion-heavy errors are the hardest case, where the margin over SymSpell's higher-order configs is smallest.
 
 If your dictionary is large, your memory budget is tight, queries need to be fast, and you can tolerate a slower build, VecFuzz is a strong pick.
 
@@ -25,6 +25,7 @@ Each word is converted into a fixed-length vector with four sub-components:
 2. **Preceding-position density:** for each character, the sum of normalized positions of all characters before it. This captures *how much of the word has already gone by*.
 3. **Succeeding-position density:** for each character, the sum of normalized positions of all characters after it. This captures *how much of the word is still ahead*.
 4. **Phase-encoded position:** a small sinusoidal (cos/sin) expansion of each character's position across a few frequency bands.
+5. **Adjacency-hash:** a fixed-size hashed count of (character, next-character) bigrams. This captures local character order.
 
 All sub-vectors are normalized by word length, so "apple" and "apples" land close together. The sub-vectors are concatenated and indexed with FAISS HNSW under Manhattan (L1) distance; a query is vectorized the same way and the nearest neighbours in the index become your top-k candidates.
 
@@ -34,27 +35,27 @@ All sub-vectors are normalized by word length, so "apple" and "apples" land clos
 
 ### Synthetic edit-distance sweep
 
-Dictionary of 100k words, compared against SymSpell at three delete-distance/prefix-length configs (d2/p7, d3/p9, d4/p12). Tested on a Ryzen 9 365.
+Dictionary of 100k words, compared against SymSpell at three delete-distance/prefix-length configs (d2/p7, d3/p9, d4/p12). Tested on an i7-14700.
 
 - **Recall@1 by error type and edit count**:
-  - *Insertions*: VecFuzz clearly wins and degrades gracefully, still >40% recall at 9 insertion edits, where every SymSpell config has already dropped to 0 once edits exceed its configured max distance.
+  - *Substitutions*: VecFuzz edges out even SymSpell's most permissive config (d4/p12) at every edit count.
   - *Transpositions*: VecFuzz starts near-perfect and stays well above all SymSpell configs at every edit count.
-  - *Deletions*: Ahead of SymSpell, but both degrade quickly past 2-3 edits.
-  - *Substitutions*: VecFuzz's weakest error type relative to SymSpell's higher-order configs, though it tracks SymSpell d4/p12 closely through 2 edits and stays within a few points through 4-5.
+  - *Insertions*: SymSpell is slightly ahead but drop to 0 once edits exceed its configured max distance. VecFuzz degrades gracefully, still >40% recall at 9 insertion edits.
+  - *Deletions*: Ahead of SymSpell at every edit count, but both degrade quickly past 2-3 edits.
 ![Accuracy by Error Type Chart](benchmark_outputs/accuracy_by_error_type_and_edits.png)
 
-- **Lookup speed**: SymSpell d2/p7 is fastest by a wide margin; VecFuzz sits in the middle, ahead of SymSpell d3/p9 and d4/p12.
+- **Lookup speed**: SymSpell d2/p7 is marginally fastest; VecFuzz is essentially tied with it, well ahead of SymSpell d3/p9 and d4/p12.
 ![Lookup Speed Chart](benchmark_outputs/lookup_speed_vs_vocab_size.png)
 
 - **Memory**: VecFuzz grows roughly linearly and stays far below SymSpell d3/p9 and d4/p12 at every size tested. It is only slightly larger than SymSpell d2/p7 at 150k words.
 ![Memory Footprint Chart](benchmark_outputs/memory_footprint_vs_vocab_size.png)
 
-- **Build time**: VecFuzz is slower to build than SymSpell d2/p7 and d3/p9 at every size tested, and is only a bit faster than SymSpell d4/p12.
+- **Build time**: VecFuzz is slower to build than SymSpell d2/p7 and d3/p9 at every size tested, and is only slightly faster than SymSpell d4/p12.
 ![Build Time Chart](benchmark_outputs/build_time_vs_vocab_size.png)
 
 ### Real-world human errors (Birkbeck Spelling Error Corpus)
 
-Dictionary ~160k words, non-synthetic human misspellings (includes phonetic errors, dysgraphia, multi-error handwriting slips). Tested on a Ryzen 9 365.
+Dictionary ~160k words, non-synthetic human misspellings (includes phonetic errors, dysgraphia, multi-error handwriting slips). Tested on an i7-14700.
 
 | Method          | Recall@1 (%) | Recall@5 (%) | Recall@10 (%) | Recall@25 (%) | Recall@100 (%) | Duration (s) | Build (s) | Size (MB) |
 |-----------------|--------------|--------------|---------------|---------------|----------------|--------------|-----------|-----------|
@@ -65,8 +66,7 @@ Dictionary ~160k words, non-synthetic human misspellings (includes phonetic erro
 
 **Takeaways:**
 - VecFuzz has the best recall at every k and is the fastest method.
-- SymSpell d2/p7 leads on build time and, at this dictionary size, memory footprint.
-- RapidFuzz and raw Levenshtein are much slower and do not outperform VecFuzz on recall.
+- SymSpell d2/p7 leads on build time and memory footprint at this dictionary size.
 
 ## Installation
 
@@ -93,10 +93,10 @@ from vecfuzz import VecFuzz
 
 words = ["apple", "banana", "orange", "peach", "pineapple"]
 
-index = VecFuzz().build_index(words)
+vecfuzz = VecFuzz().build(words)
 
 queries = ["aple", "bannana", "orng"]
-results = index.lookup(queries, k=3)
+results = vecfuzz.lookup(queries, k=3)
 
 for query, candidates in results:
     print(f"Candidates for '{query}':")
@@ -108,17 +108,17 @@ Expected output:
 
 ```
 Candidates for 'aple':
-  -> apple (L1 distance: 4.0879)
-  -> pineapple (L1 distance: 18.8328)
-  -> peach (L1 distance: 19.9901)
+  -> apple (L1 distance: 1.7406)
+  -> pineapple (L1 distance: 6.6818)
+  -> peach (L1 distance: 8.6489)
 Candidates for 'bannana':
-  -> banana (L1 distance: 3.5214)
-  -> orange (L1 distance: 29.2208)
-  -> peach (L1 distance: 32.7987)
+  -> banana (L1 distance: 1.2612)
+  -> orange (L1 distance: 8.4829)
+  -> apple (L1 distance: 9.8025)
 Candidates for 'orng':
-  -> orange (L1 distance: 9.7637)
-  -> banana (L1 distance: 26.2858)
-  -> apple (L1 distance: 30.1436)
+  -> orange (L1 distance: 4.8798)
+  -> banana (L1 distance: 8.0867)
+  -> apple (L1 distance: 10.7739)
 ```
 
 To save and load an index:
@@ -137,12 +137,10 @@ vecfuzz = VecFuzz().load("index.zip")
 
 - Large dictionaries where SymSpell-style precomputed edit indexes get too large to fit in memory.
 - Interactive/high-QPS fuzzy search where brute-force comparison (RapidFuzz, raw Levenshtein) is too slow.
-- Workloads dominated by insertions or transpositions.
 
 
 ## When not to use this
 
-- Workloads dominated by substitution errors, where SymSpell or RapidFuzz will give meaningfully better recall.
 - Small dictionaries where memory and speed aren't a constraint.
 - Workloads with frequent dictionary updates.
 
