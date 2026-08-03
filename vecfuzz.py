@@ -34,7 +34,7 @@ class VecFuzz:
         self.ef_construction = ef_construction
         self.M = M
         self.ef = ef
-        set_num_threads(num_threads)
+        self.set_num_threads(num_threads)
         
         self.entries = None
         self.vectors = None
@@ -78,7 +78,7 @@ class VecFuzz:
         vec_pre = np.zeros(self._chars_len, dtype=np.float32)  # preceding-position density
         vec_suc = np.zeros(self._chars_len, dtype=np.float32)  # succeeding-position density
 
-        PHASE_FREQS = [0.1, 0.75, 1.5] # frequency bands (in units of pi) for phase encoding
+        PHASE_FREQS = [1.0, 2.0] # frequency bands (in units of pi) for phase encoding
         num_bands = len(PHASE_FREQS)
         vec_phase = np.zeros(2 * num_bands * self._chars_len, dtype=np.float32) # phase-encoded position
 
@@ -97,8 +97,6 @@ class VecFuzz:
                     vec_phase[(2 * k) * self._chars_len + idx] += np.cos(theta) / w_len
                     vec_phase[(2 * k + 1) * self._chars_len + idx] += np.sin(theta) / w_len
 
-        vec_phase /= num_bands
-
         vector = np.concatenate([vec_frq, vec_pre, vec_suc, vec_phase])
         return vector
     
@@ -111,7 +109,7 @@ class VecFuzz:
         """
         words = [w.strip().lower() for w in words]
 
-        PHASE_FREQS = [0.1, 0.75, 1.5]
+        PHASE_FREQS = [1.0, 2.0]
         chars_len = self._chars_len
 
         n = len(words)
@@ -136,10 +134,12 @@ class VecFuzz:
         flat = word_id * chars_len + idx  # flat index into a (n, chars_len) row-major array
 
         vec_frq = np.zeros((n, chars_len), dtype=np.float32)
+        vec_pos = np.zeros((n, chars_len), dtype=np.float32)
         vec_pre = np.zeros((n, chars_len), dtype=np.float32)
         vec_suc = np.zeros((n, chars_len), dtype=np.float32)
 
         np.add.at(vec_frq.reshape(-1), flat, (1.0 / wl).astype(np.float32))
+        np.add.at(vec_pos.reshape(-1), flat, (pos / wl).astype(np.float32))
         np.add.at(vec_pre.reshape(-1), flat,
                 (i_valid * (i_valid + 1) / (2 * wl ** 2)).astype(np.float32))
         np.add.at(vec_suc.reshape(-1), flat,
@@ -157,7 +157,7 @@ class VecFuzz:
             phase_parts.append(cos_arr)
             phase_parts.append(sin_arr)
 
-        vec_phase = np.concatenate(phase_parts, axis=1) / len(PHASE_FREQS)
+        vec_phase = np.concatenate(phase_parts, axis=1)
 
         return np.concatenate([vec_frq, vec_pre, vec_suc, vec_phase], axis=1)
     
