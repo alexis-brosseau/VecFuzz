@@ -277,6 +277,8 @@ def sweep(
 	for offset, vocab_size in enumerate(vocab_sizes):
 
 		# Sweep Build Speed & Memory
+		print(f"\r[benchmark] Benchmarking builds sweep=[{vocab_size}]...", end="", flush=True)
+
 		subset = list(vocabulary[:vocab_size])
 		vecfuzz = build_vecfuzz(subset)
 		symspell_pool = _build_symspell_pool(subset, frequencies, configs)
@@ -297,6 +299,8 @@ def sweep(
 		)
 
 		# Sweep Lookup Speed
+		print(f"\r[benchmark] Benchmarking lookups sweep=[{vocab_size}]...", end="", flush=True)
+
 		cases = generate_error_cases(subset, cases_per_combo=max(1, query_count // (len(TYPO_TYPES) * len(DEFAULT_EDIT_LEVELS))), edit_levels=DEFAULT_EDIT_LEVELS, seed=seed + offset)
 		cases = cases[:query_count]
 
@@ -326,10 +330,11 @@ def sweep(
 
 		# Sweep Accuracy
 		if vocab_size == max(vocab_sizes):
-			
-			cases = generate_error_cases(vocabulary, cases_per_combo=query_count, edit_levels=DEFAULT_EDIT_LEVELS, seed=seed)
+			cases = generate_error_cases(subset, cases_per_combo=query_count, edit_levels=DEFAULT_EDIT_LEVELS, seed=seed)
 
 			for artifact, config in zip(symspell_pool, configs):
+				print(f"\r[benchmark] Benchmarking accuracy for {config.label}...", end="", flush=True)
+
 				scores = evaluate_symspell_lookup(cases, artifact.index, config)
 				accuracy_rows["symspell"].append(
 					{
@@ -338,9 +343,11 @@ def sweep(
 					}
 				)
 
+			print("\r[benchmark] Benchmarking accuracy for VecFuzz...", end="", flush=True)
 			vec_scores = evaluate_vecfuzz_lookup(cases, vecfuzz.index)
 			accuracy_rows["vecfuzz"] = vec_scores["accuracy"]
-
+		
+	print()
 	return (build_rows, lookup_rows, accuracy_rows)
 
 
