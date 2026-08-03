@@ -36,216 +36,216 @@
     {
       "vocab_size": 5000,
       "vecfuzz": {
-        "build_seconds": 0.5480843000113964,
-        "size_mb": 7.110191345214844
+        "build_seconds": 0.240009100001771,
+        "size_mb": 9.055770874023438
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "build_seconds": 0.09343919999082573,
-          "size_mb": 18.177696228027344
+          "build_seconds": 0.16042750000269734,
+          "size_mb": 18.177886962890625
         },
         {
           "label": "SymSpell d3/p9",
-          "build_seconds": 0.30859820000478067,
-          "size_mb": 66.951904296875
+          "build_seconds": 0.2908824000005552,
+          "size_mb": 66.9521255493164
         },
         {
           "label": "SymSpell d4/p12",
-          "build_seconds": 1.1125200999958906,
-          "size_mb": 197.60358428955078
+          "build_seconds": 1.1969141000008676,
+          "size_mb": 197.60377502441406
         }
       ]
     },
     {
       "vocab_size": 10000,
       "vecfuzz": {
-        "build_seconds": 1.1936193000001367,
-        "size_mb": 14.212844848632812
+        "build_seconds": 0.6127440999989631,
+        "size_mb": 18.103919982910156
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "build_seconds": 0.16931970001314767,
-          "size_mb": 33.32452392578125
+          "build_seconds": 0.12814150000122027,
+          "size_mb": 33.32471466064453
         },
         {
           "label": "SymSpell d3/p9",
-          "build_seconds": 0.7583583000232466,
-          "size_mb": 126.20782470703125
+          "build_seconds": 0.5138116000016453,
+          "size_mb": 126.20804595947266
         },
         {
           "label": "SymSpell d4/p12",
-          "build_seconds": 2.3805759999959264,
-          "size_mb": 378.7330093383789
+          "build_seconds": 1.9254848000018683,
+          "size_mb": 378.7332000732422
         }
       ]
     },
     {
       "vocab_size": 20000,
       "vecfuzz": {
-        "build_seconds": 3.109071100014262,
-        "size_mb": 28.419143676757812
+        "build_seconds": 1.5281982000014978,
+        "size_mb": 36.201210021972656
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "build_seconds": 0.26721039999392815,
-          "size_mb": 51.37492370605469
+          "build_seconds": 0.4194855000023381,
+          "size_mb": 51.37511444091797
         },
         {
           "label": "SymSpell d3/p9",
-          "build_seconds": 1.307698699994944,
-          "size_mb": 202.8018798828125
+          "build_seconds": 1.0249265999991621,
+          "size_mb": 202.8021011352539
         },
         {
           "label": "SymSpell d4/p12",
-          "build_seconds": 4.870631099998718,
-          "size_mb": 718.3898391723633
+          "build_seconds": 3.901315999999497,
+          "size_mb": 718.3900299072266
         }
       ]
     },
     {
       "vocab_size": 40000,
       "vecfuzz": {
-        "build_seconds": 7.7093887999944855,
-        "size_mb": 56.830421447753906
+        "build_seconds": 5.243715800002974,
+        "size_mb": 72.39447021484375
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "build_seconds": 0.5301443999924231,
-          "size_mb": 85.78307342529297
+          "build_seconds": 0.4523351999996521,
+          "size_mb": 85.78326416015625
         },
         {
           "label": "SymSpell d3/p9",
-          "build_seconds": 2.701949699985562,
-          "size_mb": 354.15894317626953
+          "build_seconds": 2.6770107000011194,
+          "size_mb": 354.15916442871094
         },
         {
           "label": "SymSpell d4/p12",
-          "build_seconds": 9.850775900005829,
-          "size_mb": 1319.8876495361328
+          "build_seconds": 7.4140549000003375,
+          "size_mb": 1319.887840270996
         }
       ]
     },
     {
       "vocab_size": 60000,
       "vecfuzz": {
-        "build_seconds": 12.78117800000473,
-        "size_mb": 85.24239349365234
+        "build_seconds": 8.876173500000732,
+        "size_mb": 108.58842468261719
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "build_seconds": 0.8088260999938939,
-          "size_mb": 107.06954956054688
+          "build_seconds": 0.6646536999978707,
+          "size_mb": 107.06974029541016
         },
         {
           "label": "SymSpell d3/p9",
-          "build_seconds": 4.510139899997739,
-          "size_mb": 511.5022506713867
+          "build_seconds": 3.420640000000276,
+          "size_mb": 511.5024719238281
         },
         {
           "label": "SymSpell d4/p12",
-          "build_seconds": 14.055605099973036,
-          "size_mb": 1753.2024993896484
+          "build_seconds": 11.423552199998085,
+          "size_mb": 1753.2026901245117
         }
       ]
     },
     {
       "vocab_size": 80000,
       "vecfuzz": {
-        "build_seconds": 18.235273099999176,
-        "size_mb": 113.65227508544922
+        "build_seconds": 12.568539600000804,
+        "size_mb": 144.78028869628906
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "build_seconds": 2.5948832999856677,
-          "size_mb": 138.73809814453125
+          "build_seconds": 0.8913448999992397,
+          "size_mb": 138.73828887939453
         },
         {
           "label": "SymSpell d3/p9",
-          "build_seconds": 4.48878019998665,
-          "size_mb": 593.3030319213867
+          "build_seconds": 4.736627599999338,
+          "size_mb": 593.3032531738281
         },
         {
           "label": "SymSpell d4/p12",
-          "build_seconds": 21.429967400006717,
-          "size_mb": 2357.500816345215
+          "build_seconds": 15.70931610000116,
+          "size_mb": 2357.501007080078
         }
       ]
     },
     {
       "vocab_size": 100000,
       "vecfuzz": {
-        "build_seconds": 24.078605899994727,
-        "size_mb": 142.06271362304688
+        "build_seconds": 16.649850400001014,
+        "size_mb": 180.97270965576172
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "build_seconds": 1.4135432000039145,
-          "size_mb": 155.31883239746094
+          "build_seconds": 1.1197668999993766,
+          "size_mb": 155.31902313232422
         },
         {
           "label": "SymSpell d3/p9",
-          "build_seconds": 5.629591999982949,
-          "size_mb": 666.5349273681641
+          "build_seconds": 6.183770999999979,
+          "size_mb": 666.5351486206055
         },
         {
           "label": "SymSpell d4/p12",
-          "build_seconds": 27.418992599996272,
-          "size_mb": 2696.3844985961914
+          "build_seconds": 19.602283100000932,
+          "size_mb": 2696.3846893310547
         }
       ]
     },
     {
       "vocab_size": 125000,
       "vecfuzz": {
-        "build_seconds": 31.3195119999873,
-        "size_mb": 177.5778579711914
+        "build_seconds": 21.506875199997012,
+        "size_mb": 226.21533203125
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "build_seconds": 1.7958079000236467,
-          "size_mb": 171.4696044921875
+          "build_seconds": 1.4026469999989786,
+          "size_mb": 171.46979522705078
         },
         {
           "label": "SymSpell d3/p9",
-          "build_seconds": 7.167871400015429,
-          "size_mb": 746.9668807983398
+          "build_seconds": 7.611493700002029,
+          "size_mb": 746.9671020507812
         },
         {
           "label": "SymSpell d4/p12",
-          "build_seconds": 34.471511300012935,
-          "size_mb": 3086.749740600586
+          "build_seconds": 24.832547999998496,
+          "size_mb": 3086.749931335449
         }
       ]
     },
     {
       "vocab_size": 150000,
       "vecfuzz": {
-        "build_seconds": 38.9738526000001,
-        "size_mb": 213.0930938720703
+        "build_seconds": 26.372791699999652,
+        "size_mb": 271.45804595947266
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "build_seconds": 2.1233799000037834,
-          "size_mb": 185.75800323486328
+          "build_seconds": 1.7052476999997452,
+          "size_mb": 185.75819396972656
         },
         {
           "label": "SymSpell d3/p9",
-          "build_seconds": 8.751386800024193,
-          "size_mb": 817.7710189819336
+          "build_seconds": 9.148467200000596,
+          "size_mb": 817.771240234375
         },
         {
           "label": "SymSpell d4/p12",
-          "build_seconds": 42.73654169999645,
-          "size_mb": 3440.1513671875
+          "build_seconds": 30.490410200000042,
+          "size_mb": 3440.1515579223633
         }
       ]
     }
@@ -255,24 +255,24 @@
       "vocab_size": 5000,
       "query_count": 99972,
       "vecfuzz": {
-        "qps": 23628.471149565255,
-        "seconds": 4.230997400009073
+        "qps": 36171.13885250374,
+        "seconds": 2.7638609999994515
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "qps": 97527.60706628513,
-          "seconds": 1.0250636000127997
+          "qps": 69863.54902243135,
+          "seconds": 1.4309608000003209
         },
         {
           "label": "SymSpell d3/p9",
-          "qps": 25437.7705142546,
-          "seconds": 3.9300613999948837
+          "qps": 18754.842215039087,
+          "seconds": 5.330463399997825
         },
         {
           "label": "SymSpell d4/p12",
-          "qps": 6284.6274662738815,
-          "seconds": 15.907386800012318
+          "qps": 5475.195061217061,
+          "seconds": 18.259075500001927
         }
       ]
     },
@@ -280,24 +280,24 @@
       "vocab_size": 10000,
       "query_count": 99972,
       "vecfuzz": {
-        "qps": 19762.925939431596,
-        "seconds": 5.058562699996401
+        "qps": 31874.640951183053,
+        "seconds": 3.1364117999983137
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "qps": 82700.4699687487,
-          "seconds": 1.208844400011003
+          "qps": 60704.06072098216,
+          "seconds": 1.6468750000021828
         },
         {
           "label": "SymSpell d3/p9",
-          "qps": 21254.40761829231,
-          "seconds": 4.703589099983219
+          "qps": 14974.758293260893,
+          "seconds": 6.676034299998719
         },
         {
           "label": "SymSpell d4/p12",
-          "qps": 5608.294711187373,
-          "seconds": 17.825739399995655
+          "qps": 4746.558052220604,
+          "seconds": 21.061998799999856
         }
       ]
     },
@@ -305,24 +305,24 @@
       "vocab_size": 20000,
       "query_count": 99972,
       "vecfuzz": {
-        "qps": 16753.968396428125,
-        "seconds": 5.967063899995992
+        "qps": 27401.512077112355,
+        "seconds": 3.6484118000007584
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "qps": 64163.13707960263,
-          "seconds": 1.5580909000127576
+          "qps": 44288.77796559939,
+          "seconds": 2.257276100001036
         },
         {
           "label": "SymSpell d3/p9",
-          "qps": 16512.26321945184,
-          "seconds": 6.054409300006228
+          "qps": 10987.139149846662,
+          "seconds": 9.099001899998257
         },
         {
           "label": "SymSpell d4/p12",
-          "qps": 4990.720401090717,
-          "seconds": 20.031577000016114
+          "qps": 4026.5422972635406,
+          "seconds": 24.828250300000946
         }
       ]
     },
@@ -330,24 +330,24 @@
       "vocab_size": 40000,
       "query_count": 99972,
       "vecfuzz": {
-        "qps": 14262.224141455838,
-        "seconds": 7.0095658999925945
+        "qps": 22900.387232604444,
+        "seconds": 4.365515699999378
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "qps": 51781.596773179444,
-          "seconds": 1.9306473000033293
+          "qps": 33106.99687824441,
+          "seconds": 3.019663800001581
         },
         {
           "label": "SymSpell d3/p9",
-          "qps": 12954.894194914006,
-          "seconds": 7.716929099988192
+          "qps": 7743.060211030118,
+          "seconds": 12.911174299999402
         },
         {
           "label": "SymSpell d4/p12",
-          "qps": 4430.845070992328,
-          "seconds": 22.5627387999848
+          "qps": 3338.421611212889,
+          "seconds": 29.945888099999138
         }
       ]
     },
@@ -355,24 +355,24 @@
       "vocab_size": 60000,
       "query_count": 99972,
       "vecfuzz": {
-        "qps": 13706.036286607505,
-        "seconds": 7.294012500002282
+        "qps": 21022.12944381263,
+        "seconds": 4.755560099998547
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "qps": 43337.080006272714,
-          "seconds": 2.30684669999755
+          "qps": 26856.98991361573,
+          "seconds": 3.72238290000314
         },
         {
           "label": "SymSpell d3/p9",
-          "qps": 11093.818894572743,
-          "seconds": 9.01150459999917
+          "qps": 6272.349700422557,
+          "seconds": 15.938524600001983
         },
         {
           "label": "SymSpell d4/p12",
-          "qps": 3807.667860453837,
-          "seconds": 26.255441299988888
+          "qps": 2859.536321946287,
+          "seconds": 34.9609128000011
         }
       ]
     },
@@ -380,24 +380,24 @@
       "vocab_size": 80000,
       "query_count": 99972,
       "vecfuzz": {
-        "qps": 13100.250422481016,
-        "seconds": 7.631304499984253
+        "qps": 18932.834815890823,
+        "seconds": 5.280350300003192
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "qps": 37918.92567133612,
-          "seconds": 2.6364671000046656
+          "qps": 23534.68722680675,
+          "seconds": 4.247857599999406
         },
         {
           "label": "SymSpell d3/p9",
-          "qps": 9332.072055488348,
-          "seconds": 10.712733399996068
+          "qps": 5633.121986452862,
+          "seconds": 17.74717470000178
         },
         {
           "label": "SymSpell d4/p12",
-          "qps": 3655.669501414608,
-          "seconds": 27.347111099981703
+          "qps": 2636.4298935390066,
+          "seconds": 37.9194607999998
         }
       ]
     },
@@ -405,24 +405,24 @@
       "vocab_size": 100000,
       "query_count": 99972,
       "vecfuzz": {
-        "qps": 12979.426663596723,
-        "seconds": 7.702343299984932
+        "qps": 17751.876770160525,
+        "seconds": 5.631629900002736
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "qps": 34362.90752849697,
-          "seconds": 2.909299799997825
+          "qps": 20835.6337105124,
+          "seconds": 4.798126199999388
         },
         {
           "label": "SymSpell d3/p9",
-          "qps": 8042.543649689825,
-          "seconds": 12.430395699979272
+          "qps": 4525.755656601009,
+          "seconds": 22.089570800002548
         },
         {
           "label": "SymSpell d4/p12",
-          "qps": 3295.528658679986,
-          "seconds": 30.335648799984483
+          "qps": 2363.048993527832,
+          "seconds": 42.306359400001384
         }
       ]
     },
@@ -430,24 +430,24 @@
       "vocab_size": 125000,
       "query_count": 99972,
       "vecfuzz": {
-        "qps": 12681.507340212793,
-        "seconds": 7.883289999997942
+        "qps": 16279.553140495813,
+        "seconds": 6.1409548000010545
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "qps": 31234.324764548182,
-          "seconds": 3.200709500000812
+          "qps": 18681.261266554717,
+          "seconds": 5.351458799999818
         },
         {
           "label": "SymSpell d3/p9",
-          "qps": 6997.247631674685,
-          "seconds": 14.287332000007154
+          "qps": 4212.8068899631435,
+          "seconds": 23.730496699998184
         },
         {
           "label": "SymSpell d4/p12",
-          "qps": 2942.7213558380267,
-          "seconds": 33.97263550001662
+          "qps": 2104.4363613840833,
+          "seconds": 47.50535669999954
         }
       ]
     },
@@ -455,24 +455,24 @@
       "vocab_size": 150000,
       "query_count": 99972,
       "vecfuzz": {
-        "qps": 12567.63090575372,
-        "seconds": 7.954721200017957
+        "qps": 15887.003378584312,
+        "seconds": 6.292690800000855
       },
       "symspell": [
         {
           "label": "SymSpell d2/p7",
-          "qps": 28501.756470678338,
-          "seconds": 3.5075733000121545
+          "qps": 16754.215200464183,
+          "seconds": 5.966975999999704
         },
         {
           "label": "SymSpell d3/p9",
-          "qps": 6110.523273731314,
-          "seconds": 16.360628299997188
+          "qps": 3694.412746538372,
+          "seconds": 27.060322400000587
         },
         {
           "label": "SymSpell d4/p12",
-          "qps": 2672.717790427772,
-          "seconds": 37.404622500005644
+          "qps": 1911.4622582262134,
+          "seconds": 52.301320400001714
         }
       ]
     }
@@ -480,216 +480,216 @@
   "accuracy": {
     "vecfuzz": {
       "overall": {
-        "count": 3600000.0,
-        "recall1": 1801203.0
+        "count": 99972.0,
+        "recall1": 50246.0
       },
       "by_error_type": {
         "substitution": {
-          "count": 900000.0,
-          "recall1": 263805.0
+          "count": 24993.0,
+          "recall1": 6211.0
         },
         "transposition": {
-          "count": 900000.0,
-          "recall1": 799743.0
+          "count": 24993.0,
+          "recall1": 23496.0
         },
         "deletion": {
-          "count": 900000.0,
-          "recall1": 120397.0
+          "count": 24993.0,
+          "recall1": 3334.0
         },
         "insertion": {
-          "count": 900000.0,
-          "recall1": 617258.0
+          "count": 24993.0,
+          "recall1": 17205.0
         }
       },
       "by_edits": {
         "1": {
-          "count": 400000.0,
-          "recall1": 346081.0
+          "count": 11108.0,
+          "recall1": 9765.0
         },
         "2": {
-          "count": 400000.0,
-          "recall1": 283619.0
+          "count": 11108.0,
+          "recall1": 7717.0
         },
         "3": {
-          "count": 400000.0,
-          "recall1": 230320.0
+          "count": 11108.0,
+          "recall1": 6186.0
         },
         "4": {
-          "count": 400000.0,
-          "recall1": 195329.0
+          "count": 11108.0,
+          "recall1": 5291.0
         },
         "5": {
-          "count": 400000.0,
-          "recall1": 173604.0
+          "count": 11108.0,
+          "recall1": 4762.0
         },
         "6": {
-          "count": 400000.0,
-          "recall1": 157976.0
+          "count": 11108.0,
+          "recall1": 4530.0
         },
         "7": {
-          "count": 400000.0,
-          "recall1": 147065.0
+          "count": 11108.0,
+          "recall1": 4196.0
         },
         "8": {
-          "count": 400000.0,
-          "recall1": 137503.0
+          "count": 11108.0,
+          "recall1": 4027.0
         },
         "9": {
-          "count": 400000.0,
-          "recall1": 129706.0
+          "count": 11108.0,
+          "recall1": 3772.0
         }
       },
       "by_error_and_edits": {
         "substitution": {
           "1": {
-            "count": 100000.0,
-            "recall1": 88493.0
+            "count": 2777.0,
+            "recall1": 2386.0
           },
           "2": {
-            "count": 100000.0,
-            "recall1": 67165.0
+            "count": 2777.0,
+            "recall1": 1635.0
           },
           "3": {
-            "count": 100000.0,
-            "recall1": 44391.0
+            "count": 2777.0,
+            "recall1": 967.0
           },
           "4": {
-            "count": 100000.0,
-            "recall1": 27582.0
+            "count": 2777.0,
+            "recall1": 553.0
           },
           "5": {
-            "count": 100000.0,
-            "recall1": 16256.0
+            "count": 2777.0,
+            "recall1": 291.0
           },
           "6": {
-            "count": 100000.0,
-            "recall1": 9325.0
+            "count": 2777.0,
+            "recall1": 184.0
           },
           "7": {
-            "count": 100000.0,
-            "recall1": 5416.0
+            "count": 2777.0,
+            "recall1": 96.0
           },
           "8": {
-            "count": 100000.0,
-            "recall1": 3279.0
+            "count": 2777.0,
+            "recall1": 69.0
           },
           "9": {
-            "count": 100000.0,
-            "recall1": 1898.0
+            "count": 2777.0,
+            "recall1": 30.0
           }
         },
         "transposition": {
           "1": {
-            "count": 100000.0,
-            "recall1": 98960.0
+            "count": 2777.0,
+            "recall1": 2759.0
           },
           "2": {
-            "count": 100000.0,
-            "recall1": 95157.0
+            "count": 2777.0,
+            "recall1": 2728.0
           },
           "3": {
-            "count": 100000.0,
-            "recall1": 93234.0
+            "count": 2777.0,
+            "recall1": 2682.0
           },
           "4": {
-            "count": 100000.0,
-            "recall1": 90271.0
+            "count": 2777.0,
+            "recall1": 2648.0
           },
           "5": {
-            "count": 100000.0,
-            "recall1": 88522.0
+            "count": 2777.0,
+            "recall1": 2596.0
           },
           "6": {
-            "count": 100000.0,
-            "recall1": 85939.0
+            "count": 2777.0,
+            "recall1": 2594.0
           },
           "7": {
-            "count": 100000.0,
-            "recall1": 84581.0
+            "count": 2777.0,
+            "recall1": 2539.0
           },
           "8": {
-            "count": 100000.0,
-            "recall1": 82309.0
+            "count": 2777.0,
+            "recall1": 2496.0
           },
           "9": {
-            "count": 100000.0,
-            "recall1": 80770.0
+            "count": 2777.0,
+            "recall1": 2454.0
           }
         },
         "deletion": {
           "1": {
-            "count": 100000.0,
-            "recall1": 68802.0
+            "count": 2777.0,
+            "recall1": 2071.0
           },
           "2": {
-            "count": 100000.0,
-            "recall1": 35125.0
+            "count": 2777.0,
+            "recall1": 917.0
           },
           "3": {
-            "count": 100000.0,
-            "recall1": 12332.0
+            "count": 2777.0,
+            "recall1": 275.0
           },
           "4": {
-            "count": 100000.0,
-            "recall1": 3279.0
+            "count": 2777.0,
+            "recall1": 58.0
           },
           "5": {
-            "count": 100000.0,
-            "recall1": 683.0
+            "count": 2777.0,
+            "recall1": 7.0
           },
           "6": {
-            "count": 100000.0,
-            "recall1": 127.0
+            "count": 2777.0,
+            "recall1": 2.0
           },
           "7": {
-            "count": 100000.0,
-            "recall1": 23.0
+            "count": 2777.0,
+            "recall1": 0.0
           },
           "8": {
-            "count": 100000.0,
-            "recall1": 11.0
+            "count": 2777.0,
+            "recall1": 4.0
           },
           "9": {
-            "count": 100000.0,
-            "recall1": 15.0
+            "count": 2777.0,
+            "recall1": 0.0
           }
         },
         "insertion": {
           "1": {
-            "count": 100000.0,
-            "recall1": 89826.0
+            "count": 2777.0,
+            "recall1": 2549.0
           },
           "2": {
-            "count": 100000.0,
-            "recall1": 86172.0
+            "count": 2777.0,
+            "recall1": 2437.0
           },
           "3": {
-            "count": 100000.0,
-            "recall1": 80363.0
+            "count": 2777.0,
+            "recall1": 2262.0
           },
           "4": {
-            "count": 100000.0,
-            "recall1": 74197.0
+            "count": 2777.0,
+            "recall1": 2032.0
           },
           "5": {
-            "count": 100000.0,
-            "recall1": 68143.0
+            "count": 2777.0,
+            "recall1": 1868.0
           },
           "6": {
-            "count": 100000.0,
-            "recall1": 62585.0
+            "count": 2777.0,
+            "recall1": 1750.0
           },
           "7": {
-            "count": 100000.0,
-            "recall1": 57045.0
+            "count": 2777.0,
+            "recall1": 1561.0
           },
           "8": {
-            "count": 100000.0,
-            "recall1": 51904.0
+            "count": 2777.0,
+            "recall1": 1458.0
           },
           "9": {
-            "count": 100000.0,
-            "recall1": 47023.0
+            "count": 2777.0,
+            "recall1": 1288.0
           }
         }
       }
@@ -699,215 +699,215 @@
         "label": "SymSpell d2/p7",
         "accuracy": {
           "overall": {
-            "count": 3600000.0,
-            "recall1": 764029.0
+            "count": 99972.0,
+            "recall1": 21149.0
           },
           "by_error_type": {
             "substitution": {
-              "count": 900000.0,
-              "recall1": 183447.0
+              "count": 24993.0,
+              "recall1": 5054.0
             },
             "transposition": {
-              "count": 900000.0,
-              "recall1": 308348.0
+              "count": 24993.0,
+              "recall1": 8512.0
             },
             "deletion": {
-              "count": 900000.0,
-              "recall1": 84972.0
+              "count": 24993.0,
+              "recall1": 2368.0
             },
             "insertion": {
-              "count": 900000.0,
-              "recall1": 187262.0
+              "count": 24993.0,
+              "recall1": 5215.0
             }
           },
           "by_edits": {
             "1": {
-              "count": 400000.0,
-              "recall1": 333426.0
+              "count": 11108.0,
+              "recall1": 9311.0
             },
             "2": {
-              "count": 400000.0,
-              "recall1": 251662.0
+              "count": 11108.0,
+              "recall1": 6948.0
             },
             "3": {
-              "count": 400000.0,
-              "recall1": 56472.0
+              "count": 11108.0,
+              "recall1": 1507.0
             },
             "4": {
-              "count": 400000.0,
-              "recall1": 41696.0
+              "count": 11108.0,
+              "recall1": 1153.0
             },
             "5": {
-              "count": 400000.0,
-              "recall1": 22552.0
+              "count": 11108.0,
+              "recall1": 613.0
             },
             "6": {
-              "count": 400000.0,
-              "recall1": 21239.0
+              "count": 11108.0,
+              "recall1": 604.0
             },
             "7": {
-              "count": 400000.0,
-              "recall1": 13604.0
+              "count": 11108.0,
+              "recall1": 352.0
             },
             "8": {
-              "count": 400000.0,
-              "recall1": 13690.0
+              "count": 11108.0,
+              "recall1": 378.0
             },
             "9": {
-              "count": 400000.0,
-              "recall1": 9688.0
+              "count": 11108.0,
+              "recall1": 283.0
             }
           },
           "by_error_and_edits": {
             "substitution": {
               "1": {
-                "count": 100000.0,
-                "recall1": 85762.0
+                "count": 2777.0,
+                "recall1": 2388.0
               },
               "2": {
-                "count": 100000.0,
-                "recall1": 68001.0
+                "count": 2777.0,
+                "recall1": 1854.0
               },
               "3": {
-                "count": 100000.0,
-                "recall1": 19990.0
+                "count": 2777.0,
+                "recall1": 535.0
               },
               "4": {
-                "count": 100000.0,
-                "recall1": 6218.0
+                "count": 2777.0,
+                "recall1": 163.0
               },
               "5": {
-                "count": 100000.0,
-                "recall1": 2078.0
+                "count": 2777.0,
+                "recall1": 67.0
               },
               "6": {
-                "count": 100000.0,
-                "recall1": 844.0
+                "count": 2777.0,
+                "recall1": 33.0
               },
               "7": {
-                "count": 100000.0,
-                "recall1": 346.0
+                "count": 2777.0,
+                "recall1": 8.0
               },
               "8": {
-                "count": 100000.0,
-                "recall1": 140.0
+                "count": 2777.0,
+                "recall1": 5.0
               },
               "9": {
-                "count": 100000.0,
-                "recall1": 68.0
+                "count": 2777.0,
+                "recall1": 1.0
               }
             },
             "transposition": {
               "1": {
-                "count": 100000.0,
-                "recall1": 87883.0
+                "count": 2777.0,
+                "recall1": 2460.0
               },
               "2": {
-                "count": 100000.0,
-                "recall1": 71208.0
+                "count": 2777.0,
+                "recall1": 1974.0
               },
               "3": {
-                "count": 100000.0,
-                "recall1": 36482.0
+                "count": 2777.0,
+                "recall1": 972.0
               },
               "4": {
-                "count": 100000.0,
-                "recall1": 35478.0
+                "count": 2777.0,
+                "recall1": 990.0
               },
               "5": {
-                "count": 100000.0,
-                "recall1": 20474.0
+                "count": 2777.0,
+                "recall1": 546.0
               },
               "6": {
-                "count": 100000.0,
-                "recall1": 20395.0
+                "count": 2777.0,
+                "recall1": 571.0
               },
               "7": {
-                "count": 100000.0,
-                "recall1": 13258.0
+                "count": 2777.0,
+                "recall1": 344.0
               },
               "8": {
-                "count": 100000.0,
-                "recall1": 13550.0
+                "count": 2777.0,
+                "recall1": 373.0
               },
               "9": {
-                "count": 100000.0,
-                "recall1": 9620.0
+                "count": 2777.0,
+                "recall1": 282.0
               }
             },
             "deletion": {
               "1": {
-                "count": 100000.0,
-                "recall1": 63708.0
+                "count": 2777.0,
+                "recall1": 1783.0
               },
               "2": {
-                "count": 100000.0,
-                "recall1": 21264.0
+                "count": 2777.0,
+                "recall1": 585.0
               },
               "3": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "4": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "5": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "6": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "7": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "8": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "9": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               }
             },
             "insertion": {
               "1": {
-                "count": 100000.0,
-                "recall1": 96073.0
+                "count": 2777.0,
+                "recall1": 2680.0
               },
               "2": {
-                "count": 100000.0,
-                "recall1": 91189.0
+                "count": 2777.0,
+                "recall1": 2535.0
               },
               "3": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "4": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "5": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "6": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "7": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "8": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "9": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               }
             }
@@ -918,215 +918,215 @@
         "label": "SymSpell d3/p9",
         "accuracy": {
           "overall": {
-            "count": 3600000.0,
-            "recall1": 993806.0
+            "count": 99972.0,
+            "recall1": 27499.0
           },
           "by_error_type": {
             "substitution": {
-              "count": 900000.0,
-              "recall1": 244213.0
+              "count": 24993.0,
+              "recall1": 6684.0
             },
             "transposition": {
-              "count": 900000.0,
-              "recall1": 383841.0
+              "count": 24993.0,
+              "recall1": 10638.0
             },
             "deletion": {
-              "count": 900000.0,
-              "recall1": 92168.0
+              "count": 24993.0,
+              "recall1": 2605.0
             },
             "insertion": {
-              "count": 900000.0,
-              "recall1": 273584.0
+              "count": 24993.0,
+              "recall1": 7572.0
             }
           },
           "by_edits": {
             "1": {
-              "count": 400000.0,
-              "recall1": 335580.0
+              "count": 11108.0,
+              "recall1": 9379.0
             },
             "2": {
-              "count": 400000.0,
-              "recall1": 252846.0
+              "count": 11108.0,
+              "recall1": 6985.0
             },
             "3": {
-              "count": 400000.0,
-              "recall1": 200519.0
+              "count": 11108.0,
+              "recall1": 5455.0
             },
             "4": {
-              "count": 400000.0,
-              "recall1": 64419.0
+              "count": 11108.0,
+              "recall1": 1786.0
             },
             "5": {
-              "count": 400000.0,
-              "recall1": 46284.0
+              "count": 11108.0,
+              "recall1": 1247.0
             },
             "6": {
-              "count": 400000.0,
-              "recall1": 30652.0
+              "count": 11108.0,
+              "recall1": 890.0
             },
             "7": {
-              "count": 400000.0,
-              "recall1": 26053.0
+              "count": 11108.0,
+              "recall1": 701.0
             },
             "8": {
-              "count": 400000.0,
-              "recall1": 19806.0
+              "count": 11108.0,
+              "recall1": 543.0
             },
             "9": {
-              "count": 400000.0,
-              "recall1": 17647.0
+              "count": 11108.0,
+              "recall1": 513.0
             }
           },
           "by_error_and_edits": {
             "substitution": {
               "1": {
-                "count": 100000.0,
-                "recall1": 85696.0
+                "count": 2777.0,
+                "recall1": 2388.0
               },
               "2": {
-                "count": 100000.0,
-                "recall1": 67945.0
+                "count": 2777.0,
+                "recall1": 1849.0
               },
               "3": {
-                "count": 100000.0,
-                "recall1": 50751.0
+                "count": 2777.0,
+                "recall1": 1351.0
               },
               "4": {
-                "count": 100000.0,
-                "recall1": 22986.0
+                "count": 2777.0,
+                "recall1": 633.0
               },
               "5": {
-                "count": 100000.0,
-                "recall1": 9717.0
+                "count": 2777.0,
+                "recall1": 259.0
               },
               "6": {
-                "count": 100000.0,
-                "recall1": 4159.0
+                "count": 2777.0,
+                "recall1": 129.0
               },
               "7": {
-                "count": 100000.0,
-                "recall1": 1764.0
+                "count": 2777.0,
+                "recall1": 49.0
               },
               "8": {
-                "count": 100000.0,
-                "recall1": 828.0
+                "count": 2777.0,
+                "recall1": 21.0
               },
               "9": {
-                "count": 100000.0,
-                "recall1": 367.0
+                "count": 2777.0,
+                "recall1": 5.0
               }
             },
             "transposition": {
               "1": {
-                "count": 100000.0,
-                "recall1": 87980.0
+                "count": 2777.0,
+                "recall1": 2461.0
               },
               "2": {
-                "count": 100000.0,
-                "recall1": 71665.0
+                "count": 2777.0,
+                "recall1": 1988.0
               },
               "3": {
-                "count": 100000.0,
-                "recall1": 59185.0
+                "count": 2777.0,
+                "recall1": 1608.0
               },
               "4": {
-                "count": 100000.0,
-                "recall1": 41430.0
+                "count": 2777.0,
+                "recall1": 1152.0
               },
               "5": {
-                "count": 100000.0,
-                "recall1": 36564.0
+                "count": 2777.0,
+                "recall1": 988.0
               },
               "6": {
-                "count": 100000.0,
-                "recall1": 26487.0
+                "count": 2777.0,
+                "recall1": 759.0
               },
               "7": {
-                "count": 100000.0,
-                "recall1": 24284.0
+                "count": 2777.0,
+                "recall1": 652.0
               },
               "8": {
-                "count": 100000.0,
-                "recall1": 18972.0
+                "count": 2777.0,
+                "recall1": 522.0
               },
               "9": {
-                "count": 100000.0,
-                "recall1": 17274.0
+                "count": 2777.0,
+                "recall1": 508.0
               }
             },
             "deletion": {
               "1": {
-                "count": 100000.0,
-                "recall1": 65865.0
+                "count": 2777.0,
+                "recall1": 1852.0
               },
               "2": {
-                "count": 100000.0,
-                "recall1": 22118.0
+                "count": 2777.0,
+                "recall1": 618.0
               },
               "3": {
-                "count": 100000.0,
-                "recall1": 4156.0
+                "count": 2777.0,
+                "recall1": 132.0
               },
               "4": {
-                "count": 100000.0,
-                "recall1": 3.0
+                "count": 2777.0,
+                "recall1": 1.0
               },
               "5": {
-                "count": 100000.0,
-                "recall1": 3.0
+                "count": 2777.0,
+                "recall1": 0.0
               },
               "6": {
-                "count": 100000.0,
-                "recall1": 6.0
+                "count": 2777.0,
+                "recall1": 2.0
               },
               "7": {
-                "count": 100000.0,
-                "recall1": 5.0
+                "count": 2777.0,
+                "recall1": 0.0
               },
               "8": {
-                "count": 100000.0,
-                "recall1": 6.0
+                "count": 2777.0,
+                "recall1": 0.0
               },
               "9": {
-                "count": 100000.0,
-                "recall1": 6.0
+                "count": 2777.0,
+                "recall1": 0.0
               }
             },
             "insertion": {
               "1": {
-                "count": 100000.0,
-                "recall1": 96039.0
+                "count": 2777.0,
+                "recall1": 2678.0
               },
               "2": {
-                "count": 100000.0,
-                "recall1": 91118.0
+                "count": 2777.0,
+                "recall1": 2530.0
               },
               "3": {
-                "count": 100000.0,
-                "recall1": 86427.0
+                "count": 2777.0,
+                "recall1": 2364.0
               },
               "4": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "5": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "6": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "7": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "8": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "9": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               }
             }
@@ -1137,215 +1137,215 @@
         "label": "SymSpell d4/p12",
         "accuracy": {
           "overall": {
-            "count": 3600000.0,
-            "recall1": 1151114.0
+            "count": 99972.0,
+            "recall1": 31930.0
           },
           "by_error_type": {
             "substitution": {
-              "count": 900000.0,
-              "recall1": 281764.0
+              "count": 24993.0,
+              "recall1": 7766.0
             },
             "transposition": {
-              "count": 900000.0,
-              "recall1": 417385.0
+              "count": 24993.0,
+              "recall1": 11571.0
             },
             "deletion": {
-              "count": 900000.0,
-              "recall1": 97692.0
+              "count": 24993.0,
+              "recall1": 2766.0
             },
             "insertion": {
-              "count": 900000.0,
-              "recall1": 354273.0
+              "count": 24993.0,
+              "recall1": 9827.0
             }
           },
           "by_edits": {
             "1": {
-              "count": 400000.0,
-              "recall1": 337177.0
+              "count": 11108.0,
+              "recall1": 9426.0
             },
             "2": {
-              "count": 400000.0,
-              "recall1": 255802.0
+              "count": 11108.0,
+              "recall1": 7068.0
             },
             "3": {
-              "count": 400000.0,
-              "recall1": 201816.0
+              "count": 11108.0,
+              "recall1": 5495.0
             },
             "4": {
-              "count": 400000.0,
-              "recall1": 167497.0
+              "count": 11108.0,
+              "recall1": 4649.0
             },
             "5": {
-              "count": 400000.0,
-              "recall1": 61008.0
+              "count": 11108.0,
+              "recall1": 1662.0
             },
             "6": {
-              "count": 400000.0,
-              "recall1": 44323.0
+              "count": 11108.0,
+              "recall1": 1321.0
             },
             "7": {
-              "count": 400000.0,
-              "recall1": 33709.0
+              "count": 11108.0,
+              "recall1": 911.0
             },
             "8": {
-              "count": 400000.0,
-              "recall1": 27334.0
+              "count": 11108.0,
+              "recall1": 757.0
             },
             "9": {
-              "count": 400000.0,
-              "recall1": 22448.0
+              "count": 11108.0,
+              "recall1": 641.0
             }
           },
           "by_error_and_edits": {
             "substitution": {
               "1": {
-                "count": 100000.0,
-                "recall1": 85675.0
+                "count": 2777.0,
+                "recall1": 2388.0
               },
               "2": {
-                "count": 100000.0,
-                "recall1": 67885.0
+                "count": 2777.0,
+                "recall1": 1847.0
               },
               "3": {
-                "count": 100000.0,
-                "recall1": 50680.0
+                "count": 2777.0,
+                "recall1": 1351.0
               },
               "4": {
-                "count": 100000.0,
-                "recall1": 36735.0
+                "count": 2777.0,
+                "recall1": 999.0
               },
               "5": {
-                "count": 100000.0,
-                "recall1": 20753.0
+                "count": 2777.0,
+                "recall1": 580.0
               },
               "6": {
-                "count": 100000.0,
-                "recall1": 10707.0
+                "count": 2777.0,
+                "recall1": 336.0
               },
               "7": {
-                "count": 100000.0,
-                "recall1": 5321.0
+                "count": 2777.0,
+                "recall1": 149.0
               },
               "8": {
-                "count": 100000.0,
-                "recall1": 2675.0
+                "count": 2777.0,
+                "recall1": 88.0
               },
               "9": {
-                "count": 100000.0,
-                "recall1": 1333.0
+                "count": 2777.0,
+                "recall1": 28.0
               }
             },
             "transposition": {
               "1": {
-                "count": 100000.0,
-                "recall1": 88142.0
+                "count": 2777.0,
+                "recall1": 2466.0
               },
               "2": {
-                "count": 100000.0,
-                "recall1": 71992.0
+                "count": 2777.0,
+                "recall1": 1995.0
               },
               "3": {
-                "count": 100000.0,
-                "recall1": 59916.0
+                "count": 2777.0,
+                "recall1": 1626.0
               },
               "4": {
-                "count": 100000.0,
-                "recall1": 49328.0
+                "count": 2777.0,
+                "recall1": 1375.0
               },
               "5": {
-                "count": 100000.0,
-                "recall1": 40252.0
+                "count": 2777.0,
+                "recall1": 1082.0
               },
               "6": {
-                "count": 100000.0,
-                "recall1": 33610.0
+                "count": 2777.0,
+                "recall1": 983.0
               },
               "7": {
-                "count": 100000.0,
-                "recall1": 28383.0
+                "count": 2777.0,
+                "recall1": 762.0
               },
               "8": {
-                "count": 100000.0,
-                "recall1": 24653.0
+                "count": 2777.0,
+                "recall1": 669.0
               },
               "9": {
-                "count": 100000.0,
-                "recall1": 21109.0
+                "count": 2777.0,
+                "recall1": 613.0
               }
             },
             "deletion": {
               "1": {
-                "count": 100000.0,
-                "recall1": 67346.0
+                "count": 2777.0,
+                "recall1": 1895.0
               },
               "2": {
-                "count": 100000.0,
-                "recall1": 24827.0
+                "count": 2777.0,
+                "recall1": 697.0
               },
               "3": {
-                "count": 100000.0,
-                "recall1": 4839.0
+                "count": 2777.0,
+                "recall1": 153.0
               },
               "4": {
-                "count": 100000.0,
-                "recall1": 654.0
+                "count": 2777.0,
+                "recall1": 19.0
               },
               "5": {
-                "count": 100000.0,
-                "recall1": 3.0
+                "count": 2777.0,
+                "recall1": 0.0
               },
               "6": {
-                "count": 100000.0,
-                "recall1": 6.0
+                "count": 2777.0,
+                "recall1": 2.0
               },
               "7": {
-                "count": 100000.0,
-                "recall1": 5.0
+                "count": 2777.0,
+                "recall1": 0.0
               },
               "8": {
-                "count": 100000.0,
-                "recall1": 6.0
+                "count": 2777.0,
+                "recall1": 0.0
               },
               "9": {
-                "count": 100000.0,
-                "recall1": 6.0
+                "count": 2777.0,
+                "recall1": 0.0
               }
             },
             "insertion": {
               "1": {
-                "count": 100000.0,
-                "recall1": 96014.0
+                "count": 2777.0,
+                "recall1": 2677.0
               },
               "2": {
-                "count": 100000.0,
-                "recall1": 91098.0
+                "count": 2777.0,
+                "recall1": 2529.0
               },
               "3": {
-                "count": 100000.0,
-                "recall1": 86381.0
+                "count": 2777.0,
+                "recall1": 2365.0
               },
               "4": {
-                "count": 100000.0,
-                "recall1": 80780.0
+                "count": 2777.0,
+                "recall1": 2256.0
               },
               "5": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "6": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "7": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "8": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               },
               "9": {
-                "count": 100000.0,
+                "count": 2777.0,
                 "recall1": 0.0
               }
             }
