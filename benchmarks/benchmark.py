@@ -22,7 +22,7 @@ from vecfuzz import VecFuzz
 
 
 TYPO_TYPES = ("substitution", "transposition", "deletion", "insertion")
-DEFAULT_EDIT_LEVELS = (1, 2, 3, 4, 5 , 6, 7, 8, 9)
+DEFAULT_EDIT_LEVELS = (1, 2, 3, 4, 5, 6, 7, 8, 9)
 DEFAULT_SYMSPELL_CONFIGS = (
 	{"label": "SymSpell d2/p7", "max_edit_distance": 2, "prefix_length": 7},
 	{"label": "SymSpell d3/p9", "max_edit_distance": 3, "prefix_length": 9},
