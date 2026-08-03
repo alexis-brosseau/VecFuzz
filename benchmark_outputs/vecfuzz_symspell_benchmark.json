@@ -1,0 +1,1263 @@
+{
+  "metadata": {
+    "seed": 0,
+    "vocab_count": 159191,
+    "vocab_sizes": [
+      5000,
+      10000,
+      20000,
+      40000,
+      60000,
+      80000,
+      100000
+    ],
+    "query_count": 10000,
+    "configs": [
+      {
+        "label": "SymSpell d2/p7",
+        "max_edit_distance": 2,
+        "prefix_length": 7
+      },
+      {
+        "label": "SymSpell d3/p9",
+        "max_edit_distance": 3,
+        "prefix_length": 9
+      },
+      {
+        "label": "SymSpell d4/p12",
+        "max_edit_distance": 4,
+        "prefix_length": 12
+      }
+    ]
+  },
+  "build_and_memory": [
+    {
+      "vocab_size": 5000,
+      "vecfuzz": {
+        "build_seconds": 0.5225963999982923,
+        "size_mb": 8.082939147949219
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 0.1050614999840036,
+          "size_mb": 18.177696228027344
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 0.3031009999976959,
+          "size_mb": 66.951904296875
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 1.0718224000011105,
+          "size_mb": 197.60358428955078
+        }
+      ]
+    },
+    {
+      "vocab_size": 10000,
+      "vecfuzz": {
+        "build_seconds": 1.339505999989342,
+        "size_mb": 16.158340454101562
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 0.14184140000725165,
+          "size_mb": 33.32452392578125
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 0.7514484999992419,
+          "size_mb": 126.20782470703125
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 2.3056199999991804,
+          "size_mb": 378.7330093383789
+        }
+      ]
+    },
+    {
+      "vocab_size": 20000,
+      "vecfuzz": {
+        "build_seconds": 3.4597732999827713,
+        "size_mb": 32.31013488769531
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 0.24886370002059266,
+          "size_mb": 51.37492370605469
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 1.2560833000170533,
+          "size_mb": 202.8018798828125
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 4.754913099983241,
+          "size_mb": 718.3898391723633
+        }
+      ]
+    },
+    {
+      "vocab_size": 40000,
+      "vecfuzz": {
+        "build_seconds": 8.603751300019212,
+        "size_mb": 64.6124038696289
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 0.5219435000035446,
+          "size_mb": 85.78307342529297
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 2.6651351999898907,
+          "size_mb": 354.15894317626953
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 9.77008190000197,
+          "size_mb": 1319.8876495361328
+        }
+      ]
+    },
+    {
+      "vocab_size": 60000,
+      "vecfuzz": {
+        "build_seconds": 14.429039599985117,
+        "size_mb": 96.91536712646484
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 0.8086398000014015,
+          "size_mb": 107.06954956054688
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 4.457003200019244,
+          "size_mb": 511.5022506713867
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 13.84738429999561,
+          "size_mb": 1753.2024993896484
+        }
+      ]
+    },
+    {
+      "vocab_size": 80000,
+      "vecfuzz": {
+        "build_seconds": 20.42804729999625,
+        "size_mb": 129.21623992919922
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 2.555293100012932,
+          "size_mb": 138.73809814453125
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 4.415370599977905,
+          "size_mb": 593.3030319213867
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 21.228484199993545,
+          "size_mb": 2357.500816345215
+        }
+      ]
+    },
+    {
+      "vocab_size": 100000,
+      "vecfuzz": {
+        "build_seconds": 27.028016500000376,
+        "size_mb": 161.51766967773438
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 1.4369347999745514,
+          "size_mb": 155.31883239746094
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 5.846746900002472,
+          "size_mb": 666.5349273681641
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 27.204347099992447,
+          "size_mb": 2696.3844985961914
+        }
+      ]
+    }
+  ],
+  "lookup_by_vocab_size": [
+    {
+      "vocab_size": 5000,
+      "query_count": 9972,
+      "vecfuzz": {
+        "qps": 22543.000569954776,
+        "seconds": 0.44235460000345483
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "qps": 90536.51875554773,
+          "seconds": 0.11014340000110678
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "qps": 24557.59633078596,
+          "seconds": 0.4060657999943942
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "qps": 6088.53841201246,
+          "seconds": 1.637831499974709
+        }
+      ]
+    },
+    {
+      "vocab_size": 10000,
+      "query_count": 9972,
+      "vecfuzz": {
+        "qps": 18925.72771585757,
+        "seconds": 0.526901800010819
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "qps": 77765.11846656287,
+          "seconds": 0.12823229999048635
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "qps": 21197.379874630813,
+          "seconds": 0.47043549999943934
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "qps": 5566.9934232680025,
+          "seconds": 1.7912721000029705
+        }
+      ]
+    },
+    {
+      "vocab_size": 20000,
+      "query_count": 9972,
+      "vecfuzz": {
+        "qps": 15278.906697141114,
+        "seconds": 0.652664499997627
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "qps": 62433.9081474059,
+          "seconds": 0.15972090000286698
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "qps": 16455.483560818873,
+          "seconds": 0.6059985999891069
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "qps": 4989.301670327335,
+          "seconds": 1.9986765000212472
+        }
+      ]
+    },
+    {
+      "vocab_size": 40000,
+      "query_count": 9972,
+      "vecfuzz": {
+        "qps": 12767.467693368528,
+        "seconds": 0.7810476000013296
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "qps": 47494.17276556699,
+          "seconds": 0.209962600027211
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "qps": 12455.865179828657,
+          "seconds": 0.8005867000028957
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "qps": 4388.600833757927,
+          "seconds": 2.272250400012126
+        }
+      ]
+    },
+    {
+      "vocab_size": 60000,
+      "query_count": 9972,
+      "vecfuzz": {
+        "qps": 12288.324612926262,
+        "seconds": 0.8115019999968354
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "qps": 41729.66358740506,
+          "seconds": 0.23896670000976883
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "qps": 11150.053306993319,
+          "seconds": 0.8943455000116955
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "qps": 3777.28889519203,
+          "seconds": 2.6399887000152376
+        }
+      ]
+    },
+    {
+      "vocab_size": 80000,
+      "query_count": 9972,
+      "vecfuzz": {
+        "qps": 12349.89282418698,
+        "seconds": 0.8074563999834936
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "qps": 36705.64954935433,
+          "seconds": 0.2716747999947984
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "qps": 9177.837161460748,
+          "seconds": 1.0865305000043008
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "qps": 3625.374216665922,
+          "seconds": 2.750612599978922
+        }
+      ]
+    },
+    {
+      "vocab_size": 100000,
+      "query_count": 9972,
+      "vecfuzz": {
+        "qps": 11419.466480045297,
+        "seconds": 0.8732457000005525
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "qps": 33327.261880405465,
+          "seconds": 0.299214500002563
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "qps": 8168.719946466915,
+          "seconds": 1.220754299982218
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "qps": 3313.72028738573,
+          "seconds": 3.0093064999964554
+        }
+      ]
+    }
+  ],
+  "accuracy": {
+    "vecfuzz": {
+      "overall": {
+        "count": 360000.0,
+        "recall1": 187529.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 90000.0,
+          "recall1": 28373.0
+        },
+        "transposition": {
+          "count": 90000.0,
+          "recall1": 81842.0
+        },
+        "deletion": {
+          "count": 90000.0,
+          "recall1": 13555.0
+        },
+        "insertion": {
+          "count": 90000.0,
+          "recall1": 63759.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 40000.0,
+          "recall1": 35739.0
+        },
+        "2": {
+          "count": 40000.0,
+          "recall1": 29535.0
+        },
+        "3": {
+          "count": 40000.0,
+          "recall1": 24125.0
+        },
+        "4": {
+          "count": 40000.0,
+          "recall1": 20419.0
+        },
+        "5": {
+          "count": 40000.0,
+          "recall1": 18018.0
+        },
+        "6": {
+          "count": 40000.0,
+          "recall1": 16546.0
+        },
+        "7": {
+          "count": 40000.0,
+          "recall1": 15398.0
+        },
+        "8": {
+          "count": 40000.0,
+          "recall1": 14193.0
+        },
+        "9": {
+          "count": 40000.0,
+          "recall1": 13556.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 10000.0,
+            "recall1": 9049.0
+          },
+          "2": {
+            "count": 10000.0,
+            "recall1": 7117.0
+          },
+          "3": {
+            "count": 10000.0,
+            "recall1": 4812.0
+          },
+          "4": {
+            "count": 10000.0,
+            "recall1": 3082.0
+          },
+          "5": {
+            "count": 10000.0,
+            "recall1": 1853.0
+          },
+          "6": {
+            "count": 10000.0,
+            "recall1": 1132.0
+          },
+          "7": {
+            "count": 10000.0,
+            "recall1": 699.0
+          },
+          "8": {
+            "count": 10000.0,
+            "recall1": 365.0
+          },
+          "9": {
+            "count": 10000.0,
+            "recall1": 264.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 10000.0,
+            "recall1": 9943.0
+          },
+          "2": {
+            "count": 10000.0,
+            "recall1": 9587.0
+          },
+          "3": {
+            "count": 10000.0,
+            "recall1": 9483.0
+          },
+          "4": {
+            "count": 10000.0,
+            "recall1": 9217.0
+          },
+          "5": {
+            "count": 10000.0,
+            "recall1": 9008.0
+          },
+          "6": {
+            "count": 10000.0,
+            "recall1": 8903.0
+          },
+          "7": {
+            "count": 10000.0,
+            "recall1": 8770.0
+          },
+          "8": {
+            "count": 10000.0,
+            "recall1": 8505.0
+          },
+          "9": {
+            "count": 10000.0,
+            "recall1": 8426.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 10000.0,
+            "recall1": 7484.0
+          },
+          "2": {
+            "count": 10000.0,
+            "recall1": 3981.0
+          },
+          "3": {
+            "count": 10000.0,
+            "recall1": 1553.0
+          },
+          "4": {
+            "count": 10000.0,
+            "recall1": 430.0
+          },
+          "5": {
+            "count": 10000.0,
+            "recall1": 82.0
+          },
+          "6": {
+            "count": 10000.0,
+            "recall1": 12.0
+          },
+          "7": {
+            "count": 10000.0,
+            "recall1": 4.0
+          },
+          "8": {
+            "count": 10000.0,
+            "recall1": 6.0
+          },
+          "9": {
+            "count": 10000.0,
+            "recall1": 3.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 10000.0,
+            "recall1": 9263.0
+          },
+          "2": {
+            "count": 10000.0,
+            "recall1": 8850.0
+          },
+          "3": {
+            "count": 10000.0,
+            "recall1": 8277.0
+          },
+          "4": {
+            "count": 10000.0,
+            "recall1": 7690.0
+          },
+          "5": {
+            "count": 10000.0,
+            "recall1": 7075.0
+          },
+          "6": {
+            "count": 10000.0,
+            "recall1": 6499.0
+          },
+          "7": {
+            "count": 10000.0,
+            "recall1": 5925.0
+          },
+          "8": {
+            "count": 10000.0,
+            "recall1": 5317.0
+          },
+          "9": {
+            "count": 10000.0,
+            "recall1": 4863.0
+          }
+        }
+      }
+    },
+    "symspell": [
+      {
+        "label": "SymSpell d2/p7",
+        "accuracy": {
+          "overall": {
+            "count": 360000.0,
+            "recall1": 80209.0
+          },
+          "by_error_type": {
+            "substitution": {
+              "count": 90000.0,
+              "recall1": 19223.0
+            },
+            "transposition": {
+              "count": 90000.0,
+              "recall1": 32489.0
+            },
+            "deletion": {
+              "count": 90000.0,
+              "recall1": 9438.0
+            },
+            "insertion": {
+              "count": 90000.0,
+              "recall1": 19059.0
+            }
+          },
+          "by_edits": {
+            "1": {
+              "count": 40000.0,
+              "recall1": 34609.0
+            },
+            "2": {
+              "count": 40000.0,
+              "recall1": 26631.0
+            },
+            "3": {
+              "count": 40000.0,
+              "recall1": 5835.0
+            },
+            "4": {
+              "count": 40000.0,
+              "recall1": 4383.0
+            },
+            "5": {
+              "count": 40000.0,
+              "recall1": 2367.0
+            },
+            "6": {
+              "count": 40000.0,
+              "recall1": 2381.0
+            },
+            "7": {
+              "count": 40000.0,
+              "recall1": 1528.0
+            },
+            "8": {
+              "count": 40000.0,
+              "recall1": 1437.0
+            },
+            "9": {
+              "count": 40000.0,
+              "recall1": 1038.0
+            }
+          },
+          "by_error_and_edits": {
+            "substitution": {
+              "1": {
+                "count": 10000.0,
+                "recall1": 8864.0
+              },
+              "2": {
+                "count": 10000.0,
+                "recall1": 7255.0
+              },
+              "3": {
+                "count": 10000.0,
+                "recall1": 2101.0
+              },
+              "4": {
+                "count": 10000.0,
+                "recall1": 639.0
+              },
+              "5": {
+                "count": 10000.0,
+                "recall1": 204.0
+              },
+              "6": {
+                "count": 10000.0,
+                "recall1": 97.0
+              },
+              "7": {
+                "count": 10000.0,
+                "recall1": 37.0
+              },
+              "8": {
+                "count": 10000.0,
+                "recall1": 22.0
+              },
+              "9": {
+                "count": 10000.0,
+                "recall1": 4.0
+              }
+            },
+            "transposition": {
+              "1": {
+                "count": 10000.0,
+                "recall1": 9063.0
+              },
+              "2": {
+                "count": 10000.0,
+                "recall1": 7561.0
+              },
+              "3": {
+                "count": 10000.0,
+                "recall1": 3734.0
+              },
+              "4": {
+                "count": 10000.0,
+                "recall1": 3744.0
+              },
+              "5": {
+                "count": 10000.0,
+                "recall1": 2163.0
+              },
+              "6": {
+                "count": 10000.0,
+                "recall1": 2284.0
+              },
+              "7": {
+                "count": 10000.0,
+                "recall1": 1491.0
+              },
+              "8": {
+                "count": 10000.0,
+                "recall1": 1415.0
+              },
+              "9": {
+                "count": 10000.0,
+                "recall1": 1034.0
+              }
+            },
+            "deletion": {
+              "1": {
+                "count": 10000.0,
+                "recall1": 6966.0
+              },
+              "2": {
+                "count": 10000.0,
+                "recall1": 2472.0
+              },
+              "3": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "4": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "5": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "6": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "7": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "8": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "9": {
+                "count": 10000.0,
+                "recall1": 0.0
+              }
+            },
+            "insertion": {
+              "1": {
+                "count": 10000.0,
+                "recall1": 9716.0
+              },
+              "2": {
+                "count": 10000.0,
+                "recall1": 9343.0
+              },
+              "3": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "4": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "5": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "6": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "7": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "8": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "9": {
+                "count": 10000.0,
+                "recall1": 0.0
+              }
+            }
+          }
+        }
+      },
+      {
+        "label": "SymSpell d3/p9",
+        "accuracy": {
+          "overall": {
+            "count": 360000.0,
+            "recall1": 105351.0
+          },
+          "by_error_type": {
+            "substitution": {
+              "count": 90000.0,
+              "recall1": 26052.0
+            },
+            "transposition": {
+              "count": 90000.0,
+              "recall1": 41037.0
+            },
+            "deletion": {
+              "count": 90000.0,
+              "recall1": 10302.0
+            },
+            "insertion": {
+              "count": 90000.0,
+              "recall1": 27960.0
+            }
+          },
+          "by_edits": {
+            "1": {
+              "count": 40000.0,
+              "recall1": 34784.0
+            },
+            "2": {
+              "count": 40000.0,
+              "recall1": 26780.0
+            },
+            "3": {
+              "count": 40000.0,
+              "recall1": 21249.0
+            },
+            "4": {
+              "count": 40000.0,
+              "recall1": 6919.0
+            },
+            "5": {
+              "count": 40000.0,
+              "recall1": 5120.0
+            },
+            "6": {
+              "count": 40000.0,
+              "recall1": 3485.0
+            },
+            "7": {
+              "count": 40000.0,
+              "recall1": 2907.0
+            },
+            "8": {
+              "count": 40000.0,
+              "recall1": 2128.0
+            },
+            "9": {
+              "count": 40000.0,
+              "recall1": 1979.0
+            }
+          },
+          "by_error_and_edits": {
+            "substitution": {
+              "1": {
+                "count": 10000.0,
+                "recall1": 8857.0
+              },
+              "2": {
+                "count": 10000.0,
+                "recall1": 7248.0
+              },
+              "3": {
+                "count": 10000.0,
+                "recall1": 5514.0
+              },
+              "4": {
+                "count": 10000.0,
+                "recall1": 2495.0
+              },
+              "5": {
+                "count": 10000.0,
+                "recall1": 1100.0
+              },
+              "6": {
+                "count": 10000.0,
+                "recall1": 484.0
+              },
+              "7": {
+                "count": 10000.0,
+                "recall1": 209.0
+              },
+              "8": {
+                "count": 10000.0,
+                "recall1": 100.0
+              },
+              "9": {
+                "count": 10000.0,
+                "recall1": 45.0
+              }
+            },
+            "transposition": {
+              "1": {
+                "count": 10000.0,
+                "recall1": 9067.0
+              },
+              "2": {
+                "count": 10000.0,
+                "recall1": 7576.0
+              },
+              "3": {
+                "count": 10000.0,
+                "recall1": 6291.0
+              },
+              "4": {
+                "count": 10000.0,
+                "recall1": 4423.0
+              },
+              "5": {
+                "count": 10000.0,
+                "recall1": 4020.0
+              },
+              "6": {
+                "count": 10000.0,
+                "recall1": 3001.0
+              },
+              "7": {
+                "count": 10000.0,
+                "recall1": 2697.0
+              },
+              "8": {
+                "count": 10000.0,
+                "recall1": 2028.0
+              },
+              "9": {
+                "count": 10000.0,
+                "recall1": 1934.0
+              }
+            },
+            "deletion": {
+              "1": {
+                "count": 10000.0,
+                "recall1": 7148.0
+              },
+              "2": {
+                "count": 10000.0,
+                "recall1": 2609.0
+              },
+              "3": {
+                "count": 10000.0,
+                "recall1": 543.0
+              },
+              "4": {
+                "count": 10000.0,
+                "recall1": 1.0
+              },
+              "5": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "6": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "7": {
+                "count": 10000.0,
+                "recall1": 1.0
+              },
+              "8": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "9": {
+                "count": 10000.0,
+                "recall1": 0.0
+              }
+            },
+            "insertion": {
+              "1": {
+                "count": 10000.0,
+                "recall1": 9712.0
+              },
+              "2": {
+                "count": 10000.0,
+                "recall1": 9347.0
+              },
+              "3": {
+                "count": 10000.0,
+                "recall1": 8901.0
+              },
+              "4": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "5": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "6": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "7": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "8": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "9": {
+                "count": 10000.0,
+                "recall1": 0.0
+              }
+            }
+          }
+        }
+      },
+      {
+        "label": "SymSpell d4/p12",
+        "accuracy": {
+          "overall": {
+            "count": 360000.0,
+            "recall1": 122505.0
+          },
+          "by_error_type": {
+            "substitution": {
+              "count": 90000.0,
+              "recall1": 30400.0
+            },
+            "transposition": {
+              "count": 90000.0,
+              "recall1": 44923.0
+            },
+            "deletion": {
+              "count": 90000.0,
+              "recall1": 10844.0
+            },
+            "insertion": {
+              "count": 90000.0,
+              "recall1": 36338.0
+            }
+          },
+          "by_edits": {
+            "1": {
+              "count": 40000.0,
+              "recall1": 34899.0
+            },
+            "2": {
+              "count": 40000.0,
+              "recall1": 27056.0
+            },
+            "3": {
+              "count": 40000.0,
+              "recall1": 21402.0
+            },
+            "4": {
+              "count": 40000.0,
+              "recall1": 17862.0
+            },
+            "5": {
+              "count": 40000.0,
+              "recall1": 6803.0
+            },
+            "6": {
+              "count": 40000.0,
+              "recall1": 5147.0
+            },
+            "7": {
+              "count": 40000.0,
+              "recall1": 3777.0
+            },
+            "8": {
+              "count": 40000.0,
+              "recall1": 2992.0
+            },
+            "9": {
+              "count": 40000.0,
+              "recall1": 2567.0
+            }
+          },
+          "by_error_and_edits": {
+            "substitution": {
+              "1": {
+                "count": 10000.0,
+                "recall1": 8854.0
+              },
+              "2": {
+                "count": 10000.0,
+                "recall1": 7243.0
+              },
+              "3": {
+                "count": 10000.0,
+                "recall1": 5510.0
+              },
+              "4": {
+                "count": 10000.0,
+                "recall1": 4058.0
+              },
+              "5": {
+                "count": 10000.0,
+                "recall1": 2355.0
+              },
+              "6": {
+                "count": 10000.0,
+                "recall1": 1280.0
+              },
+              "7": {
+                "count": 10000.0,
+                "recall1": 613.0
+              },
+              "8": {
+                "count": 10000.0,
+                "recall1": 320.0
+              },
+              "9": {
+                "count": 10000.0,
+                "recall1": 167.0
+              }
+            },
+            "transposition": {
+              "1": {
+                "count": 10000.0,
+                "recall1": 9078.0
+              },
+              "2": {
+                "count": 10000.0,
+                "recall1": 7598.0
+              },
+              "3": {
+                "count": 10000.0,
+                "recall1": 6374.0
+              },
+              "4": {
+                "count": 10000.0,
+                "recall1": 5323.0
+              },
+              "5": {
+                "count": 10000.0,
+                "recall1": 4448.0
+              },
+              "6": {
+                "count": 10000.0,
+                "recall1": 3867.0
+              },
+              "7": {
+                "count": 10000.0,
+                "recall1": 3163.0
+              },
+              "8": {
+                "count": 10000.0,
+                "recall1": 2672.0
+              },
+              "9": {
+                "count": 10000.0,
+                "recall1": 2400.0
+              }
+            },
+            "deletion": {
+              "1": {
+                "count": 10000.0,
+                "recall1": 7256.0
+              },
+              "2": {
+                "count": 10000.0,
+                "recall1": 2871.0
+              },
+              "3": {
+                "count": 10000.0,
+                "recall1": 623.0
+              },
+              "4": {
+                "count": 10000.0,
+                "recall1": 93.0
+              },
+              "5": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "6": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "7": {
+                "count": 10000.0,
+                "recall1": 1.0
+              },
+              "8": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "9": {
+                "count": 10000.0,
+                "recall1": 0.0
+              }
+            },
+            "insertion": {
+              "1": {
+                "count": 10000.0,
+                "recall1": 9711.0
+              },
+              "2": {
+                "count": 10000.0,
+                "recall1": 9344.0
+              },
+              "3": {
+                "count": 10000.0,
+                "recall1": 8895.0
+              },
+              "4": {
+                "count": 10000.0,
+                "recall1": 8388.0
+              },
+              "5": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "6": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "7": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "8": {
+                "count": 10000.0,
+                "recall1": 0.0
+              },
+              "9": {
+                "count": 10000.0,
+                "recall1": 0.0
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "figures": {
+    "build_time": "benchmark_outputs\\build_time_vs_vocab_size.png",
+    "memory_footprint": "benchmark_outputs\\memory_footprint_vs_vocab_size.png",
+    "lookup_vocab_size": "benchmark_outputs\\lookup_speed_vs_vocab_size.png",
+    "accuracy": "benchmark_outputs\\accuracy_by_error_type_and_edits.png"
+  }
+}
