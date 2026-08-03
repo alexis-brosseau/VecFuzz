@@ -72,7 +72,7 @@ class VecFuzz:
         vec_pre = np.zeros(self._chars_len, dtype=np.float32)  # preceding-position density
         vec_suc = np.zeros(self._chars_len, dtype=np.float32)  # succeeding-position density
 
-        PHASE_FREQS = [0.1, 0.5, 1.0, 2.0] # frequency bands (in units of pi) for phase encoding
+        PHASE_FREQS = [0.1, 0.75, 1.5] # frequency bands (in units of pi) for phase encoding
         num_bands = len(PHASE_FREQS)
         vec_phase = np.zeros(2 * num_bands * self._chars_len, dtype=np.float32) # phase-encoded position
 
@@ -105,7 +105,7 @@ class VecFuzz:
         """
         words = [w.strip().lower() for w in words]
 
-        PHASE_FREQS = [0.1, 0.5, 1.0, 2.0]
+        PHASE_FREQS = [0.1, 0.75, 1.5]
         chars_len = self._chars_len
 
         n = len(words)
