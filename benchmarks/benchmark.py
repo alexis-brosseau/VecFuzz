@@ -274,8 +274,6 @@ def sweep(
 		"symspell": [],
 	}
 
-	cases = generate_error_cases(vocabulary, cases_per_combo=query_count, edit_levels=DEFAULT_EDIT_LEVELS, seed=seed)
-
 	for offset, vocab_size in enumerate(vocab_sizes):
 
 		# Sweep Build Speed & Memory
@@ -328,6 +326,9 @@ def sweep(
 
 		# Sweep Accuracy
 		if vocab_size == max(vocab_sizes):
+			
+			cases = generate_error_cases(vocabulary, cases_per_combo=query_count, edit_levels=DEFAULT_EDIT_LEVELS, seed=seed)
+
 			for artifact, config in zip(symspell_pool, configs):
 				scores = evaluate_symspell_lookup(cases, artifact.index, config)
 				accuracy_rows["symspell"].append(
