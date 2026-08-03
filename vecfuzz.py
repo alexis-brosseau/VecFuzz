@@ -50,10 +50,9 @@ class VecFuzz:
         block, which is 2*K*self._chars_len):
 
         1. Character frequency: count of each character, normalized by word length.
-        2. Average character position: mean normalized position (i/w_len) at which each character occurs.
-        3. Preceding-position density: for each character, a sum of positions that came before it.
-        4. Succeeding-position density: for each character, a sum of positions that came after it.
-        5. Phase-encoded position: sinusoidal expansion of each character's position(s) at a few frequencies (cos/sin pairs per band).
+        2. Preceding-position density: for each character, a sum of positions that came before it.
+        3. Succeeding-position density: for each character, a sum of positions that came after it.
+        4. Phase-encoded position: sinusoidal expansion of each character's position(s) at a few frequencies (cos/sin pairs per band).
 
         All sub-vectors are normalized by word length for scale invariance.
 
@@ -73,7 +72,7 @@ class VecFuzz:
         vec_pre = np.zeros(self._chars_len, dtype=np.float32)  # preceding-position density
         vec_suc = np.zeros(self._chars_len, dtype=np.float32)  # succeeding-position density
 
-        PHASE_FREQS = [1.0, 2.0] # frequency bands (in units of pi) for phase encoding
+        PHASE_FREQS = [0.1, 0.5, 1.0, 2.0] # frequency bands (in units of pi) for phase encoding
         num_bands = len(PHASE_FREQS)
         vec_phase = np.zeros(2 * num_bands * self._chars_len, dtype=np.float32) # phase-encoded position
 
@@ -92,6 +91,8 @@ class VecFuzz:
                     vec_phase[(2 * k) * self._chars_len + idx] += np.cos(theta) / w_len
                     vec_phase[(2 * k + 1) * self._chars_len + idx] += np.sin(theta) / w_len
 
+        vec_phase /= num_bands
+
         vector = np.concatenate([vec_frq, vec_pre, vec_suc, vec_phase])
         return vector
     
@@ -104,7 +105,7 @@ class VecFuzz:
         """
         words = [w.strip().lower() for w in words]
 
-        PHASE_FREQS = [1.0, 2.0]
+        PHASE_FREQS = [0.01, 0.1, 0.5, 1.0, 2.0]
         chars_len = self._chars_len
 
         n = len(words)
@@ -150,7 +151,7 @@ class VecFuzz:
             phase_parts.append(cos_arr)
             phase_parts.append(sin_arr)
 
-        vec_phase = np.concatenate(phase_parts, axis=1)
+        vec_phase = np.concatenate(phase_parts, axis=1) / len(PHASE_FREQS)
 
         return np.concatenate([vec_frq, vec_pre, vec_suc, vec_phase], axis=1)
     
