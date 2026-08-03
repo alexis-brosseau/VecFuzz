@@ -1,6 +1,8 @@
 faiss-cpu
-matplotlib
 numpy
+matplotlib
 pympler
 pyspellchecker
 symspellpy
+tqdm
+rapidfuzz
