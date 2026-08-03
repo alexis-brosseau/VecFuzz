@@ -14,7 +14,7 @@ class VecFuzz:
     It allows for efficient similarity search and retrieval of nearest neighbors based on vector representations of strings.
     """
 
-    def __init__(self, chars: str="aàbcçdeéèêëfghiïjklmnñoöpqrstuvwxyz0123456789-̧ '. ", ef_construction: int=200, M: int=32, ef: int=64):
+    def __init__(self, chars: str="aàbcçdeéèêëfghiïjklmnñoöpqrstuvwxyz0123456789-̧ '. ", ef_construction: int=200, M: int=32, ef: int=64, num_threads=os.cpu_count()):
         """
         Initialize the FAISS index parameters.
 
@@ -23,6 +23,7 @@ class VecFuzz:
             ef_construction (int, optional): The depth of the search during index construction for FAISS HNSW. Defaults to 200.
             M (int, optional): The number of bi-directional links created for every new element during HNSW index construction. Defaults to 32.
             ef (int, optional): The depth of the search for FAISS HNSW. Defaults to 50.
+            num_threads: Number of thread used to build the index. Default to the maximum available on the system.
         """
         
         self._chars = chars
@@ -33,10 +34,15 @@ class VecFuzz:
         self.ef_construction = ef_construction
         self.M = M
         self.ef = ef
+        set_num_threads(num_threads)
         
         self.entries = None
         self.vectors = None
         self.index = None
+
+    def set_num_threads(self, num_threads: int):
+        self.num_threads = num_threads
+        faiss.omp_set_num_threads(num_threads)
         
     def vectorize(self, word: str):
         """
@@ -155,18 +161,15 @@ class VecFuzz:
 
         return np.concatenate([vec_frq, vec_pre, vec_suc, vec_phase], axis=1)
     
-    def build(self, entries: list[str], num_threads=os.cpu_count()):
+    def build(self, entries: list[str]):
         """
         Build the FAISS index using the provided entries.
         
         Args:
             entries (list[str]): A list of strings to vectorize and index.
-            num_threads: Number of thread used to build the index. Default to the maximum available on the system.
         """
         self.entries = entries
         self.vectors = self.vectorize_batch(entries)
-
-        faiss.omp_set_num_threads(num_threads)
         self._build_index()
         
         return self
