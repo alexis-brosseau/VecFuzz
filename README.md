@@ -13,7 +13,6 @@ Fuzzy matching has a three-way tension between speed, memory, and accuracy. VecF
 - **Memory stays flat** as typo-tolerance increases. SymSpell's index size grows combinatorially with max edit distance while VecFuzz grows linearly **O(N)**.
 - **Query speed stays high** relative to brute-force comparison methods. RapidFuzz and raw Levenshtein score every candidate per query; VecFuzz searches an ANN index instead, ~100x+ faster in my tests.
 - **Accuracy is strong**, including on real human misspellings (see the Birkbeck results below). Substitution-heavy errors are the hardest case, where SymSpell's higher-order configs hold an edge.
-- **Build time is VecFuzz's weakest axis.** It's the slowest to build of any method tested here except SymSpell d4/p12, which it's roughly tied with at 100k words.
 
 If your dictionary is large, your memory budget is tight, queries need to be fast, and you can tolerate a slower build, VecFuzz is a strong pick.
 
@@ -47,10 +46,10 @@ Dictionary of 100k words, compared against SymSpell at three delete-distance/pre
 - **Lookup speed**: SymSpell d2/p7 is fastest by a wide margin; VecFuzz sits in the middle, ahead of SymSpell d3/p9 and d4/p12.
 ![Lookup Speed Chart](benchmark_outputs/lookup_speed_vs_vocab_size.png)
 
-- **Memory**: VecFuzz grows roughly linearly and stays far below SymSpell d3/p9 and d4/p12 at every size tested (SymSpell d4/p12 reaches ~2.7GB at 100k words vs VecFuzz's ~160MB). It is only slightly larger than SymSpell d2/p7 at 100k words.
+- **Memory**: VecFuzz grows roughly linearly and stays far below SymSpell d3/p9 and d4/p12 at every size tested (SymSpell d4/p12 reaches ~3.4GB at 150k words vs VecFuzz's ~213MB). It is only slightly larger than SymSpell d2/p7 at 150k words.
 ![Memory Footprint Chart](benchmark_outputs/memory_footprint_vs_vocab_size.png)
 
-- **Build time**: VecFuzz is slower to build than SymSpell d2/p7 and d3/p9 at every size tested, and  is essentially tied with SymSpell d4/p12.
+- **Build time**: VecFuzz is slower to build than SymSpell d2/p7 and d3/p9 at every size tested, and is only a bit faster than SymSpell d4/p12.
 ![Build Time Chart](benchmark_outputs/build_time_vs_vocab_size.png)
 
 ### Real-world human errors (Birkbeck Spelling Error Corpus)
@@ -59,8 +58,8 @@ Dictionary ~160k words, non-synthetic human misspellings (includes phonetic erro
 
 | Method          | Recall@1 (%) | Recall@5 (%) | Recall@10 (%) | Recall@25 (%) | Recall@100 (%) | Duration (s) | Build (s) | Size (MB) |
 |-----------------|--------------|--------------|---------------|---------------|----------------|--------------|-----------|-----------|
-| **VecFuzz**     | **35.29%**   | **54.88%**   | **61.58%**    | **69.08%**    | **78.39%**     | **3.762s**   | 43.479s   | 228.48 MB |
-| SymSpell d2/p7  | 34.05%       | 48.92%       | 51.94%        | 54.58%        | 57.70%         | 7.675s       | **1.889s**| **190.88 MB** |
+| **VecFuzz**     | **35.29%**   | **54.88%**   | **61.58%**    | **69.08%**    | **78.39%**     | **3.762s**   | 43.479s   | 228.48MB |
+| SymSpell d2/p7  | 34.05%       | 48.92%       | 51.94%        | 54.58%        | 57.70%         | 7.675s       | **1.889s**| **190.88MB** |
 | RapidFuzz       | 32.64%       | 51.74%       | 58.54%        | 66.56%        | 76.67%         | 409.564s     | N/A       | N/A       |
 | Levenshtein     | 28.10%       | 46.73%       | 54.20%        | 62.64%        | 72.35%         | 454.533s     | N/A       | N/A       |
 
