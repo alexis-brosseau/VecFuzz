@@ -24,7 +24,7 @@ Each word is converted into a fixed-length vector with four sub-components:
 1. **Character frequency:** how often each letter appears.
 2. **Preceding-position density:** for each character, the sum of normalized positions of all characters before it. This captures *how much of the word has already gone by*.
 3. **Succeeding-position density:** for each character, the sum of normalized positions of all characters after it. This captures *how much of the word is still ahead*.
-4. **Phase-encoded position:** a small sinusoidal (cos/sin) expansion of each character's position across a few frequency bands. Unlike (2), repeated occurrences of the same character don't collapse to a single mean, they interfere constructively or destructively across bands, preserving more of the position *distribution* than a plain average can.
+4. **Phase-encoded position:** a small sinusoidal (cos/sin) expansion of each character's position across a few frequency bands.
 
 All sub-vectors are normalized by word length, so "apple" and "apples" land close together. The sub-vectors are concatenated and indexed with FAISS HNSW under Manhattan (L1) distance; a query is vectorized the same way and the nearest neighbours in the index become your top-k candidates.
 
