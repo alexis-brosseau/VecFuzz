@@ -1,6 +1,7 @@
 from typing import Callable
 import pickle
 import io
+import os
 import zipfile
 
 import numpy as np
@@ -252,6 +253,9 @@ class VecFuzz:
         Returns:
             faiss.Index: The constructed FAISS index.
         """ 
+
+        max_threads = os.cpu_count()
+        faiss.omp_set_num_threads(max_threads)
         
         dim = self.vectors.shape[1]
         
