@@ -13,6 +13,7 @@ Fuzzy matching has a three-way tension between speed, memory, and accuracy. VecF
 - **Memory stays flat** as typo-tolerance increases. SymSpell's index size grows combinatorially with max edit distance while VecFuzz grows linearly **O(N)**.
 - **Query speed stays high** relative to brute-force comparison methods. RapidFuzz and raw Levenshtein score every candidate per query; VecFuzz searches an ANN index instead, ~100x+ faster in my tests.
 - **Accuracy is strong**, including on real human misspellings (see the Birkbeck results below). Deletion-heavy errors are the hardest case, where the margin over SymSpell's higher-order configs is smallest.
+- **Multi-threaded (via FAISS)** while SymSpell runs one query at a time. More cores widen VecFuzz's advantage, while SymSpell's lookup speed is mostly a function of single-core clock speed.
 
 If your dictionary is large, your memory budget is tight, queries need to be fast, and you can tolerate a slower build, VecFuzz is a strong pick.
 
@@ -38,13 +39,13 @@ All sub-vectors are normalized by word length, so "apple" and "apples" land clos
 Dictionary of 100k words, compared against SymSpell at three delete-distance/prefix-length configs (d2/p7, d3/p9, d4/p12). Tested on a Xeon E5-2690 v4.
 
 - **Recall@1 by error type and edit count**:
-  - *Substitutions*: VecFuzz edges out even SymSpell's most permissive config (d4/p12) at every edit count.
+  - *Substitutions*: VecFuzz is close to parity with SymSpell d4/p12, leading at 1-2 edits, and trailing by only a few points at 3-5 edits.
   - *Transpositions*: VecFuzz starts near-perfect and stays well above all SymSpell configs at every edit count.
-  - *Insertions*: SymSpell is slightly ahead but drop to 0 once edits exceed its configured max distance. VecFuzz degrades gracefully, still >40% recall at 9 insertion edits.
+  - *Insertions*: SymSpell is slightly ahead but drop to 0 once edits exceed its configured max distance. VecFuzz degrades gracefully, still >50% recall at 9 insertion edits.
   - *Deletions*: Ahead of SymSpell at every edit count, but both degrade quickly past 2-3 edits.
 ![Accuracy by Error Type Chart](benchmark_outputs/accuracy_by_error_type_and_edits.png)
 
-- **Lookup speed**: SymSpell d2/p7 is marginally fastest; VecFuzz is essentially tied with it, well ahead of SymSpell d3/p9 and d4/p12.
+- **Lookup speed**:  SymSpell d2/p7 is fastest at small dictionaries, but VecFuzz overtakes it at larger dictionaries sizes when using more threads.
 ![Lookup Speed Chart](benchmark_outputs/lookup_speed_vs_vocab_size.png)
 
 - **Memory**: VecFuzz grows roughly linearly and stays far below SymSpell d3/p9 and d4/p12 at every size tested. It is only slightly larger than SymSpell d2/p7 at 150k words.
@@ -59,10 +60,10 @@ Dictionary ~160k words, non-synthetic human misspellings (includes phonetic erro
 
 | Method          | Recall@1 (%) | Recall@5 (%) | Recall@10 (%) | Recall@25 (%) | Recall@100 (%) | Duration (s) | Build (s) | Size (MB) |
 |-----------------|--------------|--------------|---------------|---------------|----------------|--------------|-----------|-----------|
-| **VecFuzz**     | **35.29%**   | **54.88%**   | **61.58%**    | **69.08%**    | **78.39%**     | **3.762s**   | 43.479s   | 228.48MB |
-| SymSpell d2/p7  | 34.05%       | 48.92%       | 51.94%        | 54.58%        | 57.70%         | 7.675s       | **1.889s**| **190.88MB** |
-| RapidFuzz       | 32.64%       | 51.74%       | 58.54%        | 66.56%        | 76.67%         | 409.564s     | N/A       | N/A       |
-| Levenshtein     | 28.10%       | 46.73%       | 54.20%        | 62.64%        | 72.35%         | 454.533s     | N/A       | N/A       |
+| **VecFuzz**     | **35.06%**   | **54.27%**   | **61.20%**    | **69.67%**    | **78.86%**     | **6.128s**   | 48.687s   | 267.74MB |
+| SymSpell d2/p7  | 34.05%       | 48.92%       | 51.94%        | 54.58%        | 57.70%         | 41.686s      | **3.428s**| **190.88MB** |
+| RapidFuzz       | 32.64%       | 51.74%       | 58.54%        | 66.56%        | 76.67%         | 698.735s     | N/A       | N/A       |
+| Levenshtein     | 28.10%       | 46.73%       | 54.20%        | 62.64%        | 72.35%         | 829.648s     | N/A       | N/A       |
 
 **Takeaways:**
 - VecFuzz has the best recall at every k and is the fastest method.
