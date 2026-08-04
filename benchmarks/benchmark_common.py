@@ -107,9 +107,9 @@ def build_symspell(vocab: Sequence[str], config: SymSpellConfig, frequencies: Di
     return instance, perf_counter() - t0
 
 
-def build_vecfuzz(vocab: Sequence[str]):
+def build_vecfuzz(vocab: Sequence[str], num_threads: int | None = None):
     t0 = perf_counter()
-    vf = VecFuzz().build(list(vocab))
+    vf = VecFuzz(num_threads=num_threads).build(list(vocab))
     return vf, perf_counter() - t0
 
 def lookup_vecfuzz(index, queries, k: int = 1):

@@ -17,6 +17,8 @@ from benchmark_common import (
 )
 from spellchecker import SpellChecker
 
+VECFUZZ_THREAD_COUNTS = (1, 8, 16)
+
 
 def sweep(
     vocabulary: Sequence[str],
@@ -25,21 +27,12 @@ def sweep(
     configs: Sequence[SymSpellConfig],
     query_count: int,
     seed: int,
+    thread_counts: Sequence[int] = VECFUZZ_THREAD_COUNTS,
 ) -> List[Dict[str, object]]:
     rows: List[Dict[str, object]] = []
 
     for offset, vocab_size in enumerate(vocab_sizes):
-        print(f"\r[speed] Benchmarking vocab_size={vocab_size}...", end="", flush=True)
-
         subset = list(vocabulary[:vocab_size])
-
-        vf_index, vf_build_s = build_vecfuzz(subset)
-        vf_size = safe_size_mb(vf_index)
-
-        symspell_pool = []
-        for cfg in configs:
-            index, build_s = build_symspell(subset, cfg, frequencies)
-            symspell_pool.append({"config": cfg, "index": index, "build_seconds": build_s, "size_mb": safe_size_mb(index)})
 
         cases = generate_error_cases(
             subset,
@@ -49,10 +42,32 @@ def sweep(
         )[:query_count]
         queries = [str(c["query"]) for c in cases]
 
-        t0 = perf_counter()
-        lookup_vecfuzz(vf_index, queries)
-        vf_seconds = perf_counter() - t0
-        vf_qps = len(queries) / vf_seconds if vf_seconds > 0 else 0.0
+        vecfuzz_results: Dict[str, Dict[str, float]] = {}
+        for threads in thread_counts:
+            print(f"\r[speed] vocab_size={vocab_size} | vecfuzz threads={threads}...", end="", flush=True)
+
+            vf_index, vf_build_s = build_vecfuzz(subset, threads)
+            vf_size = safe_size_mb(vf_index)
+
+            t0 = perf_counter()
+            lookup_vecfuzz(vf_index, queries)
+            vf_seconds = perf_counter() - t0
+            vf_qps = len(queries) / vf_seconds if vf_seconds > 0 else 0.0
+
+            vecfuzz_results.append({
+                "label": f"VecFuzz t{threads}",
+                "build_seconds": vf_build_s,
+                "size_mb": vf_size,
+                "qps": vf_qps,
+                "seconds": vf_seconds,
+            })
+
+        # --- SymSpell: unchanged, single-threaded, no thread sweep.
+        print(f"\r[speed] vocab_size={vocab_size} | symspell...           ", end="", flush=True)
+        symspell_pool = []
+        for cfg in configs:
+            index, build_s = build_symspell(subset, cfg, frequencies)
+            symspell_pool.append({"config": cfg, "index": index, "build_seconds": build_s, "size_mb": safe_size_mb(index)})
 
         symspell_results = []
         for entry in symspell_pool:
@@ -70,7 +85,7 @@ def sweep(
         rows.append({
             "vocab_size": vocab_size,
             "query_count": len(cases),
-            "vecfuzz": {"build_seconds": vf_build_s, "size_mb": vf_size, "qps": vf_qps, "seconds": vf_seconds},
+            "vecfuzz": vecfuzz_results,  # now keyed by thread count string, e.g. "1", "8", "16"
             "symspell": symspell_results,
         })
 
@@ -84,14 +99,16 @@ def _figure_path(output_dir: Path, stem: str) -> Path:
 
 def _plot_lines(ax, x_values, series, title, xlabel, ylabel) -> None:
     color_map = {
-        "VecFuzz": "#1D4ED8",
+        "VecFuzz t1": "#93C5FD",
+        "VecFuzz t8": "#3B82F6",
+        "VecFuzz t16": "#1D4ED8",
         "SymSpell d2/p7": "#FCA5A5",
         "SymSpell d3/p9": "#EF4444",
         "SymSpell d4/p12": "#7F1D1D",
     }
-    palette = ["#0F766E", "#1D4ED8", "#B45309", "#7C3AED", "#DC2626"]
+    palette = ["#0F766E", "#B45309", "#7C3AED", "#DC2626"]
     for idx, (label, y_values) in enumerate(series):
-        is_vecfuzz = label == "VecFuzz"
+        is_vecfuzz = label.startswith("VecFuzz")
         ax.plot(
             x_values, y_values, marker="o",
             linewidth=2.5 if is_vecfuzz else 2,
@@ -105,14 +122,17 @@ def _plot_lines(ax, x_values, series, title, xlabel, ylabel) -> None:
     ax.legend(frameon=False)
 
 
-def plot_build_time(rows: Sequence[Dict[str, object]], output_dir: Path) -> Path:
+def plot_build_time(rows: Sequence[Dict[str, object]], output_dir: Path, thread_counts: Sequence[int] = VECFUZZ_THREAD_COUNTS) -> Path:
     vocab_sizes = [r["vocab_size"] for r in rows]
-    vec_build = [r["vecfuzz"]["build_seconds"] for r in rows]
-    labels = [e["label"] for e in rows[0]["symspell"]] if rows else []
-    builds = [[r["symspell"][i]["build_seconds"] for r in rows] for i in range(len(labels))]
+
+    vecfuzz_labels = [e["label"] for e in rows[0]["vecfuzz"]] if rows else []
+    vecfuzz_builds = [[r["vecfuzz"][i]["build_seconds"] for r in rows] for i in range(len(vecfuzz_labels))]
+
+    symspell_labels = [e["label"] for e in rows[0]["symspell"]] if rows else []
+    symspell_builds = [[r["symspell"][i]["build_seconds"] for r in rows] for i in range(len(symspell_labels))]
 
     fig, ax = plt.subplots(figsize=(12, 6))
-    _plot_lines(ax, vocab_sizes, [("VecFuzz", vec_build)] + list(zip(labels, builds)),
+    _plot_lines(ax, vocab_sizes, list(zip(vecfuzz_labels, vecfuzz_builds)) + list(zip(symspell_labels, symspell_builds)),
                 "Build time vs dictionary size (Lower is better)", "Dictionary size", "Build time (s)")
     fig.tight_layout()
     path = _figure_path(output_dir, "build_time_vs_vocab_size")
@@ -121,14 +141,15 @@ def plot_build_time(rows: Sequence[Dict[str, object]], output_dir: Path) -> Path
     return path
 
 
-def plot_memory_footprint(rows: Sequence[Dict[str, object]], output_dir: Path) -> Path:
+def plot_memory_footprint(rows: Sequence[Dict[str, object]], output_dir: Path, thread_counts: Sequence[int] = VECFUZZ_THREAD_COUNTS) -> Path:
     vocab_sizes = [r["vocab_size"] for r in rows]
-    vec_size = [r["vecfuzz"]["size_mb"] for r in rows]
-    labels = [e["label"] for e in rows[0]["symspell"]] if rows else []
-    sizes = [[r["symspell"][i]["size_mb"] for r in rows] for i in range(len(labels))]
+    vec_size = [r["vecfuzz"][0]["size_mb"] for r in rows]  # use first thread count's size
+
+    symspell_labels = [e["label"] for e in rows[0]["symspell"]] if rows else []
+    sizes = [[r["symspell"][i]["size_mb"] for r in rows] for i in range(len(symspell_labels))]
 
     fig, ax = plt.subplots(figsize=(12, 6))
-    _plot_lines(ax, vocab_sizes, [("VecFuzz", vec_size)] + list(zip(labels, sizes)),
+    _plot_lines(ax, vocab_sizes, [("VecFuzz", vec_size)] + list(zip(symspell_labels, sizes)),
                 "Memory footprint vs dictionary size (Lower is better)", "Dictionary size", "Memory (MB)")
     fig.tight_layout()
     path = _figure_path(output_dir, "memory_footprint_vs_vocab_size")
@@ -137,14 +158,17 @@ def plot_memory_footprint(rows: Sequence[Dict[str, object]], output_dir: Path) -
     return path
 
 
-def plot_lookup_speed(rows: Sequence[Dict[str, object]], output_dir: Path) -> Path:
+def plot_lookup_speed(rows: Sequence[Dict[str, object]], output_dir: Path, thread_counts: Sequence[int] = VECFUZZ_THREAD_COUNTS) -> Path:
     vocab_sizes = [r["vocab_size"] for r in rows]
-    vec_qps = [r["vecfuzz"]["qps"] for r in rows]
-    labels = [e["label"] for e in rows[0]["symspell"]] if rows else []
-    qps = [[r["symspell"][i]["qps"] for r in rows] for i in range(len(labels))]
+
+    vecfuzz_labels = [e["label"] for e in rows[0]["vecfuzz"]] if rows else []
+    vecfuzz_qps = [[r["vecfuzz"][i]["qps"] for r in rows] for i in range(len(vecfuzz_labels))]
+
+    symspell_labels = [e["label"] for e in rows[0]["symspell"]] if rows else []
+    symspell_qps = [[r["symspell"][i]["qps"] for r in rows] for i in range(len(symspell_labels))]
 
     fig, ax = plt.subplots(figsize=(12, 6))
-    _plot_lines(ax, vocab_sizes, [("VecFuzz", vec_qps)] + list(zip(labels, qps)),
+    _plot_lines(ax, vocab_sizes, list(zip(vecfuzz_labels, vecfuzz_qps)) + list(zip(symspell_labels, symspell_qps)),
                 "Lookup speed vs dictionary size (Higher is better)", "Dictionary size", "Queries / second")
     fig.tight_layout()
     path = _figure_path(output_dir, "lookup_speed_vs_vocab_size")
@@ -160,6 +184,7 @@ def run_speed_benchmark(
     seed: int = 0,
     max_words: int = None,
     save_json_file: bool = True,
+    thread_counts: Sequence[int] = VECFUZZ_THREAD_COUNTS,
 ) -> Dict[str, object]:
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
@@ -170,20 +195,22 @@ def run_speed_benchmark(
     configs = [SymSpellConfig(**c) for c in DEFAULT_SYMSPELL_CONFIGS]
     vocab_sizes = [v for v in vocab_sizes if v <= len(vocab)] or [len(vocab)]
 
-    print(f"[speed] Loaded {len(vocab)} words; sweeps={vocab_sizes}; query_count={query_count}", flush=True)
-    rows = sweep(vocab, frequencies, vocab_sizes, configs, query_count, seed)
+    print(f"[speed] Loaded {len(vocab)} words; sweeps={vocab_sizes}; query_count={query_count}; "
+          f"vecfuzz threads={list(thread_counts)}", flush=True)
+    rows = sweep(vocab, frequencies, vocab_sizes, configs, query_count, seed, thread_counts)
 
     print("[speed] Rendering figures...", flush=True)
     figures = {
-        "build_time": str(plot_build_time(rows, output_path)),
-        "memory_footprint": str(plot_memory_footprint(rows, output_path)),
-        "lookup_speed": str(plot_lookup_speed(rows, output_path)),
+        "build_time": str(plot_build_time(rows, output_path, thread_counts)),
+        "memory_footprint": str(plot_memory_footprint(rows, output_path, thread_counts)),
+        "lookup_speed": str(plot_lookup_speed(rows, output_path, thread_counts)),
     }
 
     results = {
         "metadata": {
             "seed": seed, "vocab_count": len(vocab), "vocab_sizes": list(vocab_sizes),
             "query_count": query_count, "configs": [c.__dict__ for c in configs],
+            "vecfuzz_thread_counts": list(thread_counts),
         },
         "rows": rows,
         "figures": figures,
@@ -208,6 +235,8 @@ def main() -> None:
     p.add_argument("--vocab-sizes", type=int, nargs="+",
                     default=[5_000, 10_000, 20_000, 40_000, 60_000, 80_000, 100_000, 125_000, 150_000])
     p.add_argument("--query-count", type=int, default=100_000)
+    p.add_argument("--vecfuzz-threads", type=int, nargs="+", default=list(VECFUZZ_THREAD_COUNTS),
+                   help="Thread counts to benchmark VecFuzz build/lookup at (faiss.omp_set_num_threads is global).")
     p.add_argument("--no-json", action="store_true")
     args = p.parse_args()
 
@@ -218,6 +247,7 @@ def main() -> None:
         seed=args.seed,
         max_words=args.max_words,
         save_json_file=not args.no_json,
+        thread_counts=args.vecfuzz_threads,
     )
     print(json.dumps(results["figures"], ensure_ascii=False, indent=2))
     if "results_path" in results:

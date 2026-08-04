@@ -86,7 +86,7 @@ def plot_accuracy(state: Dict[str, object], k: int, output_dir: str = "benchmark
 
     total_cases = int(vec_acc["overall"]["count"])
     fig.suptitle(
-        f"Recall@1 accuracy by error type and number of edits (Higher is better) — n={total_cases} cases",
+        f"Recall@1 accuracy by error type and number of edits (Higher is better)",
         y=1.02, fontsize=14,
     )
     fig.tight_layout()
@@ -197,7 +197,7 @@ def main() -> None:
     p.add_argument("--output-dir", default="benchmark_outputs")
     args = p.parse_args()
 
-    if not args.plot:
+    if args.plot:
         state = load_json(Path(f"{args.output_dir}/accuracy_state_{args.vocab_size}_k{args.k}.json"))
         if state is None:
             raise SystemExit(f"No state file at {args.output_dir} to plot.")
