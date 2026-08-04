@@ -244,6 +244,19 @@ class VecFuzz:
             self.index = faiss.read_index(reader)
         
         return self
+    
+    def load_or_build(self, filepath: str, entries: list[str]):
+        """
+        Load the FAISS index from a file if it exists; otherwise, build the index from the provided entries and save it.
+        
+        Args:
+            filepath (str): The path to the file where the index should be loaded from or saved to.
+            entries (list[str]): A list of strings to vectorize and index if the index file does not exist.
+        """
+        if os.path.exists(filepath):
+            return self.load(filepath)
+        else:
+            return self.build(entries).save(filepath)
 
     def lookup(self, queries: list[str], k: int=1):
         """
