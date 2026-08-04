@@ -1,0 +1,339 @@
+{
+  "metadata": {
+    "seed": 0,
+    "vocab_count": 159191,
+    "vocab_sizes": [
+      5000,
+      10000,
+      20000,
+      40000,
+      60000,
+      80000,
+      100000,
+      125000,
+      150000
+    ],
+    "query_count": 100000,
+    "configs": [
+      {
+        "label": "SymSpell d2/p7",
+        "max_edit_distance": 2,
+        "prefix_length": 7
+      },
+      {
+        "label": "SymSpell d3/p9",
+        "max_edit_distance": 3,
+        "prefix_length": 9
+      },
+      {
+        "label": "SymSpell d4/p12",
+        "max_edit_distance": 4,
+        "prefix_length": 12
+      }
+    ]
+  },
+  "rows": [
+    {
+      "vocab_size": 5000,
+      "query_count": 99972,
+      "vecfuzz": {
+        "build_seconds": 0.5428817998617887,
+        "size_mb": 8.330978393554688,
+        "qps": 15645.371332705572,
+        "seconds": 6.389877100009471
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 0.166907399892807,
+          "size_mb": 18.177886962890625,
+          "qps": 29177.76814616604,
+          "seconds": 3.426307300105691
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 0.4944235000293702,
+          "size_mb": 66.9521255493164,
+          "qps": 7422.5170099781535,
+          "seconds": 13.468746500089765
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 1.7859602000098675,
+          "size_mb": 197.60377502441406,
+          "qps": 2205.1484556387895,
+          "seconds": 45.335723200114444
+        }
+      ]
+    },
+    {
+      "vocab_size": 10000,
+      "query_count": 99972,
+      "vecfuzz": {
+        "build_seconds": 1.508121700026095,
+        "size_mb": 16.654335021972656,
+        "qps": 14125.395994558405,
+        "seconds": 7.077465299982578
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 0.401257999939844,
+          "size_mb": 33.32471466064453,
+          "qps": 23907.902203825382,
+          "seconds": 4.181546299951151
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 1.0417681999970227,
+          "size_mb": 126.20804595947266,
+          "qps": 6043.786840225525,
+          "seconds": 16.541284900158644
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 3.996176900109276,
+          "size_mb": 378.7332000732422,
+          "qps": 1946.638345894055,
+          "seconds": 51.356226600008085
+        }
+      ]
+    },
+    {
+      "vocab_size": 20000,
+      "query_count": 99972,
+      "vecfuzz": {
+        "build_seconds": 3.3397786000277847,
+        "size_mb": 33.302040100097656,
+        "qps": 12508.779556111622,
+        "seconds": 7.992146600037813
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 0.43594100000336766,
+          "size_mb": 51.37511444091797,
+          "qps": 18133.40722211086,
+          "seconds": 5.513139300048351
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 2.3654829000588506,
+          "size_mb": 202.8021011352539,
+          "qps": 4529.282209083861,
+          "seconds": 22.072371599962935
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 7.4152092998847365,
+          "size_mb": 718.3900299072266,
+          "qps": 1669.5807172942373,
+          "seconds": 59.87850660015829
+        }
+      ]
+    },
+    {
+      "vocab_size": 40000,
+      "query_count": 99972,
+      "vecfuzz": {
+        "build_seconds": 7.956274300115183,
+        "size_mb": 66.59613037109375,
+        "qps": 10829.915799633822,
+        "seconds": 9.2310967000667
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 1.3911468000151217,
+          "size_mb": 85.78326416015625,
+          "qps": 13383.043131087894,
+          "seconds": 7.470049899769947
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 4.098438800079748,
+          "size_mb": 354.15916442871094,
+          "qps": 3279.6117411046043,
+          "seconds": 30.482876599999145
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 15.966947600012645,
+          "size_mb": 1319.887840270996,
+          "qps": 1375.9586850601327,
+          "seconds": 72.65625129989348
+        }
+      ]
+    },
+    {
+      "vocab_size": 60000,
+      "query_count": 99972,
+      "vecfuzz": {
+        "build_seconds": 13.216346400091425,
+        "size_mb": 99.89091491699219,
+        "qps": 9660.51212125554,
+        "seconds": 10.348519700113684
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 1.2984478999860585,
+          "size_mb": 107.06974029541016,
+          "qps": 10890.391109146303,
+          "seconds": 9.179835599847138
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 6.5383419001009315,
+          "size_mb": 511.5024719238281,
+          "qps": 2669.4753068884675,
+          "seconds": 37.45005609979853
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 22.95843520015478,
+          "size_mb": 1753.2026901245117,
+          "qps": 1170.7574593110185,
+          "seconds": 85.39087170013227
+        }
+      ]
+    },
+    {
+      "vocab_size": 80000,
+      "query_count": 99972,
+      "vecfuzz": {
+        "build_seconds": 19.151266100117937,
+        "size_mb": 133.18360900878906,
+        "qps": 8721.935691794763,
+        "seconds": 11.462134500034153
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 1.7624221998266876,
+          "size_mb": 138.73828887939453,
+          "qps": 9441.017570559809,
+          "seconds": 10.589112799847499
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 8.70244780019857,
+          "size_mb": 593.3032531738281,
+          "qps": 2243.1418532718053,
+          "seconds": 44.56784570007585
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 31.396732500055805,
+          "size_mb": 2357.501007080078,
+          "qps": 1066.820558367549,
+          "seconds": 93.71023009996861
+        }
+      ]
+    },
+    {
+      "vocab_size": 100000,
+      "query_count": 99972,
+      "vecfuzz": {
+        "build_seconds": 25.643226200016215,
+        "size_mb": 166.47686004638672,
+        "qps": 8169.057222403843,
+        "seconds": 12.237887099850923
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 2.199630299815908,
+          "size_mb": 155.31903076171875,
+          "qps": 8346.228040744982,
+          "seconds": 11.978105500107631
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 8.77216890011914,
+          "size_mb": 666.53515625,
+          "qps": 1938.2849468077663,
+          "seconds": 51.57755579985678
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 39.22078340011649,
+          "size_mb": 2696.384696960449,
+          "qps": 956.4168809910869,
+          "seconds": 104.52764059999026
+        }
+      ]
+    },
+    {
+      "vocab_size": 125000,
+      "query_count": 99972,
+      "vecfuzz": {
+        "build_seconds": 33.989455100148916,
+        "size_mb": 208.09552001953125,
+        "qps": 7690.839869059637,
+        "seconds": 12.998840400017798
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 2.7563360000494868,
+          "size_mb": 171.4698028564453,
+          "qps": 7369.978509174079,
+          "seconds": 13.564761399989948
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 13.364104300038889,
+          "size_mb": 746.9671096801758,
+          "qps": 1661.5515934117163,
+          "seconds": 60.1678578001447
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 47.65046630008146,
+          "size_mb": 3086.7499389648438,
+          "qps": 843.1857871690052,
+          "seconds": 118.56461710017174
+        }
+      ]
+    },
+    {
+      "vocab_size": 150000,
+      "query_count": 99972,
+      "vecfuzz": {
+        "build_seconds": 44.047461200039834,
+        "size_mb": 249.71427154541016,
+        "qps": 7400.865403410063,
+        "seconds": 13.50815000012517
+      },
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 3.4741529999300838,
+          "size_mb": 185.7582015991211,
+          "qps": 6637.9611741207245,
+          "seconds": 15.06064849998802
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 16.330466199899092,
+          "size_mb": 817.7712478637695,
+          "qps": 1459.054548352079,
+          "seconds": 68.5183430002071
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 58.28202330018394,
+          "size_mb": 3440.151565551758,
+          "qps": 770.135519477081,
+          "seconds": 129.81091960007325
+        }
+      ]
+    }
+  ],
+  "figures": {
+    "build_time": "benchmark_outputs\\build_time_vs_vocab_size.png",
+    "memory_footprint": "benchmark_outputs\\memory_footprint_vs_vocab_size.png",
+    "lookup_speed": "benchmark_outputs\\lookup_speed_vs_vocab_size.png"
+  }
+}
