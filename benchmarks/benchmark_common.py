@@ -7,7 +7,6 @@ from pathlib import Path
 from time import perf_counter
 from typing import Dict, List, Optional, Sequence
 from unicodedata import normalize
-from tqdm import tqdm
 from pympler import asizeof
 from spellchecker import SpellChecker
 from symspellpy import SymSpell, Verbosity
@@ -119,7 +118,7 @@ def lookup_vecfuzz(index, queries, k: int = 1):
 
 def lookup_symspell(index: SymSpell, queries, max_edit_distance: int, k: int = 1):
     out = []
-    for q in tqdm(queries, desc="[symspell] Lookups", unit="lookups", leave=False):
+    for q in queries:
         sug = index.lookup(q, Verbosity.CLOSEST, max_edit_distance=max_edit_distance)
         out.append([s.term for s in sug[:k]])
     return out

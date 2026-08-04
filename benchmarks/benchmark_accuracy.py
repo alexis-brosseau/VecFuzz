@@ -155,11 +155,11 @@ def run_accuracy_benchmark(
             cases = generate_error_cases(subset, per_combo, DEFAULT_EDIT_LEVELS, session_seed)
             queries = [str(c["query"]) for c in cases]
 
-            # VecFuzz: single batched call, no per-word loop -> no tqdm here.
+            # VecFuzz Lookups
             vec_preds = lookup_vecfuzz(vecfuzz_index, queries, k)
             accumulate_accuracy(state["vecfuzz"], cases, vec_preds)
 
-            # SymSpell: lookup_symspell
+            # SymSpell Lookups
             for cfg in configs:
                 preds = lookup_symspell(symspell_indexes[cfg.label], queries, cfg.max_edit_distance, k)
                 accumulate_accuracy(state["symspell"][cfg.label], cases, preds)

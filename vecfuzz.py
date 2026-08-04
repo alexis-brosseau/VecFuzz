@@ -39,10 +39,6 @@ class VecFuzz:
         self.entries = None
         self.vectors = None
         self.index = None
-
-    def set_num_threads(self, num_threads: int):
-        self.num_threads = num_threads
-        faiss.omp_set_num_threads(num_threads)
         
     def vectorize(self, word: str):
         """
@@ -277,6 +273,8 @@ class VecFuzz:
         if self.index is None:
             raise ValueError("The index has not been built yet. Please call the `build` method before performing lookups.")
         
+        faiss.omp_set_num_threads(self.num_threads) # Ensure the number of threads is set before performing the search
+        
         query_vectors = self.vectorize_batch(queries)
         distances, labels = self.index.search(query_vectors, k)
         
@@ -300,6 +298,8 @@ class VecFuzz:
         Returns:
             faiss.Index: The constructed FAISS index.
         """ 
+        
+        faiss.omp_set_num_threads(self.num_threads) # Ensure the number of threads is set before building the index
         
         dim = self.vectors.shape[1]
         

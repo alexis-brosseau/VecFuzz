@@ -17,7 +17,7 @@ from benchmark_common import (
 )
 from spellchecker import SpellChecker
 
-VECFUZZ_THREAD_COUNTS = (1, 8, 16)
+VECFUZZ_THREAD_COUNTS = (1, 12, 24)
 
 
 def sweep(
@@ -42,7 +42,7 @@ def sweep(
         )[:query_count]
         queries = [str(c["query"]) for c in cases]
 
-        vecfuzz_results: Dict[str, Dict[str, float]] = {}
+        vecfuzz_results = []
         for threads in thread_counts:
             print(f"\r[speed] vocab_size={vocab_size} | vecfuzz threads={threads}...", end="", flush=True)
 
@@ -99,6 +99,7 @@ def _figure_path(output_dir: Path, stem: str) -> Path:
 
 def _plot_lines(ax, x_values, series, title, xlabel, ylabel) -> None:
     color_map = {
+        "VecFuzz": "#1D4ED8",
         "VecFuzz t1": "#93C5FD",
         "VecFuzz t8": "#3B82F6",
         "VecFuzz t16": "#1D4ED8",
@@ -180,7 +181,7 @@ def plot_lookup_speed(rows: Sequence[Dict[str, object]], output_dir: Path, threa
 def run_speed_benchmark(
     output_dir: str = "benchmark_outputs",
     vocab_sizes: Sequence[int] = (5_000, 10_000, 20_000, 40_000, 60_000, 80_000, 100_000, 125_000, 150_000),
-    query_count: int = 15_000,
+    query_count: int = 50_000,
     seed: int = 0,
     max_words: int = None,
     save_json_file: bool = True,
@@ -232,11 +233,9 @@ def main() -> None:
     p.add_argument("--output-dir", default="benchmark_outputs")
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--max-words", type=int, default=None)
-    p.add_argument("--vocab-sizes", type=int, nargs="+",
-                    default=[5_000, 10_000, 20_000, 40_000, 60_000, 80_000, 100_000, 125_000, 150_000])
-    p.add_argument("--query-count", type=int, default=100_000)
-    p.add_argument("--vecfuzz-threads", type=int, nargs="+", default=list(VECFUZZ_THREAD_COUNTS),
-                   help="Thread counts to benchmark VecFuzz build/lookup at (faiss.omp_set_num_threads is global).")
+    p.add_argument("--vocab-sizes", type=int, nargs="+", default=[5_000, 10_000, 20_000, 40_000, 60_000, 80_000, 100_000, 125_000, 150_000])
+    p.add_argument("--query-count", type=int, default=50_000)
+    p.add_argument("--vecfuzz-threads", type=int, nargs="+", default=list(VECFUZZ_THREAD_COUNTS), help="Thread counts to benchmark VecFuzz build/lookup.")
     p.add_argument("--no-json", action="store_true")
     args = p.parse_args()
 
