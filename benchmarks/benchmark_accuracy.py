@@ -62,7 +62,7 @@ def plot_accuracy(state: Dict[str, object], k: int, output_dir: str = "benchmark
         vec_series = [(
             "VecFuzz",
             [
-                (vec_by_edit[str(e)][f"recall@{k}"] / vec_by_edit[str(e)]["count"]) if vec_by_edit[str(e)]["count"] else 0.0
+                (vec_by_edit[str(e)][f"recall{k}"] / vec_by_edit[str(e)]["count"]) if vec_by_edit[str(e)]["count"] else 0.0
                 for e in DEFAULT_EDIT_LEVELS
             ],
         )]
@@ -73,7 +73,7 @@ def plot_accuracy(state: Dict[str, object], k: int, output_dir: str = "benchmark
             symspell_series.append((
                 label,
                 [
-                    (by_edit[str(e)][f"recall@{k}"] / by_edit[str(e)]["count"]) if by_edit[str(e)]["count"] else 0.0
+                    (by_edit[str(e)][f"recall{k}"] / by_edit[str(e)]["count"]) if by_edit[str(e)]["count"] else 0.0
                     for e in DEFAULT_EDIT_LEVELS
                 ],
             ))
@@ -142,7 +142,8 @@ def run_accuracy_benchmark(
     print("[accuracy] Building indexes (once per run, not per session)...", flush=True)
     vecfuzz_index, _ = build_vecfuzz(subset)
     symspell_indexes = {c.label: build_symspell(subset, c, frequencies)[0] for c in configs}
-
+    
+    print("[accuracy] Starting sessions...", flush=True)
     session = 0
     try:
         while max_sessions is None or session < max_sessions:
@@ -169,7 +170,7 @@ def run_accuracy_benchmark(
 
             total_cases = int(state["vecfuzz"]["overall"]["count"])
             recall = (
-                state["vecfuzz"]["overall"]["recall1"] / total_cases if total_cases else 0.0
+                state["vecfuzz"]["overall"][f"recall{k}"] / total_cases if total_cases else 0.0
             )
             print(
                 "\r"
@@ -186,8 +187,8 @@ def run_accuracy_benchmark(
 
 def main() -> None:
     p = argparse.ArgumentParser(description="Resumable accuracy benchmark (VecFuzz vs SymSpell).")
-    p.add_argument("--vocab-size", type=int, default=10_000)
-    p.add_argument("--cases", type=int, default=15_000)
+    p.add_argument("--vocab-size", type=int, default=150_000)
+    p.add_argument("--cases", type=int, default=50_000)
     p.add_argument("--max-sessions", type=int, default=None)
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--k", type=int, default=1)
@@ -196,8 +197,8 @@ def main() -> None:
     p.add_argument("--output-dir", default="benchmark_outputs")
     args = p.parse_args()
 
-    if args.plot:
-        state = load_json(Path(args.output_dir))
+    if not args.plot:
+        state = load_json(Path(f"{args.output_dir}/accuracy_state_{args.vocab_size}_k{args.k}.json"))
         if state is None:
             raise SystemExit(f"No state file at {args.output_dir} to plot.")
         path = plot_accuracy(state, args.k, args.output_dir)

@@ -207,7 +207,7 @@ def main() -> None:
     p.add_argument("--max-words", type=int, default=None)
     p.add_argument("--vocab-sizes", type=int, nargs="+",
                     default=[5_000, 10_000, 20_000, 40_000, 60_000, 80_000, 100_000, 125_000, 150_000])
-    p.add_argument("--query-count", type=int, default=15_000)
+    p.add_argument("--query-count", type=int, default=100_000)
     p.add_argument("--no-json", action="store_true")
     args = p.parse_args()
 
