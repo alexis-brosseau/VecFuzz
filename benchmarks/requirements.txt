@@ -4,5 +4,4 @@ matplotlib
 pympler
 pyspellchecker
 symspellpy
-tqdm
 rapidfuzz

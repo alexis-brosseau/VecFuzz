@@ -1,16 +1,12 @@
 import os
 from time import time
 from unicodedata import normalize
-from tqdm import tqdm
 from spellchecker import SpellChecker
 from symspellpy import SymSpell
 from pympler import asizeof
 from vecfuzz import VecFuzz
-import numpy as np
-import matplotlib.pyplot as plt
 from time import time
 from spellchecker import SpellChecker
-from tqdm import tqdm
 from rapidfuzz import fuzz, process
 from rapidfuzz.distance import Levenshtein
 from symspellpy import SymSpell, Verbosity
@@ -21,13 +17,25 @@ from pympler import asizeof
 # BASELINE METHODS
 # ---------------------------
 
-def candidates_levenshtein(query, vocab, k=100):
-    results = process.extract(query, vocab, scorer=Levenshtein.distance, limit=k)
-    return [match[0] for match in results]
+def _candidate_rapidfuzz(query, vocab, scorer, workers, k=1):
+    """RapidFuzz: use its built-in cdist, return Recall@k candidates."""
+    matrice_score = process.cdist([query], vocab, scorer=scorer, workers=workers)
+    sorted_indices = matrice_score.argsort()[0][:k]
+    return [vocab[i] for i in sorted_indices]
 
-def candidates_rapidfuzz(query, vocab, k=100):
-    results = process.extract(query, vocab, scorer=fuzz.ratio, limit=k)
-    return [match[0] for match in results]
+def candidates_levenshtein_t1(query, vocab, k=1):
+    return _candidate_rapidfuzz(query, vocab, scorer=Levenshtein.distance, workers=1, k=k)
+
+def candidates_levenshtein_t12(query, vocab, k=1):
+    return _candidate_rapidfuzz(query, vocab, scorer=Levenshtein.distance, workers=12, k=k)
+
+def candidates_rapidfuzz_t1(query, vocab, k=1):
+    return _candidate_rapidfuzz(query, vocab, scorer=fuzz.ratio, workers=1, k=k)
+    
+def candidates_rapidfuzz_t12(query, vocab, k=1):
+    matrice_score = process.cdist([query], vocab, scorer=fuzz.ratio, workers=12)
+    sorted_indices = matrice_score.argsort()[0][:k]
+    return [vocab[i] for i in sorted_indices]
 
 def candidates_symspell(query, vocab, symspell_instance, k=100):
     """SymSpell: use its built-in lookup, return Recall@k candidates."""
@@ -39,7 +47,6 @@ def candidates_vecfuzz_batch(queries, vocab, vecfuzz_instance, k=100):
     """VecFuzz batched lookup. Returns list of candidate lists."""
     results = vecfuzz_instance.lookup(queries, k)
     return [[word for word, dist in res[1]] for res in results]
-
 
 def load_birkbeck_dataset(filepath):
     test_cases = []
@@ -79,7 +86,7 @@ def evaluate_simple(method_func, name, test_cases, vocab, args=[], is_batched=Fa
             if target in preds[:25]: recall25 += 1
             if target in preds[:100]: recall100 += 1
     else:
-        for tc in tqdm(test_cases, desc=name, leave=False):
+        for tc in test_cases:
             target = tc["target"]
             preds = method_func(tc["query"], vocab, *args)
             if target in preds[:1]: recall1 += 1

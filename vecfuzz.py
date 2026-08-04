@@ -14,7 +14,7 @@ class VecFuzz:
     It allows for efficient similarity search and retrieval of nearest neighbors based on vector representations of strings.
     """
 
-    def __init__(self, chars: str="aàbcçdeéèêëfghiïjklmnñoöpqrstuvwxyz0123456789-̧ '. ", ef_construction: int=200, M: int=32, ef: int=64, num_threads=os.cpu_count()):
+    def __init__(self, chars: str="aàbcçdeéèêëfghiïjklmnñoöpqrstuvwxyz0123456789-̧ '. ", ef_construction: int=200, M: int=32, ef: int=64, num_threads: int | None = None):
         """
         Initialize the FAISS index parameters.
 
@@ -23,7 +23,7 @@ class VecFuzz:
             ef_construction (int, optional): The depth of the search during index construction for FAISS HNSW. Defaults to 200.
             M (int, optional): The number of bi-directional links created for every new element during HNSW index construction. Defaults to 32.
             ef (int, optional): The depth of the search for FAISS HNSW. Defaults to 50.
-            num_threads: Number of thread used to build the index. Default to the maximum available on the system.
+            num_threads: Number of thread used to build the index. Default to the maximum available on the system, or 1 if the system cannot determine the number of available threads.
         """
         
         self._chars = chars
@@ -34,7 +34,7 @@ class VecFuzz:
         self.ef_construction = ef_construction
         self.M = M
         self.ef = ef
-        self.set_num_threads(num_threads)
+        self.num_threads = num_threads or os.cpu_count() or 1
         
         self.entries = None
         self.vectors = None

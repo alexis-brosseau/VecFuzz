@@ -5,7 +5,6 @@ import signal
 from pathlib import Path
 from time import perf_counter
 from typing import Dict
-from tqdm import tqdm
 
 import matplotlib
 matplotlib.use("Agg")
@@ -49,7 +48,7 @@ def plot_accuracy(state: Dict[str, object], k: int, output_dir: str = "benchmark
     out.mkdir(parents=True, exist_ok=True)
 
     vec_acc = state["vecfuzz"]
-    symspell_acc = state["symspell"]  # dict keyed by label now, not a list — see note below
+    symspell_acc = state["symspell"]
 
     fig, axes = plt.subplots(2, 2, figsize=(14, 10), sharex=True, sharey=True)
     axes_flat = list(axes.flat)
@@ -97,7 +96,7 @@ def plot_accuracy(state: Dict[str, object], k: int, output_dir: str = "benchmark
 
 def _handle_sigint(signum, frame):
     global _stop_requested
-    print("\n[accuracy] Pause requested — finishing current session, then saving...", flush=True)
+    print("\n[accuracy] Pause requested - finishing current session, then saving...", flush=True)
     _stop_requested = True
 
 
@@ -137,10 +136,10 @@ def run_accuracy_benchmark(
                 "Accumulated accuracy would be measuring different things - "
                 "use a fresh --state-path or match the original vocab_size."
             )
-        print(f"[accuracy] Resuming from {path} — {state['sessions_run']} sessions so far.", flush=True)
+        print(f"[accuracy] Resuming from {path} - {state['sessions_run']} sessions so far.", flush=True)
 
     print("[accuracy] Building indexes (once per run, not per session)...", flush=True)
-    vecfuzz_index, _ = build_vecfuzz(subset)
+    vecfuzz_index, _ = build_vecfuzz(subset, num_threads=16)
     symspell_indexes = {c.label: build_symspell(subset, c, frequencies)[0] for c in configs}
     
     print("[accuracy] Starting sessions...", flush=True)
@@ -188,7 +187,7 @@ def run_accuracy_benchmark(
 def main() -> None:
     p = argparse.ArgumentParser(description="Resumable accuracy benchmark (VecFuzz vs SymSpell).")
     p.add_argument("--vocab-size", type=int, default=150_000)
-    p.add_argument("--cases", type=int, default=50_000)
+    p.add_argument("--cases", type=int, default=1_000)
     p.add_argument("--max-sessions", type=int, default=None)
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--k", type=int, default=1)
