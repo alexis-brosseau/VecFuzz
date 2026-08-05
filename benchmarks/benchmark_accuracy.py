@@ -32,7 +32,8 @@ def _plot_lines(ax, x_values, series, title, xlabel, ylabel) -> None:
         is_vecfuzz = label == "VecFuzz"
         ax.plot(
             x_values, y_values, marker="o",
-            linewidth=2.5 if is_vecfuzz else 2,
+            linewidth=1.5,
+            markersize=4.5,
             label=label, color=color_map.get(label, palette[idx % len(palette)]),
             zorder=10 if is_vecfuzz else 2,
         )
@@ -196,7 +197,7 @@ def main() -> None:
     p.add_argument("--output-dir", default="benchmark_outputs")
     args = p.parse_args()
 
-    if args.plot:
+    if not args.plot:
         state = load_json(Path(f"{args.output_dir}/accuracy_state_{args.vocab_size}_k{args.k}.json"))
         if state is None:
             raise SystemExit(f"No state file at {args.output_dir} to plot.")

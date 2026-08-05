@@ -17,7 +17,7 @@ from benchmark_common import (
 )
 from spellchecker import SpellChecker
 
-VECFUZZ_THREAD_COUNTS = (1, 12, 24)
+VECFUZZ_THREAD_COUNTS = (4, 12, 24)
 
 
 def sweep(
@@ -100,9 +100,9 @@ def _figure_path(output_dir: Path, stem: str) -> Path:
 def _plot_lines(ax, x_values, series, title, xlabel, ylabel) -> None:
     color_map = {
         "VecFuzz": "#1D4ED8",
-        "VecFuzz t1": "#93C5FD",
-        "VecFuzz t8": "#3B82F6",
-        "VecFuzz t16": "#1D4ED8",
+        "VecFuzz t4": "#93C5FD",
+        "VecFuzz t12": "#3B82F6",
+        "VecFuzz t24": "#1D4ED8",
         "SymSpell d2/p7": "#FCA5A5",
         "SymSpell d3/p9": "#EF4444",
         "SymSpell d4/p12": "#7F1D1D",
@@ -110,9 +110,11 @@ def _plot_lines(ax, x_values, series, title, xlabel, ylabel) -> None:
     palette = ["#0F766E", "#B45309", "#7C3AED", "#DC2626"]
     for idx, (label, y_values) in enumerate(series):
         is_vecfuzz = label.startswith("VecFuzz")
+
         ax.plot(
             x_values, y_values, marker="o",
-            linewidth=2.5 if is_vecfuzz else 2,
+            linewidth=1.5,
+            markersize=4.5,
             label=label, color=color_map.get(label, palette[idx % len(palette)]),
             zorder=10 if is_vecfuzz else 2,
         )

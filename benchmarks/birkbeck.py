@@ -197,8 +197,10 @@ def run_birkbeck_benchmark(save_to_file=False):
         (candidates_vecfuzz_batch, "VecFuzz t1", [vecfuzz_instance_t1], True),
         (candidates_symspell, "SymSpell d4/p12", [symspell_instance_d4], False),
         (candidates_symspell, "SymSpell d2/p7", [symspell_instance_d2], False),
-        (candidates_rapidfuzz, "RapidFuzz", [], False),
-        (candidates_levenshtein, "Levenshtein", [], False),
+        (candidates_rapidfuzz_t1, "RapidFuzz t12", [], False),
+        (candidates_rapidfuzz_t12, "RapidFuzz 1", [], False),
+        (candidates_levenshtein_t1, "Levenshtein t12", [], False),
+        (candidates_levenshtein_t12, "Levenshtein t1", [], False),
     ]
 
     print("\nStarting Benchmark on birkbeck dataset...")
