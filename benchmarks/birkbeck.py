@@ -17,25 +17,13 @@ from pympler import asizeof
 # BASELINE METHODS
 # ---------------------------
 
-def _candidate_rapidfuzz(query, vocab, scorer, workers, k=1):
-    """RapidFuzz: use its built-in cdist, return Recall@k candidates."""
-    matrice_score = process.cdist([query], vocab, scorer=scorer, workers=workers)
-    sorted_indices = matrice_score.argsort()[0][:k]
-    return [vocab[i] for i in sorted_indices]
+def candidates_levenshtein(query, vocab, k=100):
+    results = process.extract(query, vocab, scorer=Levenshtein.distance, limit=k)
+    return [match[0] for match in results]
 
-def candidates_levenshtein_t1(query, vocab, k=1):
-    return _candidate_rapidfuzz(query, vocab, scorer=Levenshtein.distance, workers=1, k=k)
-
-def candidates_levenshtein_t12(query, vocab, k=1):
-    return _candidate_rapidfuzz(query, vocab, scorer=Levenshtein.distance, workers=12, k=k)
-
-def candidates_rapidfuzz_t1(query, vocab, k=1):
-    return _candidate_rapidfuzz(query, vocab, scorer=fuzz.ratio, workers=1, k=k)
-    
-def candidates_rapidfuzz_t12(query, vocab, k=1):
-    matrice_score = process.cdist([query], vocab, scorer=fuzz.ratio, workers=12)
-    sorted_indices = matrice_score.argsort()[0][:k]
-    return [vocab[i] for i in sorted_indices]
+def candidates_rapidfuzz(query, vocab, k=100):
+    results = process.extract(query, vocab, scorer=fuzz.ratio, limit=k)
+    return [match[0] for match in results]
 
 def candidates_symspell(query, vocab, symspell_instance, k=100):
     """SymSpell: use its built-in lookup, return Recall@k candidates."""
@@ -47,6 +35,7 @@ def candidates_vecfuzz_batch(queries, vocab, vecfuzz_instance, k=100):
     """VecFuzz batched lookup. Returns list of candidate lists."""
     results = vecfuzz_instance.lookup(queries, k)
     return [[word for word, dist in res[1]] for res in results]
+
 
 def load_birkbeck_dataset(filepath):
     test_cases = []
@@ -154,20 +143,12 @@ def run_birkbeck_benchmark(save_to_file=False):
     print(f"Using {len(vocab)} words for the benchmark vocabulary.")
 
     # Build VecFuzz index
-    print("Building VecFuzz t1 index (preprocessing)...")
+    print("Building VecFuzz t4 index (preprocessing)...")
     t0_build = time()
-    vecfuzz_instance_t1 = VecFuzz(num_threads=1).build(vocab)
+    vecfuzz_instance_t4 = VecFuzz(num_threads=1).build(vocab)
     t1_build = time()
-    vecfuzz_build_time_t1 = t1_build - t0_build
-    vecfuzz_size_t1 = asizeof.asizeof(vecfuzz_instance_t1) / (1024 * 1024)
-    
-    # Build VecFuzz index
-    print("Building VecFuzz t16 (preprocessing)...")
-    t0_build = time()
-    vecfuzz_instance_t12 = VecFuzz(num_threads=12).build(vocab)
-    t1_build = time()
-    vecfuzz_build_time_t12 = t1_build - t0_build
-    vecfuzz_size_t12 = asizeof.asizeof(vecfuzz_instance_t12) / (1024 * 1024)
+    vecfuzz_build_time_t4 = t1_build - t0_build
+    vecfuzz_size_t4 = asizeof.asizeof(vecfuzz_instance_t4) / (1024 * 1024)
     
     # Build SymSpell dictionary and measure build time
     print("Building SymSpell d2/p7 dictionary (preprocessing)...")
@@ -183,7 +164,7 @@ def run_birkbeck_benchmark(save_to_file=False):
     # Build SymSpell dictionary and measure build time
     print("Building SymSpell d4/p12 dictionary (preprocessing)...")
     t0_build = time()
-    symspell_instance_d4 = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
+    symspell_instance_d4 = SymSpell(max_dictionary_edit_distance=4, prefix_length=12)
     for w in vocab:
         freq = filtered_dict.get(w, 1)
         symspell_instance_d4.create_dictionary_entry(w, max(1, freq))
@@ -193,14 +174,10 @@ def run_birkbeck_benchmark(save_to_file=False):
 
     # Define methods to benchmark
     methods = [
-        (candidates_vecfuzz_batch, "VecFuzz t12", [vecfuzz_instance_t12], True),
-        (candidates_vecfuzz_batch, "VecFuzz t1", [vecfuzz_instance_t1], True),
-        (candidates_symspell, "SymSpell d4/p12", [symspell_instance_d4], False),
+        (candidates_vecfuzz_batch, "VecFuzz t4", [vecfuzz_instance_t4], True),
         (candidates_symspell, "SymSpell d2/p7", [symspell_instance_d2], False),
-        (candidates_rapidfuzz_t1, "RapidFuzz t12", [], False),
-        (candidates_rapidfuzz_t12, "RapidFuzz 1", [], False),
-        (candidates_levenshtein_t1, "Levenshtein t12", [], False),
-        (candidates_levenshtein_t12, "Levenshtein t1", [], False),
+        (candidates_rapidfuzz, "RapidFuzz", [], False),
+        (candidates_levenshtein, "Levenshtein", [], False),
     ]
 
     print("\nStarting Benchmark on birkbeck dataset...")
@@ -209,18 +186,12 @@ def run_birkbeck_benchmark(save_to_file=False):
         res = evaluate_simple(func, name, test_cases, vocab, args, is_batched)
         res["name"] = name
         
-        if name == "SymSpell d4/p12":
-            res["build_time"] = symspell_build_time_d4
-            res["build_size"] = symspell_size_d4
         if name == "SymSpell d2/p7":
             res["build_time"] = symspell_build_time_d2
             res["build_size"] = symspell_size_d2
-        elif name == "VecFuzz t12":
-            res["build_time"] = vecfuzz_build_time_t12
-            res["build_size"] = vecfuzz_size_t12
-        elif name == "VecFuzz t1":
-            res["build_time"] = vecfuzz_build_time_t1
-            res["build_size"] = vecfuzz_size_t1
+        elif name == "VecFuzz t4":
+            res["build_time"] = vecfuzz_build_time_t4
+            res["build_size"] = vecfuzz_size_t4
         else:
             res["build_time"] = 0.0
             res["build_size"] = 0.0
