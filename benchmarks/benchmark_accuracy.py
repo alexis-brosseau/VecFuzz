@@ -197,7 +197,7 @@ def main() -> None:
     p.add_argument("--output-dir", default="benchmark_outputs")
     args = p.parse_args()
 
-    if not args.plot:
+    if args.plot:
         state = load_json(Path(f"{args.output_dir}/accuracy_state_{args.vocab_size}_k{args.k}.json"))
         if state is None:
             raise SystemExit(f"No state file at {args.output_dir} to plot.")

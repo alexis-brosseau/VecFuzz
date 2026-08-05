@@ -1,0 +1,3248 @@
+{
+  "vocab_size": 5000,
+  "vocab_fingerprint": 5000,
+  "seed_base": 0,
+  "sessions_run": 1,
+  "ablations": {
+    "full": {
+      "overall": {
+        "count": 36000.0,
+        "recall1": 24292.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 9000.0,
+          "recall1": 4716.0
+        },
+        "transposition": {
+          "count": 9000.0,
+          "recall1": 8738.0
+        },
+        "deletion": {
+          "count": 9000.0,
+          "recall1": 2600.0
+        },
+        "insertion": {
+          "count": 9000.0,
+          "recall1": 8238.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 4000.0,
+          "recall1": 3963.0
+        },
+        "2": {
+          "count": 4000.0,
+          "recall1": 3747.0
+        },
+        "3": {
+          "count": 4000.0,
+          "recall1": 3254.0
+        },
+        "4": {
+          "count": 4000.0,
+          "recall1": 2784.0
+        },
+        "5": {
+          "count": 4000.0,
+          "recall1": 2452.0
+        },
+        "6": {
+          "count": 4000.0,
+          "recall1": 2213.0
+        },
+        "7": {
+          "count": 4000.0,
+          "recall1": 2067.0
+        },
+        "8": {
+          "count": 4000.0,
+          "recall1": 1961.0
+        },
+        "9": {
+          "count": 4000.0,
+          "recall1": 1851.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 995.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 932.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 804.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 630.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 465.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 345.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 224.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 185.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 136.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 996.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 995.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 988.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 977.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 982.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 951.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 953.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 954.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 942.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 976.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 831.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 478.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 218.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 71.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 17.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 6.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 1.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 2.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 996.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 989.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 984.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 959.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 934.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 900.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 884.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 821.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 771.0
+          }
+        }
+      }
+    },
+    "frq": {
+      "overall": {
+        "count": 36000.0,
+        "recall1": 17162.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 9000.0,
+          "recall1": 2184.0
+        },
+        "transposition": {
+          "count": 9000.0,
+          "recall1": 8976.0
+        },
+        "deletion": {
+          "count": 9000.0,
+          "recall1": 1734.0
+        },
+        "insertion": {
+          "count": 9000.0,
+          "recall1": 4268.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 4000.0,
+          "recall1": 3725.0
+        },
+        "2": {
+          "count": 4000.0,
+          "recall1": 2772.0
+        },
+        "3": {
+          "count": 4000.0,
+          "recall1": 2119.0
+        },
+        "4": {
+          "count": 4000.0,
+          "recall1": 1745.0
+        },
+        "5": {
+          "count": 4000.0,
+          "recall1": 1519.0
+        },
+        "6": {
+          "count": 4000.0,
+          "recall1": 1411.0
+        },
+        "7": {
+          "count": 4000.0,
+          "recall1": 1352.0
+        },
+        "8": {
+          "count": 4000.0,
+          "recall1": 1296.0
+        },
+        "9": {
+          "count": 4000.0,
+          "recall1": 1223.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 871.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 489.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 306.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 200.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 115.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 78.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 53.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 44.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 28.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 998.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 999.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 999.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 997.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 998.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 999.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 997.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 994.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 995.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 939.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 480.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 199.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 71.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 21.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 12.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 3.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 5.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 4.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 917.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 804.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 615.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 477.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 385.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 322.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 299.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 253.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 196.0
+          }
+        }
+      }
+    },
+    "pre-suc": {
+      "overall": {
+        "count": 36000.0,
+        "recall1": 22803.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 9000.0,
+          "recall1": 3564.0
+        },
+        "transposition": {
+          "count": 9000.0,
+          "recall1": 8620.0
+        },
+        "deletion": {
+          "count": 9000.0,
+          "recall1": 2217.0
+        },
+        "insertion": {
+          "count": 9000.0,
+          "recall1": 8402.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 4000.0,
+          "recall1": 3956.0
+        },
+        "2": {
+          "count": 4000.0,
+          "recall1": 3599.0
+        },
+        "3": {
+          "count": 4000.0,
+          "recall1": 2977.0
+        },
+        "4": {
+          "count": 4000.0,
+          "recall1": 2492.0
+        },
+        "5": {
+          "count": 4000.0,
+          "recall1": 2178.0
+        },
+        "6": {
+          "count": 4000.0,
+          "recall1": 2031.0
+        },
+        "7": {
+          "count": 4000.0,
+          "recall1": 1936.0
+        },
+        "8": {
+          "count": 4000.0,
+          "recall1": 1855.0
+        },
+        "9": {
+          "count": 4000.0,
+          "recall1": 1779.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 990.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 871.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 650.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 445.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 248.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 157.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 93.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 68.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 42.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 997.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 994.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 982.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 963.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 966.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 943.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 933.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 925.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 917.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 974.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 744.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 361.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 115.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 21.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 1.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 1.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 0.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 0.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 995.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 990.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 984.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 969.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 943.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 930.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 909.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 862.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 820.0
+          }
+        }
+      }
+    },
+    "phase": {
+      "overall": {
+        "count": 36000.0,
+        "recall1": 22371.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 9000.0,
+          "recall1": 4952.0
+        },
+        "transposition": {
+          "count": 9000.0,
+          "recall1": 8236.0
+        },
+        "deletion": {
+          "count": 9000.0,
+          "recall1": 2534.0
+        },
+        "insertion": {
+          "count": 9000.0,
+          "recall1": 6649.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 4000.0,
+          "recall1": 3941.0
+        },
+        "2": {
+          "count": 4000.0,
+          "recall1": 3624.0
+        },
+        "3": {
+          "count": 4000.0,
+          "recall1": 3110.0
+        },
+        "4": {
+          "count": 4000.0,
+          "recall1": 2633.0
+        },
+        "5": {
+          "count": 4000.0,
+          "recall1": 2242.0
+        },
+        "6": {
+          "count": 4000.0,
+          "recall1": 1967.0
+        },
+        "7": {
+          "count": 4000.0,
+          "recall1": 1776.0
+        },
+        "8": {
+          "count": 4000.0,
+          "recall1": 1607.0
+        },
+        "9": {
+          "count": 4000.0,
+          "recall1": 1471.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 995.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 935.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 813.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 652.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 490.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 394.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 282.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 219.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 172.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 996.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 979.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 960.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 922.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 927.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 873.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 876.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 855.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 848.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 961.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 752.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 423.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 235.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 96.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 38.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 20.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 7.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 2.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 989.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 958.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 914.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 824.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 729.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 662.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 598.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 526.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 449.0
+          }
+        }
+      }
+    },
+    "adj": {
+      "overall": {
+        "count": 36000.0,
+        "recall1": 9735.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 9000.0,
+          "recall1": 2012.0
+        },
+        "transposition": {
+          "count": 9000.0,
+          "recall1": 2318.0
+        },
+        "deletion": {
+          "count": 9000.0,
+          "recall1": 1566.0
+        },
+        "insertion": {
+          "count": 9000.0,
+          "recall1": 3839.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 4000.0,
+          "recall1": 3345.0
+        },
+        "2": {
+          "count": 4000.0,
+          "recall1": 2197.0
+        },
+        "3": {
+          "count": 4000.0,
+          "recall1": 1337.0
+        },
+        "4": {
+          "count": 4000.0,
+          "recall1": 894.0
+        },
+        "5": {
+          "count": 4000.0,
+          "recall1": 601.0
+        },
+        "6": {
+          "count": 4000.0,
+          "recall1": 456.0
+        },
+        "7": {
+          "count": 4000.0,
+          "recall1": 361.0
+        },
+        "8": {
+          "count": 4000.0,
+          "recall1": 320.0
+        },
+        "9": {
+          "count": 4000.0,
+          "recall1": 224.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 863.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 516.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 264.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 171.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 83.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 47.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 23.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 29.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 16.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 614.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 417.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 289.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 238.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 188.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 164.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 150.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 147.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 111.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 907.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 437.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 172.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 39.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 9.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 2.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 0.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 0.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 0.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 961.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 827.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 612.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 446.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 321.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 243.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 188.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 144.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 97.0
+          }
+        }
+      }
+    },
+    "frq pre-suc": {
+      "overall": {
+        "count": 36000.0,
+        "recall1": 23342.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 9000.0,
+          "recall1": 3788.0
+        },
+        "transposition": {
+          "count": 9000.0,
+          "recall1": 8949.0
+        },
+        "deletion": {
+          "count": 9000.0,
+          "recall1": 2325.0
+        },
+        "insertion": {
+          "count": 9000.0,
+          "recall1": 8280.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 4000.0,
+          "recall1": 3962.0
+        },
+        "2": {
+          "count": 4000.0,
+          "recall1": 3633.0
+        },
+        "3": {
+          "count": 4000.0,
+          "recall1": 3043.0
+        },
+        "4": {
+          "count": 4000.0,
+          "recall1": 2574.0
+        },
+        "5": {
+          "count": 4000.0,
+          "recall1": 2246.0
+        },
+        "6": {
+          "count": 4000.0,
+          "recall1": 2130.0
+        },
+        "7": {
+          "count": 4000.0,
+          "recall1": 2008.0
+        },
+        "8": {
+          "count": 4000.0,
+          "recall1": 1912.0
+        },
+        "9": {
+          "count": 4000.0,
+          "recall1": 1834.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 988.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 876.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 674.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 479.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 283.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 210.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 125.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 90.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 63.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 999.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 1000.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 1000.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 999.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 997.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 992.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 990.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 989.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 983.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 979.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 767.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 386.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 138.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 37.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 10.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 2.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 4.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 2.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 996.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 990.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 983.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 958.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 929.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 918.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 891.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 829.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 786.0
+          }
+        }
+      }
+    },
+    "frq phase": {
+      "overall": {
+        "count": 36000.0,
+        "recall1": 23085.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 9000.0,
+          "recall1": 4821.0
+        },
+        "transposition": {
+          "count": 9000.0,
+          "recall1": 8793.0
+        },
+        "deletion": {
+          "count": 9000.0,
+          "recall1": 2634.0
+        },
+        "insertion": {
+          "count": 9000.0,
+          "recall1": 6837.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 4000.0,
+          "recall1": 3952.0
+        },
+        "2": {
+          "count": 4000.0,
+          "recall1": 3663.0
+        },
+        "3": {
+          "count": 4000.0,
+          "recall1": 3158.0
+        },
+        "4": {
+          "count": 4000.0,
+          "recall1": 2691.0
+        },
+        "5": {
+          "count": 4000.0,
+          "recall1": 2315.0
+        },
+        "6": {
+          "count": 4000.0,
+          "recall1": 2073.0
+        },
+        "7": {
+          "count": 4000.0,
+          "recall1": 1877.0
+        },
+        "8": {
+          "count": 4000.0,
+          "recall1": 1724.0
+        },
+        "9": {
+          "count": 4000.0,
+          "recall1": 1632.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 995.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 921.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 790.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 629.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 474.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 372.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 261.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 206.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 173.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 999.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 995.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 988.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 979.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 987.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 966.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 959.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 963.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 957.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 967.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 782.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 454.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 245.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 102.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 42.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 26.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 8.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 8.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 991.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 965.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 926.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 838.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 752.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 693.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 631.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 547.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 494.0
+          }
+        }
+      }
+    },
+    "frq adj": {
+      "overall": {
+        "count": 36000.0,
+        "recall1": 19657.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 9000.0,
+          "recall1": 3350.0
+        },
+        "transposition": {
+          "count": 9000.0,
+          "recall1": 7940.0
+        },
+        "deletion": {
+          "count": 9000.0,
+          "recall1": 2281.0
+        },
+        "insertion": {
+          "count": 9000.0,
+          "recall1": 6086.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 4000.0,
+          "recall1": 3932.0
+        },
+        "2": {
+          "count": 4000.0,
+          "recall1": 3416.0
+        },
+        "3": {
+          "count": 4000.0,
+          "recall1": 2708.0
+        },
+        "4": {
+          "count": 4000.0,
+          "recall1": 2134.0
+        },
+        "5": {
+          "count": 4000.0,
+          "recall1": 1804.0
+        },
+        "6": {
+          "count": 4000.0,
+          "recall1": 1594.0
+        },
+        "7": {
+          "count": 4000.0,
+          "recall1": 1439.0
+        },
+        "8": {
+          "count": 4000.0,
+          "recall1": 1363.0
+        },
+        "9": {
+          "count": 4000.0,
+          "recall1": 1267.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 979.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 802.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 573.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 374.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 234.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 157.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 88.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 84.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 59.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 982.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 928.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 904.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 851.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 882.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 848.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 849.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 841.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 855.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 972.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 723.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 365.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 145.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 46.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 14.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 6.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 6.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 4.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 999.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 963.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 866.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 764.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 642.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 575.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 496.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 432.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 349.0
+          }
+        }
+      }
+    },
+    "pre-suc phase": {
+      "overall": {
+        "count": 36000.0,
+        "recall1": 23768.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 9000.0,
+          "recall1": 4594.0
+        },
+        "transposition": {
+          "count": 9000.0,
+          "recall1": 8537.0
+        },
+        "deletion": {
+          "count": 9000.0,
+          "recall1": 2470.0
+        },
+        "insertion": {
+          "count": 9000.0,
+          "recall1": 8167.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 4000.0,
+          "recall1": 3957.0
+        },
+        "2": {
+          "count": 4000.0,
+          "recall1": 3692.0
+        },
+        "3": {
+          "count": 4000.0,
+          "recall1": 3186.0
+        },
+        "4": {
+          "count": 4000.0,
+          "recall1": 2728.0
+        },
+        "5": {
+          "count": 4000.0,
+          "recall1": 2368.0
+        },
+        "6": {
+          "count": 4000.0,
+          "recall1": 2155.0
+        },
+        "7": {
+          "count": 4000.0,
+          "recall1": 2005.0
+        },
+        "8": {
+          "count": 4000.0,
+          "recall1": 1889.0
+        },
+        "9": {
+          "count": 4000.0,
+          "recall1": 1788.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 994.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 930.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 794.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 620.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 441.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 328.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 211.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 165.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 111.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 996.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 988.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 978.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 957.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 956.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 923.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 926.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 907.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 906.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 972.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 789.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 440.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 198.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 53.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 13.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 3.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 1.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 1.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 995.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 985.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 974.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 953.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 918.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 891.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 865.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 816.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 770.0
+          }
+        }
+      }
+    },
+    "pre-suc adj": {
+      "overall": {
+        "count": 36000.0,
+        "recall1": 23403.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 9000.0,
+          "recall1": 4021.0
+        },
+        "transposition": {
+          "count": 9000.0,
+          "recall1": 8363.0
+        },
+        "deletion": {
+          "count": 9000.0,
+          "recall1": 2456.0
+        },
+        "insertion": {
+          "count": 9000.0,
+          "recall1": 8563.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 4000.0,
+          "recall1": 3963.0
+        },
+        "2": {
+          "count": 4000.0,
+          "recall1": 3736.0
+        },
+        "3": {
+          "count": 4000.0,
+          "recall1": 3126.0
+        },
+        "4": {
+          "count": 4000.0,
+          "recall1": 2597.0
+        },
+        "5": {
+          "count": 4000.0,
+          "recall1": 2275.0
+        },
+        "6": {
+          "count": 4000.0,
+          "recall1": 2080.0
+        },
+        "7": {
+          "count": 4000.0,
+          "recall1": 1978.0
+        },
+        "8": {
+          "count": 4000.0,
+          "recall1": 1872.0
+        },
+        "9": {
+          "count": 4000.0,
+          "recall1": 1776.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 989.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 913.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 736.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 537.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 329.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 228.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 127.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 104.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 58.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 990.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 982.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 968.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 927.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 938.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 897.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 903.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 883.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 875.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 985.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 845.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 426.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 153.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 39.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 6.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 2.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 0.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 0.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 999.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 996.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 996.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 980.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 969.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 949.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 946.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 885.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 843.0
+          }
+        }
+      }
+    },
+    "phase adj": {
+      "overall": {
+        "count": 36000.0,
+        "recall1": 22881.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 9000.0,
+          "recall1": 5029.0
+        },
+        "transposition": {
+          "count": 9000.0,
+          "recall1": 7986.0
+        },
+        "deletion": {
+          "count": 9000.0,
+          "recall1": 2662.0
+        },
+        "insertion": {
+          "count": 9000.0,
+          "recall1": 7204.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 4000.0,
+          "recall1": 3950.0
+        },
+        "2": {
+          "count": 4000.0,
+          "recall1": 3680.0
+        },
+        "3": {
+          "count": 4000.0,
+          "recall1": 3164.0
+        },
+        "4": {
+          "count": 4000.0,
+          "recall1": 2694.0
+        },
+        "5": {
+          "count": 4000.0,
+          "recall1": 2324.0
+        },
+        "6": {
+          "count": 4000.0,
+          "recall1": 2043.0
+        },
+        "7": {
+          "count": 4000.0,
+          "recall1": 1821.0
+        },
+        "8": {
+          "count": 4000.0,
+          "recall1": 1663.0
+        },
+        "9": {
+          "count": 4000.0,
+          "recall1": 1542.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 993.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 939.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 807.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 661.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 519.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 405.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 276.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 241.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 188.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 991.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 965.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 948.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 882.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 882.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 826.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 854.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 823.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 815.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 972.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 799.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 466.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 251.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 108.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 37.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 19.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 6.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 4.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 994.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 977.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 943.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 900.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 815.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 775.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 672.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 593.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 535.0
+          }
+        }
+      }
+    },
+    "frq pre-suc adj": {
+      "overall": {
+        "count": 36000.0,
+        "recall1": 23997.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 9000.0,
+          "recall1": 4142.0
+        },
+        "transposition": {
+          "count": 9000.0,
+          "recall1": 8864.0
+        },
+        "deletion": {
+          "count": 9000.0,
+          "recall1": 2544.0
+        },
+        "insertion": {
+          "count": 9000.0,
+          "recall1": 8447.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 4000.0,
+          "recall1": 3977.0
+        },
+        "2": {
+          "count": 4000.0,
+          "recall1": 3746.0
+        },
+        "3": {
+          "count": 4000.0,
+          "recall1": 3187.0
+        },
+        "4": {
+          "count": 4000.0,
+          "recall1": 2696.0
+        },
+        "5": {
+          "count": 4000.0,
+          "recall1": 2352.0
+        },
+        "6": {
+          "count": 4000.0,
+          "recall1": 2170.0
+        },
+        "7": {
+          "count": 4000.0,
+          "recall1": 2053.0
+        },
+        "8": {
+          "count": 4000.0,
+          "recall1": 1954.0
+        },
+        "9": {
+          "count": 4000.0,
+          "recall1": 1862.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 988.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 902.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 738.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 555.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 357.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 251.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 148.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 124.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 79.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 998.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 999.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 995.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 991.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 991.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 974.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 980.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 973.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 963.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 992.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 851.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 460.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 175.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 45.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 14.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 3.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 3.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 1.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 999.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 994.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 994.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 975.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 959.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 931.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 922.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 854.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 819.0
+          }
+        }
+      }
+    },
+    "frq pre-suc phase": {
+      "overall": {
+        "count": 36000.0,
+        "recall1": 23940.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 9000.0,
+          "recall1": 4558.0
+        },
+        "transposition": {
+          "count": 9000.0,
+          "recall1": 8778.0
+        },
+        "deletion": {
+          "count": 9000.0,
+          "recall1": 2526.0
+        },
+        "insertion": {
+          "count": 9000.0,
+          "recall1": 8078.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 4000.0,
+          "recall1": 3964.0
+        },
+        "2": {
+          "count": 4000.0,
+          "recall1": 3697.0
+        },
+        "3": {
+          "count": 4000.0,
+          "recall1": 3195.0
+        },
+        "4": {
+          "count": 4000.0,
+          "recall1": 2747.0
+        },
+        "5": {
+          "count": 4000.0,
+          "recall1": 2401.0
+        },
+        "6": {
+          "count": 4000.0,
+          "recall1": 2175.0
+        },
+        "7": {
+          "count": 4000.0,
+          "recall1": 2025.0
+        },
+        "8": {
+          "count": 4000.0,
+          "recall1": 1913.0
+        },
+        "9": {
+          "count": 4000.0,
+          "recall1": 1823.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 994.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 922.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 778.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 614.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 437.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 324.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 209.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 164.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 116.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 999.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 995.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 990.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 978.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 989.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 959.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 959.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 957.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 952.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 976.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 795.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 453.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 213.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 65.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 15.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 5.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 3.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 1.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 995.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 985.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 974.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 942.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 910.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 877.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 852.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 789.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 754.0
+          }
+        }
+      }
+    },
+    "frq phase adj": {
+      "overall": {
+        "count": 36000.0,
+        "recall1": 23663.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 9000.0,
+          "recall1": 4979.0
+        },
+        "transposition": {
+          "count": 9000.0,
+          "recall1": 8667.0
+        },
+        "deletion": {
+          "count": 9000.0,
+          "recall1": 2711.0
+        },
+        "insertion": {
+          "count": 9000.0,
+          "recall1": 7306.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 4000.0,
+          "recall1": 3958.0
+        },
+        "2": {
+          "count": 4000.0,
+          "recall1": 3721.0
+        },
+        "3": {
+          "count": 4000.0,
+          "recall1": 3230.0
+        },
+        "4": {
+          "count": 4000.0,
+          "recall1": 2770.0
+        },
+        "5": {
+          "count": 4000.0,
+          "recall1": 2405.0
+        },
+        "6": {
+          "count": 4000.0,
+          "recall1": 2147.0
+        },
+        "7": {
+          "count": 4000.0,
+          "recall1": 1942.0
+        },
+        "8": {
+          "count": 4000.0,
+          "recall1": 1804.0
+        },
+        "9": {
+          "count": 4000.0,
+          "recall1": 1686.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 994.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 931.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 809.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 647.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 509.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 399.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 272.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 230.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 188.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 997.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 991.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 982.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 965.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 968.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 939.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 946.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 948.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 931.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 973.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 821.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 486.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 256.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 105.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 35.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 21.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 7.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 7.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 994.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 978.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 953.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 902.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 823.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 774.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 703.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 619.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 560.0
+          }
+        }
+      }
+    },
+    "pre-suc phase adj": {
+      "overall": {
+        "count": 36000.0,
+        "recall1": 24091.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 9000.0,
+          "recall1": 4744.0
+        },
+        "transposition": {
+          "count": 9000.0,
+          "recall1": 8466.0
+        },
+        "deletion": {
+          "count": 9000.0,
+          "recall1": 2563.0
+        },
+        "insertion": {
+          "count": 9000.0,
+          "recall1": 8318.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 4000.0,
+          "recall1": 3957.0
+        },
+        "2": {
+          "count": 4000.0,
+          "recall1": 3737.0
+        },
+        "3": {
+          "count": 4000.0,
+          "recall1": 3241.0
+        },
+        "4": {
+          "count": 4000.0,
+          "recall1": 2756.0
+        },
+        "5": {
+          "count": 4000.0,
+          "recall1": 2428.0
+        },
+        "6": {
+          "count": 4000.0,
+          "recall1": 2185.0
+        },
+        "7": {
+          "count": 4000.0,
+          "recall1": 2041.0
+        },
+        "8": {
+          "count": 4000.0,
+          "recall1": 1926.0
+        },
+        "9": {
+          "count": 4000.0,
+          "recall1": 1820.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 993.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 935.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 817.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 640.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 473.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 349.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 230.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 178.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 129.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 995.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 987.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 970.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 947.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 944.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 910.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 912.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 908.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 893.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 973.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 826.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 471.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 207.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 67.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 14.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 4.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 0.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 1.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 1000.0,
+            "recall1": 996.0
+          },
+          "2": {
+            "count": 1000.0,
+            "recall1": 989.0
+          },
+          "3": {
+            "count": 1000.0,
+            "recall1": 983.0
+          },
+          "4": {
+            "count": 1000.0,
+            "recall1": 962.0
+          },
+          "5": {
+            "count": 1000.0,
+            "recall1": 944.0
+          },
+          "6": {
+            "count": 1000.0,
+            "recall1": 912.0
+          },
+          "7": {
+            "count": 1000.0,
+            "recall1": 895.0
+          },
+          "8": {
+            "count": 1000.0,
+            "recall1": 840.0
+          },
+          "9": {
+            "count": 1000.0,
+            "recall1": 797.0
+          }
+        }
+      }
+    }
+  }
+}

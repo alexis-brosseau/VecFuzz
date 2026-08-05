@@ -1,0 +1,497 @@
+{
+  "metadata": {
+    "seed": 0,
+    "vocab_count": 159191,
+    "vocab_sizes": [
+      5000,
+      10000,
+      20000,
+      40000,
+      60000,
+      80000,
+      100000,
+      125000,
+      150000
+    ],
+    "query_count": 50000,
+    "configs": [
+      {
+        "label": "SymSpell d2/p7",
+        "max_edit_distance": 2,
+        "prefix_length": 7
+      },
+      {
+        "label": "SymSpell d3/p9",
+        "max_edit_distance": 3,
+        "prefix_length": 9
+      },
+      {
+        "label": "SymSpell d4/p12",
+        "max_edit_distance": 4,
+        "prefix_length": 12
+      }
+    ],
+    "vecfuzz_thread_counts": [
+      4,
+      12,
+      24
+    ]
+  },
+  "rows": [
+    {
+      "vocab_size": 5000,
+      "query_count": 49968,
+      "vecfuzz": [
+        {
+          "label": "VecFuzz t4",
+          "build_seconds": 2.2537100000772625,
+          "size_mb": 8.330978393554688,
+          "qps": 4122.883819584023,
+          "seconds": 12.119672100059688
+        },
+        {
+          "label": "VecFuzz t12",
+          "build_seconds": 0.9328071000054479,
+          "size_mb": 8.330963134765625,
+          "qps": 9202.752279960185,
+          "seconds": 5.429680000059307
+        },
+        {
+          "label": "VecFuzz t24",
+          "build_seconds": 0.6169622000306845,
+          "size_mb": 8.330947875976562,
+          "qps": 14011.249601761881,
+          "seconds": 3.566277200123295
+        }
+      ],
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 0.1534754999447614,
+          "size_mb": 18.177886962890625,
+          "qps": 29453.261456183947,
+          "seconds": 1.6965183999855071
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 0.4718217998743057,
+          "size_mb": 66.9521255493164,
+          "qps": 7277.457418660986,
+          "seconds": 6.866134300129488
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 1.811940599931404,
+          "size_mb": 197.60377502441406,
+          "qps": 2220.1729442250344,
+          "seconds": 22.50635479995981
+        }
+      ]
+    },
+    {
+      "vocab_size": 10000,
+      "query_count": 49968,
+      "vecfuzz": [
+        {
+          "label": "VecFuzz t4",
+          "build_seconds": 5.734404500108212,
+          "size_mb": 16.65430450439453,
+          "qps": 3559.563005213438,
+          "seconds": 14.037678200053051
+        },
+        {
+          "label": "VecFuzz t12",
+          "build_seconds": 2.5326654999516904,
+          "size_mb": 16.65428924560547,
+          "qps": 8375.52594481296,
+          "seconds": 5.965953700011596
+        },
+        {
+          "label": "VecFuzz t24",
+          "build_seconds": 1.5551698000635952,
+          "size_mb": 16.654273986816406,
+          "qps": 11669.7570845165,
+          "seconds": 4.281837200047448
+        }
+      ],
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 0.21374580007977784,
+          "size_mb": 33.32471466064453,
+          "qps": 24049.159855517802,
+          "seconds": 2.0777441000100225
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 1.2259536001365632,
+          "size_mb": 126.20804595947266,
+          "qps": 6045.550259438159,
+          "seconds": 8.26525259995833
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 3.7008231999352574,
+          "size_mb": 378.7332000732422,
+          "qps": 1957.0048141613488,
+          "seconds": 25.53289579995908
+        }
+      ]
+    },
+    {
+      "vocab_size": 20000,
+      "query_count": 49968,
+      "vecfuzz": [
+        {
+          "label": "VecFuzz t4",
+          "build_seconds": 14.115538999903947,
+          "size_mb": 33.301979064941406,
+          "qps": 3130.0466152343865,
+          "seconds": 15.963979500113055
+        },
+        {
+          "label": "VecFuzz t12",
+          "build_seconds": 6.042572699952871,
+          "size_mb": 33.301963806152344,
+          "qps": 7100.852252943244,
+          "seconds": 7.0369017999619246
+        },
+        {
+          "label": "VecFuzz t24",
+          "build_seconds": 3.7437263999599963,
+          "size_mb": 33.30194854736328,
+          "qps": 10649.746653285687,
+          "seconds": 4.691942599834874
+        }
+      ],
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 0.7050228998996317,
+          "size_mb": 51.37511444091797,
+          "qps": 18138.991327667754,
+          "seconds": 2.7547287000343204
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 2.0207419998478144,
+          "size_mb": 202.8021011352539,
+          "qps": 4522.733333379628,
+          "seconds": 11.048186199972406
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 7.224691899958998,
+          "size_mb": 718.3900299072266,
+          "qps": 1682.3888329576123,
+          "seconds": 29.700625099940225
+        }
+      ]
+    },
+    {
+      "vocab_size": 40000,
+      "query_count": 49968,
+      "vecfuzz": [
+        {
+          "label": "VecFuzz t4",
+          "build_seconds": 34.68174059991725,
+          "size_mb": 66.59603881835938,
+          "qps": 2576.822101964712,
+          "seconds": 19.39132699999027
+        },
+        {
+          "label": "VecFuzz t12",
+          "build_seconds": 14.47651519998908,
+          "size_mb": 66.59602355957031,
+          "qps": 6322.5390774835405,
+          "seconds": 7.9031539999414235
+        },
+        {
+          "label": "VecFuzz t24",
+          "build_seconds": 8.9629226999823,
+          "size_mb": 66.59600830078125,
+          "qps": 9550.74932703032,
+          "seconds": 5.231840800028294
+        }
+      ],
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 0.8714389000087976,
+          "size_mb": 85.78326416015625,
+          "qps": 13390.482997259454,
+          "seconds": 3.731605499982834
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 4.684140699915588,
+          "size_mb": 354.15916442871094,
+          "qps": 3323.5090897617083,
+          "seconds": 15.034711400046945
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 14.989317000145093,
+          "size_mb": 1319.887840270996,
+          "qps": 1388.5237936077235,
+          "seconds": 35.986419699853286
+        }
+      ]
+    },
+    {
+      "vocab_size": 60000,
+      "query_count": 49968,
+      "vecfuzz": [
+        {
+          "label": "VecFuzz t4",
+          "build_seconds": 57.520672200014815,
+          "size_mb": 99.89079284667969,
+          "qps": 2536.119695570175,
+          "seconds": 19.70254009985365
+        },
+        {
+          "label": "VecFuzz t12",
+          "build_seconds": 21.977799100102857,
+          "size_mb": 99.89077758789062,
+          "qps": 5922.396059717579,
+          "seconds": 8.437125699827448
+        },
+        {
+          "label": "VecFuzz t24",
+          "build_seconds": 14.779038100037724,
+          "size_mb": 99.89076232910156,
+          "qps": 8785.882257483065,
+          "seconds": 5.687305900035426
+        }
+      ],
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 1.3113333000801504,
+          "size_mb": 107.06974029541016,
+          "qps": 10990.666204242445,
+          "seconds": 4.546403199899942
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 6.457951000193134,
+          "size_mb": 511.5024719238281,
+          "qps": 2711.2689067489528,
+          "seconds": 18.429746999870986
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 22.53161789989099,
+          "size_mb": 1753.2026901245117,
+          "qps": 1175.882854454717,
+          "seconds": 42.49402889981866
+        }
+      ]
+    },
+    {
+      "vocab_size": 80000,
+      "query_count": 49968,
+      "vecfuzz": [
+        {
+          "label": "VecFuzz t4",
+          "build_seconds": 81.20540850004181,
+          "size_mb": 133.18345642089844,
+          "qps": 2439.591464299285,
+          "seconds": 20.48211790015921
+        },
+        {
+          "label": "VecFuzz t12",
+          "build_seconds": 31.229250199859962,
+          "size_mb": 133.18344116210938,
+          "qps": 5860.068694667554,
+          "seconds": 8.526862500002608
+        },
+        {
+          "label": "VecFuzz t24",
+          "build_seconds": 21.07993940007873,
+          "size_mb": 133.1834259033203,
+          "qps": 8292.936496930884,
+          "seconds": 6.025368700036779
+        }
+      ],
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 1.773734200047329,
+          "size_mb": 138.73828887939453,
+          "qps": 9575.610983479875,
+          "seconds": 5.218257099855691
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 8.478720899904147,
+          "size_mb": 593.3032531738281,
+          "qps": 2225.7604484526014,
+          "seconds": 22.449855299899355
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 30.024142500013113,
+          "size_mb": 2357.501007080078,
+          "qps": 1068.104239894591,
+          "seconds": 46.78195079998113
+        }
+      ]
+    },
+    {
+      "vocab_size": 100000,
+      "query_count": 49968,
+      "vecfuzz": [
+        {
+          "label": "VecFuzz t4",
+          "build_seconds": 106.17936359997839,
+          "size_mb": 166.4766845703125,
+          "qps": 2382.013691470137,
+          "seconds": 20.977209400152788
+        },
+        {
+          "label": "VecFuzz t12",
+          "build_seconds": 40.89571310020983,
+          "size_mb": 166.47667694091797,
+          "qps": 5594.949881426807,
+          "seconds": 8.930911100003868
+        },
+        {
+          "label": "VecFuzz t24",
+          "build_seconds": 27.956278099911287,
+          "size_mb": 166.47666931152344,
+          "qps": 7889.674659988157,
+          "seconds": 6.333340999903157
+        }
+      ],
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 3.9865753001067787,
+          "size_mb": 155.31903076171875,
+          "qps": 8420.695436247854,
+          "seconds": 5.933951700106263
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 10.920268299989402,
+          "size_mb": 666.53515625,
+          "qps": 1922.2808628728967,
+          "seconds": 25.994120300048962
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 35.33119870000519,
+          "size_mb": 2696.384696960449,
+          "qps": 960.4150801441565,
+          "seconds": 52.027504599886015
+        }
+      ]
+    },
+    {
+      "vocab_size": 125000,
+      "query_count": 49968,
+      "vecfuzz": [
+        {
+          "label": "VecFuzz t4",
+          "build_seconds": 138.47881180001423,
+          "size_mb": 208.0953369140625,
+          "qps": 2314.961876862633,
+          "seconds": 21.584804699989036
+        },
+        {
+          "label": "VecFuzz t12",
+          "build_seconds": 54.71583360014483,
+          "size_mb": 208.09532928466797,
+          "qps": 5523.704577766792,
+          "seconds": 9.046102900058031
+        },
+        {
+          "label": "VecFuzz t24",
+          "build_seconds": 37.02772959996946,
+          "size_mb": 208.09532165527344,
+          "qps": 7422.033666344931,
+          "seconds": 6.732386599993333
+        }
+      ],
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 4.8954103998839855,
+          "size_mb": 171.4698028564453,
+          "qps": 7311.676802669947,
+          "seconds": 6.834000099916011
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 13.64242949988693,
+          "size_mb": 746.9671096801758,
+          "qps": 1661.869662107473,
+          "seconds": 30.06733989994973
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 44.200627100188285,
+          "size_mb": 3086.7499389648438,
+          "qps": 849.608430882178,
+          "seconds": 58.81297570001334
+        }
+      ]
+    },
+    {
+      "vocab_size": 150000,
+      "query_count": 49968,
+      "vecfuzz": [
+        {
+          "label": "VecFuzz t4",
+          "build_seconds": 173.58881580014713,
+          "size_mb": 249.71408081054688,
+          "qps": 2265.0935520683597,
+          "seconds": 22.06001599994488
+        },
+        {
+          "label": "VecFuzz t12",
+          "build_seconds": 68.27443140000105,
+          "size_mb": 249.71407318115234,
+          "qps": 5246.06317693944,
+          "seconds": 9.52485670009628
+        },
+        {
+          "label": "VecFuzz t24",
+          "build_seconds": 45.86723960004747,
+          "size_mb": 249.7140655517578,
+          "qps": 7171.453378882355,
+          "seconds": 6.967625299934298
+        }
+      ],
+      "symspell": [
+        {
+          "label": "SymSpell d2/p7",
+          "build_seconds": 3.337216299958527,
+          "size_mb": 185.7582015991211,
+          "qps": 6548.980391606967,
+          "seconds": 7.62988999998197
+        },
+        {
+          "label": "SymSpell d3/p9",
+          "build_seconds": 16.661931900074705,
+          "size_mb": 817.7712478637695,
+          "qps": 1462.1463983090941,
+          "seconds": 34.17441650014371
+        },
+        {
+          "label": "SymSpell d4/p12",
+          "build_seconds": 53.52633900009096,
+          "size_mb": 3440.151565551758,
+          "qps": 762.8100729902526,
+          "seconds": 65.50516539998353
+        }
+      ]
+    }
+  ],
+  "figures": {
+    "build_time": "benchmark_outputs\\build_time_vs_vocab_size.png",
+    "memory_footprint": "benchmark_outputs\\memory_footprint_vs_vocab_size.png",
+    "lookup_speed": "benchmark_outputs\\lookup_speed_vs_vocab_size.png"
+  }
+}

@@ -220,7 +220,7 @@ def run_speed_benchmark(
     }
 
     if save_json_file:
-        result_path = output_path / "vecfuzz_symspell_speed_benchmark.json"
+        result_path = output_path / "speed_state.json"
         with result_path.open("w", encoding="utf-8") as f:
             json.dump(results, f, ensure_ascii=False, indent=2)
         results["results_path"] = str(result_path)
