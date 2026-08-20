@@ -54,7 +54,7 @@ def get_block_slices(vf: VecFuzz) -> dict[str, tuple[int, int]]:
     [frq, pre, suc, phase, adj].
     """
     c = vf._chars_len
-    adj_dim = 64
+    adj_dim = 192
     num_bands = 2
     offsets = {}
     start = 0
@@ -286,9 +286,9 @@ def run_ablation_benchmark(
 
 def main() -> None:
     p = argparse.ArgumentParser(description="Resumable ablation benchmark for VecFuzz sub-vectors.")
-    p.add_argument("--vocab-size", type=int, default=150_000)
+    p.add_argument("--vocab-size", type=int, default=50_000)
     p.add_argument("--cases", type=int, default=1_000)
-    p.add_argument("--max-sessions", type=int, default=None)
+    p.add_argument("--max-sessions", type=int, default=15)
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--k", type=int, default=1)
     p.add_argument("--max-words", type=int, default=None)

@@ -7,6 +7,8 @@ import zipfile
 import numpy as np
 import faiss
 
+### WARNING: SAVE AND LOAD DO NOT WORK SINC VECTORIZER ARE NOT SAVED.
+
 @dataclass
 class VecContext:
     """
@@ -40,7 +42,6 @@ class VecFuzz:
     def __init__(
         self, 
         vectorizers: list[Callable[[VecContext], np.ndarray]],
-        metric: int = faiss.METRIC_L1,
         chars: str = "aàbcçdeéèêëfghiïjklmnñoöpqrstuvwxyz0123456789-̧ '. ", 
         ef_construction: int = 200, 
         M: int = 32, 
@@ -62,7 +63,7 @@ class VecFuzz:
         self._chars_len = len(chars)
         self._char_idx = {c: i for i, c in enumerate(chars)}
         
-        self.metric = metric
+        self.metric = faiss.METRIC_L1
         self.ef_construction = ef_construction
         self.M = M
         self.ef = ef
@@ -208,7 +209,7 @@ class Vectorizer:
         return vec
 
     @staticmethod
-    def backward_density(ctx: VecContext) -> np.ndarray:
+    def preceding_density(ctx: VecContext) -> np.ndarray:
         """Preceding-position density: sum of positions that came before each character."""
         n = ctx.word_lengths.shape[0]
         vec = np.zeros((n, ctx.num_chars), dtype=np.float32)
@@ -218,23 +219,13 @@ class Vectorizer:
         return vec
 
     @staticmethod
-    def forward_density(ctx: VecContext) -> np.ndarray:
+    def succeeding_density(ctx: VecContext) -> np.ndarray:
         """Succeeding-position density: sum of positions that came after each character."""
         n = ctx.word_lengths.shape[0]
         vec = np.zeros((n, ctx.num_chars), dtype=np.float32)
         pos = ctx.char_positions
         wl = ctx.expanded_word_lengths
         np.add.at(vec.reshape(-1), ctx.flat_char_indices, ((wl - 1 - pos) * (wl - pos) / (wl ** 2)).astype(np.float32))
-        return vec
-    
-    @staticmethod
-    def density(ctx: VecContext) -> np.ndarray:
-        """Bi-directional position density: sum of positions that came before and after each character."""
-        n = ctx.word_lengths.shape[0]
-        vec = np.zeros((n, ctx.num_chars), dtype=np.float32)
-        pos = ctx.char_positions
-        wl = ctx.expanded_word_lengths
-        np.add.at(vec.reshape(-1), ctx.flat_char_indices, ((pos * (pos + 1) + (wl - 1 - pos) * (wl - pos)) / (wl ** 2)).astype(np.float32))
         return vec
     
     @staticmethod

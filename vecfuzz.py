@@ -88,8 +88,8 @@ class VecFuzz:
                 idx = self._char_idx[ch]
 
                 vec_frq[idx] += 1 / w_len
-                vec_pre[idx] += i               * (i + 1)       / (2 * w_len ** 2)
-                vec_suc[idx] += (w_len - 1 - i) * (w_len - i)   / (2 * w_len ** 2)
+                vec_pre[idx] += i               * (i + 1)       / (w_len ** 2)
+                vec_suc[idx] += (w_len - 1 - i) * (w_len - i)   / (w_len ** 2)
 
                 for k, freq in enumerate(PHASE_FREQS):
                     theta = freq * np.pi * pos
@@ -147,9 +147,9 @@ class VecFuzz:
 
         np.add.at(vec_frq.reshape(-1), flat, (1.0 / wl).astype(np.float32))
         np.add.at(vec_pre.reshape(-1), flat,
-                (i_valid * (i_valid + 1) / (2 * wl ** 2)).astype(np.float32))
+                (i_valid * (i_valid + 1) / (wl ** 2)).astype(np.float32))
         np.add.at(vec_suc.reshape(-1), flat,
-                ((wl - 1 - i_valid) * (wl - i_valid) / (2 * wl ** 2)).astype(np.float32))
+                ((wl - 1 - i_valid) * (wl - i_valid) / (wl ** 2)).astype(np.float32))
 
         # phase blocks: each band's cos/sin built as its own contiguous array,
         # then concatenated (avoids the non-contiguous-slice pitfall)
