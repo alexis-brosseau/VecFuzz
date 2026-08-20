@@ -87,7 +87,7 @@ def _plot_lines(ax, x_values, series, title, xlabel, ylabel) -> None:
         "#49cc5c", 
         "#2c7ce5", 
         "#b361ff", 
-        "#f15de2"
+        "#f15de2",
         "#f82553", 
     ]
     for idx, (label, y_values) in enumerate(series):
