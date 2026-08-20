@@ -22,6 +22,12 @@ DEFAULT_EDIT_LEVELS = (1, 2, 3, 4, 5, 6, 7, 8, 9)
 TYPO_TYPES = ("substitution", "transposition", "insertion", "deletion")
 
 VECFUZZ_INSTANCES = {
+    "VecFuzz Phase": VecFuzz(
+        metric=faiss.METRIC_L1,
+        vectorizers=[
+            Vectorizer.phase_position
+        ]
+    ),
     "VecFuzz Both": VecFuzz(
         metric=faiss.METRIC_L1,
         vectorizers=[
@@ -32,6 +38,29 @@ VECFUZZ_INSTANCES = {
     "VecFuzz Density": VecFuzz(
         metric=faiss.METRIC_L1,
         vectorizers=[
+            Vectorizer.density,
+        ]
+    ),
+    "VecFuzz Phase Both": VecFuzz(
+        metric=faiss.METRIC_L1,
+        vectorizers=[
+            Vectorizer.phase_position,
+            Vectorizer.forward_density,
+            Vectorizer.backward_density
+        ]
+    ),
+    "VecFuzz Phase Both 2.0": VecFuzz(
+        metric=faiss.METRIC_L1,
+        vectorizers=[
+            Vectorizer.phase_position * 2.0,
+            Vectorizer.forward_density,
+            Vectorizer.backward_density
+        ]
+    ),
+    "VecFuzz Phase Density": VecFuzz(
+        metric=faiss.METRIC_L1,
+        vectorizers=[
+            Vectorizer.phase_position,
             Vectorizer.density,
         ]
     ),
@@ -263,7 +292,7 @@ def run_benchmark(
 ) -> dict[str, object]:
     signal.signal(signal.SIGINT, _handle_sigint)
 
-    path = Path(f"{output_dir}/benchmark_state_{vocab_size}_k{k}.json")
+    path = Path(f"{output_dir}/benchmark_{vocab_size}_k{k}.json")
     state = load_json(path) if resume else None
 
     vocab = load_vocabulary(max_words=vocab_size, seed=seed)
@@ -271,7 +300,6 @@ def run_benchmark(
     subset = vocab[:vocab_size]
 
     if state is None:
-        print(f"[benchmark] Starting fresh.", flush=True)
         state = {
             "vocab_size": vocab_size,
             "vocab_fingerprint": len(vocab),
@@ -348,7 +376,7 @@ def main() -> None:
     args = p.parse_args()
 
     if args.plot:
-        state = load_json(Path(f"{args.output_dir}/benchmark_state_{args.vocab_size}_k{args.k}.json"))
+        state = load_json(Path(f"{args.output_dir}/benchmark_{args.vocab_size}_k{args.k}.json"))
         if state is None:
             raise SystemExit(f"No state file at {args.output_dir} to plot.")
         path = plot(state, args.k, args.output_dir)

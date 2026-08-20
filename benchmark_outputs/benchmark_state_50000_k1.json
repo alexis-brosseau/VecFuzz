@@ -2,219 +2,435 @@
   "vocab_size": 50000,
   "vocab_fingerprint": 50000,
   "seed_base": 0,
-  "sessions_run": 15,
+  "sessions_run": 6,
   "vecfuzz": {
-    "VecFuzz Both": {
+    "VecFuzz Phase": {
       "overall": {
-        "count": 540000.0,
-        "recall": 289168.0
+        "count": 216000.0,
+        "recall": 107420.0
       },
       "by_error_type": {
         "substitution": {
-          "count": 135000.0,
-          "recall": 36256.0
+          "count": 54000.0,
+          "recall": 21555.0
         },
         "transposition": {
-          "count": 135000.0,
-          "recall": 119747.0
+          "count": 54000.0,
+          "recall": 45084.0
         },
         "insertion": {
-          "count": 135000.0,
-          "recall": 111363.0
+          "count": 54000.0,
+          "recall": 31318.0
         },
         "deletion": {
-          "count": 135000.0,
-          "recall": 21802.0
+          "count": 54000.0,
+          "recall": 9463.0
         }
       },
       "by_edits": {
         "1": {
-          "count": 60000.0,
-          "recall": 55529.0
+          "count": 24000.0,
+          "recall": 21838.0
         },
         "2": {
-          "count": 60000.0,
-          "recall": 45496.0
+          "count": 24000.0,
+          "recall": 18271.0
         },
         "3": {
-          "count": 60000.0,
-          "recall": 36005.0
+          "count": 24000.0,
+          "recall": 14863.0
         },
         "4": {
-          "count": 60000.0,
-          "recall": 30409.0
+          "count": 24000.0,
+          "recall": 12161.0
         },
         "5": {
-          "count": 60000.0,
-          "recall": 27510.0
+          "count": 24000.0,
+          "recall": 10351.0
         },
         "6": {
-          "count": 60000.0,
-          "recall": 25622.0
+          "count": 24000.0,
+          "recall": 8887.0
         },
         "7": {
-          "count": 60000.0,
-          "recall": 24113.0
+          "count": 24000.0,
+          "recall": 7735.0
         },
         "8": {
-          "count": 60000.0,
-          "recall": 22788.0
+          "count": 24000.0,
+          "recall": 7011.0
         },
         "9": {
-          "count": 60000.0,
-          "recall": 21696.0
+          "count": 24000.0,
+          "recall": 6303.0
         }
       },
       "by_error_and_edits": {
         "substitution": {
           "1": {
-            "count": 15000.0,
-            "recall": 13708.0
+            "count": 6000.0,
+            "recall": 5670.0
           },
           "2": {
-            "count": 15000.0,
-            "recall": 10052.0
+            "count": 6000.0,
+            "recall": 4831.0
           },
           "3": {
-            "count": 15000.0,
-            "recall": 5962.0
+            "count": 6000.0,
+            "recall": 3632.0
           },
           "4": {
-            "count": 15000.0,
-            "recall": 3211.0
+            "count": 6000.0,
+            "recall": 2568.0
           },
           "5": {
-            "count": 15000.0,
-            "recall": 1670.0
+            "count": 6000.0,
+            "recall": 1817.0
           },
           "6": {
-            "count": 15000.0,
-            "recall": 843.0
+            "count": 6000.0,
+            "recall": 1223.0
           },
           "7": {
-            "count": 15000.0,
-            "recall": 452.0
+            "count": 6000.0,
+            "recall": 817.0
           },
           "8": {
-            "count": 15000.0,
-            "recall": 240.0
+            "count": 6000.0,
+            "recall": 578.0
           },
           "9": {
-            "count": 15000.0,
-            "recall": 118.0
+            "count": 6000.0,
+            "recall": 419.0
           }
         },
         "transposition": {
           "1": {
-            "count": 15000.0,
-            "recall": 14894.0
+            "count": 6000.0,
+            "recall": 5878.0
           },
           "2": {
-            "count": 15000.0,
-            "recall": 14401.0
+            "count": 6000.0,
+            "recall": 5606.0
           },
           "3": {
-            "count": 15000.0,
-            "recall": 13982.0
+            "count": 6000.0,
+            "recall": 5407.0
           },
           "4": {
-            "count": 15000.0,
-            "recall": 13606.0
+            "count": 6000.0,
+            "recall": 5175.0
           },
           "5": {
-            "count": 15000.0,
-            "recall": 13297.0
+            "count": 6000.0,
+            "recall": 5022.0
           },
           "6": {
-            "count": 15000.0,
-            "recall": 12888.0
+            "count": 6000.0,
+            "recall": 4747.0
           },
           "7": {
-            "count": 15000.0,
-            "recall": 12558.0
+            "count": 6000.0,
+            "recall": 4554.0
           },
           "8": {
-            "count": 15000.0,
-            "recall": 12224.0
+            "count": 6000.0,
+            "recall": 4430.0
           },
           "9": {
-            "count": 15000.0,
-            "recall": 11897.0
+            "count": 6000.0,
+            "recall": 4265.0
           }
         },
         "insertion": {
           "1": {
-            "count": 15000.0,
-            "recall": 14698.0
+            "count": 6000.0,
+            "recall": 5594.0
           },
           "2": {
-            "count": 15000.0,
-            "recall": 14286.0
+            "count": 6000.0,
+            "recall": 5088.0
           },
           "3": {
-            "count": 15000.0,
-            "recall": 13777.0
+            "count": 6000.0,
+            "recall": 4527.0
           },
           "4": {
-            "count": 15000.0,
-            "recall": 13134.0
+            "count": 6000.0,
+            "recall": 3956.0
           },
           "5": {
-            "count": 15000.0,
-            "recall": 12488.0
+            "count": 6000.0,
+            "recall": 3343.0
           },
           "6": {
-            "count": 15000.0,
-            "recall": 11874.0
+            "count": 6000.0,
+            "recall": 2853.0
           },
           "7": {
-            "count": 15000.0,
-            "recall": 11102.0
+            "count": 6000.0,
+            "recall": 2345.0
           },
           "8": {
-            "count": 15000.0,
-            "recall": 10323.0
+            "count": 6000.0,
+            "recall": 1995.0
           },
           "9": {
-            "count": 15000.0,
-            "recall": 9681.0
+            "count": 6000.0,
+            "recall": 1617.0
           }
         },
         "deletion": {
           "1": {
-            "count": 15000.0,
-            "recall": 12229.0
+            "count": 6000.0,
+            "recall": 4696.0
           },
           "2": {
-            "count": 15000.0,
-            "recall": 6757.0
+            "count": 6000.0,
+            "recall": 2746.0
           },
           "3": {
-            "count": 15000.0,
-            "recall": 2284.0
+            "count": 6000.0,
+            "recall": 1297.0
           },
           "4": {
-            "count": 15000.0,
-            "recall": 458.0
+            "count": 6000.0,
+            "recall": 462.0
           },
           "5": {
-            "count": 15000.0,
-            "recall": 55.0
+            "count": 6000.0,
+            "recall": 169.0
           },
           "6": {
-            "count": 15000.0,
-            "recall": 17.0
+            "count": 6000.0,
+            "recall": 64.0
           },
           "7": {
-            "count": 15000.0,
-            "recall": 1.0
+            "count": 6000.0,
+            "recall": 19.0
           },
           "8": {
-            "count": 15000.0,
+            "count": 6000.0,
+            "recall": 8.0
+          },
+          "9": {
+            "count": 6000.0,
+            "recall": 2.0
+          }
+        }
+      }
+    },
+    "VecFuzz Both": {
+      "overall": {
+        "count": 216000.0,
+        "recall": 115805.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 54000.0,
+          "recall": 14523.0
+        },
+        "transposition": {
+          "count": 54000.0,
+          "recall": 47939.0
+        },
+        "insertion": {
+          "count": 54000.0,
+          "recall": 44528.0
+        },
+        "deletion": {
+          "count": 54000.0,
+          "recall": 8815.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 24000.0,
+          "recall": 22280.0
+        },
+        "2": {
+          "count": 24000.0,
+          "recall": 18187.0
+        },
+        "3": {
+          "count": 24000.0,
+          "recall": 14464.0
+        },
+        "4": {
+          "count": 24000.0,
+          "recall": 12232.0
+        },
+        "5": {
+          "count": 24000.0,
+          "recall": 11057.0
+        },
+        "6": {
+          "count": 24000.0,
+          "recall": 10248.0
+        },
+        "7": {
+          "count": 24000.0,
+          "recall": 9634.0
+        },
+        "8": {
+          "count": 24000.0,
+          "recall": 9067.0
+        },
+        "9": {
+          "count": 24000.0,
+          "recall": 8636.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 6000.0,
+            "recall": 5500.0
+          },
+          "2": {
+            "count": 6000.0,
+            "recall": 4005.0
+          },
+          "3": {
+            "count": 6000.0,
+            "recall": 2375.0
+          },
+          "4": {
+            "count": 6000.0,
+            "recall": 1302.0
+          },
+          "5": {
+            "count": 6000.0,
+            "recall": 673.0
+          },
+          "6": {
+            "count": 6000.0,
+            "recall": 352.0
+          },
+          "7": {
+            "count": 6000.0,
+            "recall": 177.0
+          },
+          "8": {
+            "count": 6000.0,
+            "recall": 86.0
+          },
+          "9": {
+            "count": 6000.0,
+            "recall": 53.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 6000.0,
+            "recall": 5956.0
+          },
+          "2": {
+            "count": 6000.0,
+            "recall": 5756.0
+          },
+          "3": {
+            "count": 6000.0,
+            "recall": 5612.0
+          },
+          "4": {
+            "count": 6000.0,
+            "recall": 5447.0
+          },
+          "5": {
+            "count": 6000.0,
+            "recall": 5359.0
+          },
+          "6": {
+            "count": 6000.0,
+            "recall": 5155.0
+          },
+          "7": {
+            "count": 6000.0,
+            "recall": 5014.0
+          },
+          "8": {
+            "count": 6000.0,
+            "recall": 4908.0
+          },
+          "9": {
+            "count": 6000.0,
+            "recall": 4732.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 6000.0,
+            "recall": 5897.0
+          },
+          "2": {
+            "count": 6000.0,
+            "recall": 5717.0
+          },
+          "3": {
+            "count": 6000.0,
+            "recall": 5528.0
+          },
+          "4": {
+            "count": 6000.0,
+            "recall": 5284.0
+          },
+          "5": {
+            "count": 6000.0,
+            "recall": 5005.0
+          },
+          "6": {
+            "count": 6000.0,
+            "recall": 4731.0
+          },
+          "7": {
+            "count": 6000.0,
+            "recall": 4443.0
+          },
+          "8": {
+            "count": 6000.0,
+            "recall": 4072.0
+          },
+          "9": {
+            "count": 6000.0,
+            "recall": 3851.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 6000.0,
+            "recall": 4927.0
+          },
+          "2": {
+            "count": 6000.0,
+            "recall": 2709.0
+          },
+          "3": {
+            "count": 6000.0,
+            "recall": 949.0
+          },
+          "4": {
+            "count": 6000.0,
+            "recall": 199.0
+          },
+          "5": {
+            "count": 6000.0,
+            "recall": 20.0
+          },
+          "6": {
+            "count": 6000.0,
+            "recall": 10.0
+          },
+          "7": {
+            "count": 6000.0,
+            "recall": 0.0
+          },
+          "8": {
+            "count": 6000.0,
             "recall": 1.0
           },
           "9": {
-            "count": 15000.0,
+            "count": 6000.0,
             "recall": 0.0
           }
         }
@@ -222,215 +438,863 @@
     },
     "VecFuzz Density": {
       "overall": {
-        "count": 540000.0,
-        "recall": 249290.0
+        "count": 216000.0,
+        "recall": 99742.0
       },
       "by_error_type": {
         "substitution": {
-          "count": 135000.0,
-          "recall": 20966.0
+          "count": 54000.0,
+          "recall": 8381.0
         },
         "transposition": {
-          "count": 135000.0,
-          "recall": 129893.0
+          "count": 54000.0,
+          "recall": 51958.0
         },
         "insertion": {
-          "count": 135000.0,
-          "recall": 80739.0
+          "count": 54000.0,
+          "recall": 32280.0
         },
         "deletion": {
-          "count": 135000.0,
-          "recall": 17692.0
+          "count": 54000.0,
+          "recall": 7123.0
         }
       },
       "by_edits": {
         "1": {
-          "count": 60000.0,
-          "recall": 52513.0
+          "count": 24000.0,
+          "recall": 21085.0
         },
         "2": {
-          "count": 60000.0,
-          "recall": 38127.0
+          "count": 24000.0,
+          "recall": 15243.0
         },
         "3": {
-          "count": 60000.0,
-          "recall": 29686.0
+          "count": 24000.0,
+          "recall": 11876.0
         },
         "4": {
-          "count": 60000.0,
-          "recall": 25946.0
+          "count": 24000.0,
+          "recall": 10448.0
         },
         "5": {
-          "count": 60000.0,
-          "recall": 23522.0
+          "count": 24000.0,
+          "recall": 9416.0
         },
         "6": {
-          "count": 60000.0,
-          "recall": 21819.0
+          "count": 24000.0,
+          "recall": 8720.0
         },
         "7": {
-          "count": 60000.0,
-          "recall": 20397.0
+          "count": 24000.0,
+          "recall": 8112.0
         },
         "8": {
-          "count": 60000.0,
-          "recall": 19201.0
+          "count": 24000.0,
+          "recall": 7657.0
         },
         "9": {
-          "count": 60000.0,
-          "recall": 18079.0
+          "count": 24000.0,
+          "recall": 7185.0
         }
       },
       "by_error_and_edits": {
         "substitution": {
           "1": {
-            "count": 15000.0,
-            "recall": 11355.0
+            "count": 6000.0,
+            "recall": 4561.0
           },
           "2": {
-            "count": 15000.0,
-            "recall": 5309.0
+            "count": 6000.0,
+            "recall": 2122.0
           },
           "3": {
-            "count": 15000.0,
-            "recall": 2323.0
+            "count": 6000.0,
+            "recall": 908.0
           },
           "4": {
-            "count": 15000.0,
-            "recall": 1068.0
+            "count": 6000.0,
+            "recall": 414.0
           },
           "5": {
-            "count": 15000.0,
-            "recall": 454.0
+            "count": 6000.0,
+            "recall": 183.0
           },
           "6": {
-            "count": 15000.0,
-            "recall": 245.0
+            "count": 6000.0,
+            "recall": 100.0
           },
           "7": {
-            "count": 15000.0,
-            "recall": 124.0
+            "count": 6000.0,
+            "recall": 53.0
           },
           "8": {
-            "count": 15000.0,
-            "recall": 55.0
+            "count": 6000.0,
+            "recall": 20.0
           },
           "9": {
-            "count": 15000.0,
-            "recall": 33.0
+            "count": 6000.0,
+            "recall": 20.0
           }
         },
         "transposition": {
           "1": {
-            "count": 15000.0,
-            "recall": 14878.0
+            "count": 6000.0,
+            "recall": 5953.0
           },
           "2": {
-            "count": 15000.0,
-            "recall": 14783.0
+            "count": 6000.0,
+            "recall": 5914.0
           },
           "3": {
-            "count": 15000.0,
-            "recall": 14597.0
+            "count": 6000.0,
+            "recall": 5841.0
           },
           "4": {
-            "count": 15000.0,
-            "recall": 14519.0
+            "count": 6000.0,
+            "recall": 5815.0
           },
           "5": {
-            "count": 15000.0,
-            "recall": 14401.0
+            "count": 6000.0,
+            "recall": 5753.0
           },
           "6": {
-            "count": 15000.0,
-            "recall": 14294.0
+            "count": 6000.0,
+            "recall": 5732.0
           },
           "7": {
-            "count": 15000.0,
-            "recall": 14232.0
+            "count": 6000.0,
+            "recall": 5667.0
           },
           "8": {
-            "count": 15000.0,
-            "recall": 14127.0
+            "count": 6000.0,
+            "recall": 5648.0
           },
           "9": {
-            "count": 15000.0,
-            "recall": 14062.0
+            "count": 6000.0,
+            "recall": 5635.0
           }
         },
         "insertion": {
           "1": {
-            "count": 15000.0,
-            "recall": 14443.0
+            "count": 6000.0,
+            "recall": 5798.0
           },
           "2": {
-            "count": 15000.0,
-            "recall": 13232.0
+            "count": 6000.0,
+            "recall": 5280.0
           },
           "3": {
-            "count": 15000.0,
-            "recall": 11822.0
+            "count": 6000.0,
+            "recall": 4749.0
           },
           "4": {
-            "count": 15000.0,
-            "recall": 10259.0
+            "count": 6000.0,
+            "recall": 4178.0
           },
           "5": {
-            "count": 15000.0,
-            "recall": 8662.0
+            "count": 6000.0,
+            "recall": 3479.0
           },
           "6": {
-            "count": 15000.0,
-            "recall": 7278.0
+            "count": 6000.0,
+            "recall": 2886.0
           },
           "7": {
-            "count": 15000.0,
-            "recall": 6041.0
+            "count": 6000.0,
+            "recall": 2392.0
           },
           "8": {
-            "count": 15000.0,
-            "recall": 5018.0
+            "count": 6000.0,
+            "recall": 1988.0
           },
           "9": {
-            "count": 15000.0,
-            "recall": 3984.0
+            "count": 6000.0,
+            "recall": 1530.0
           }
         },
         "deletion": {
           "1": {
-            "count": 15000.0,
-            "recall": 11837.0
+            "count": 6000.0,
+            "recall": 4773.0
           },
           "2": {
-            "count": 15000.0,
-            "recall": 4803.0
+            "count": 6000.0,
+            "recall": 1927.0
           },
           "3": {
-            "count": 15000.0,
-            "recall": 944.0
+            "count": 6000.0,
+            "recall": 378.0
           },
           "4": {
-            "count": 15000.0,
-            "recall": 100.0
+            "count": 6000.0,
+            "recall": 41.0
           },
           "5": {
-            "count": 15000.0,
-            "recall": 5.0
+            "count": 6000.0,
+            "recall": 1.0
           },
           "6": {
-            "count": 15000.0,
+            "count": 6000.0,
             "recall": 2.0
           },
           "7": {
-            "count": 15000.0,
+            "count": 6000.0,
             "recall": 0.0
           },
           "8": {
-            "count": 15000.0,
+            "count": 6000.0,
             "recall": 1.0
           },
           "9": {
-            "count": 15000.0,
+            "count": 6000.0,
+            "recall": 0.0
+          }
+        }
+      }
+    },
+    "VecFuzz Phase Both": {
+      "overall": {
+        "count": 216000.0,
+        "recall": 119099.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 54000.0,
+          "recall": 17941.0
+        },
+        "transposition": {
+          "count": 54000.0,
+          "recall": 47827.0
+        },
+        "insertion": {
+          "count": 54000.0,
+          "recall": 43801.0
+        },
+        "deletion": {
+          "count": 54000.0,
+          "recall": 9530.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 24000.0,
+          "recall": 22285.0
+        },
+        "2": {
+          "count": 24000.0,
+          "recall": 18944.0
+        },
+        "3": {
+          "count": 24000.0,
+          "recall": 15469.0
+        },
+        "4": {
+          "count": 24000.0,
+          "recall": 12921.0
+        },
+        "5": {
+          "count": 24000.0,
+          "recall": 11486.0
+        },
+        "6": {
+          "count": 24000.0,
+          "recall": 10480.0
+        },
+        "7": {
+          "count": 24000.0,
+          "recall": 9728.0
+        },
+        "8": {
+          "count": 24000.0,
+          "recall": 9151.0
+        },
+        "9": {
+          "count": 24000.0,
+          "recall": 8635.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 6000.0,
+            "recall": 5639.0
+          },
+          "2": {
+            "count": 6000.0,
+            "recall": 4594.0
+          },
+          "3": {
+            "count": 6000.0,
+            "recall": 3174.0
+          },
+          "4": {
+            "count": 6000.0,
+            "recall": 1946.0
+          },
+          "5": {
+            "count": 6000.0,
+            "recall": 1165.0
+          },
+          "6": {
+            "count": 6000.0,
+            "recall": 682.0
+          },
+          "7": {
+            "count": 6000.0,
+            "recall": 387.0
+          },
+          "8": {
+            "count": 6000.0,
+            "recall": 224.0
+          },
+          "9": {
+            "count": 6000.0,
+            "recall": 130.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 6000.0,
+            "recall": 5921.0
+          },
+          "2": {
+            "count": 6000.0,
+            "recall": 5740.0
+          },
+          "3": {
+            "count": 6000.0,
+            "recall": 5603.0
+          },
+          "4": {
+            "count": 6000.0,
+            "recall": 5450.0
+          },
+          "5": {
+            "count": 6000.0,
+            "recall": 5331.0
+          },
+          "6": {
+            "count": 6000.0,
+            "recall": 5136.0
+          },
+          "7": {
+            "count": 6000.0,
+            "recall": 5002.0
+          },
+          "8": {
+            "count": 6000.0,
+            "recall": 4904.0
+          },
+          "9": {
+            "count": 6000.0,
+            "recall": 4740.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 6000.0,
+            "recall": 5790.0
+          },
+          "2": {
+            "count": 6000.0,
+            "recall": 5629.0
+          },
+          "3": {
+            "count": 6000.0,
+            "recall": 5463.0
+          },
+          "4": {
+            "count": 6000.0,
+            "recall": 5221.0
+          },
+          "5": {
+            "count": 6000.0,
+            "recall": 4929.0
+          },
+          "6": {
+            "count": 6000.0,
+            "recall": 4643.0
+          },
+          "7": {
+            "count": 6000.0,
+            "recall": 4338.0
+          },
+          "8": {
+            "count": 6000.0,
+            "recall": 4023.0
+          },
+          "9": {
+            "count": 6000.0,
+            "recall": 3765.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 6000.0,
+            "recall": 4935.0
+          },
+          "2": {
+            "count": 6000.0,
+            "recall": 2981.0
+          },
+          "3": {
+            "count": 6000.0,
+            "recall": 1229.0
+          },
+          "4": {
+            "count": 6000.0,
+            "recall": 304.0
+          },
+          "5": {
+            "count": 6000.0,
+            "recall": 61.0
+          },
+          "6": {
+            "count": 6000.0,
+            "recall": 19.0
+          },
+          "7": {
+            "count": 6000.0,
+            "recall": 1.0
+          },
+          "8": {
+            "count": 6000.0,
+            "recall": 0.0
+          },
+          "9": {
+            "count": 6000.0,
+            "recall": 0.0
+          }
+        }
+      }
+    },
+    "VecFuzz Phase Both 2.0": {
+      "overall": {
+        "count": 216000.0,
+        "recall": 119158.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 54000.0,
+          "recall": 19441.0
+        },
+        "transposition": {
+          "count": 54000.0,
+          "recall": 47464.0
+        },
+        "insertion": {
+          "count": 54000.0,
+          "recall": 42546.0
+        },
+        "deletion": {
+          "count": 54000.0,
+          "recall": 9707.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 24000.0,
+          "recall": 22220.0
+        },
+        "2": {
+          "count": 24000.0,
+          "recall": 19011.0
+        },
+        "3": {
+          "count": 24000.0,
+          "recall": 15679.0
+        },
+        "4": {
+          "count": 24000.0,
+          "recall": 13110.0
+        },
+        "5": {
+          "count": 24000.0,
+          "recall": 11592.0
+        },
+        "6": {
+          "count": 24000.0,
+          "recall": 10450.0
+        },
+        "7": {
+          "count": 24000.0,
+          "recall": 9648.0
+        },
+        "8": {
+          "count": 24000.0,
+          "recall": 9020.0
+        },
+        "9": {
+          "count": 24000.0,
+          "recall": 8428.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 6000.0,
+            "recall": 5661.0
+          },
+          "2": {
+            "count": 6000.0,
+            "recall": 4742.0
+          },
+          "3": {
+            "count": 6000.0,
+            "recall": 3437.0
+          },
+          "4": {
+            "count": 6000.0,
+            "recall": 2219.0
+          },
+          "5": {
+            "count": 6000.0,
+            "recall": 1437.0
+          },
+          "6": {
+            "count": 6000.0,
+            "recall": 878.0
+          },
+          "7": {
+            "count": 6000.0,
+            "recall": 533.0
+          },
+          "8": {
+            "count": 6000.0,
+            "recall": 335.0
+          },
+          "9": {
+            "count": 6000.0,
+            "recall": 199.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 6000.0,
+            "recall": 5911.0
+          },
+          "2": {
+            "count": 6000.0,
+            "recall": 5725.0
+          },
+          "3": {
+            "count": 6000.0,
+            "recall": 5570.0
+          },
+          "4": {
+            "count": 6000.0,
+            "recall": 5415.0
+          },
+          "5": {
+            "count": 6000.0,
+            "recall": 5286.0
+          },
+          "6": {
+            "count": 6000.0,
+            "recall": 5086.0
+          },
+          "7": {
+            "count": 6000.0,
+            "recall": 4932.0
+          },
+          "8": {
+            "count": 6000.0,
+            "recall": 4847.0
+          },
+          "9": {
+            "count": 6000.0,
+            "recall": 4692.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 6000.0,
+            "recall": 5759.0
+          },
+          "2": {
+            "count": 6000.0,
+            "recall": 5543.0
+          },
+          "3": {
+            "count": 6000.0,
+            "recall": 5349.0
+          },
+          "4": {
+            "count": 6000.0,
+            "recall": 5106.0
+          },
+          "5": {
+            "count": 6000.0,
+            "recall": 4773.0
+          },
+          "6": {
+            "count": 6000.0,
+            "recall": 4462.0
+          },
+          "7": {
+            "count": 6000.0,
+            "recall": 4179.0
+          },
+          "8": {
+            "count": 6000.0,
+            "recall": 3838.0
+          },
+          "9": {
+            "count": 6000.0,
+            "recall": 3537.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 6000.0,
+            "recall": 4889.0
+          },
+          "2": {
+            "count": 6000.0,
+            "recall": 3001.0
+          },
+          "3": {
+            "count": 6000.0,
+            "recall": 1323.0
+          },
+          "4": {
+            "count": 6000.0,
+            "recall": 370.0
+          },
+          "5": {
+            "count": 6000.0,
+            "recall": 96.0
+          },
+          "6": {
+            "count": 6000.0,
+            "recall": 24.0
+          },
+          "7": {
+            "count": 6000.0,
+            "recall": 4.0
+          },
+          "8": {
+            "count": 6000.0,
+            "recall": 0.0
+          },
+          "9": {
+            "count": 6000.0,
+            "recall": 0.0
+          }
+        }
+      }
+    },
+    "VecFuzz Phase Density": {
+      "overall": {
+        "count": 216000.0,
+        "recall": 112692.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 54000.0,
+          "recall": 14226.0
+        },
+        "transposition": {
+          "count": 54000.0,
+          "recall": 51087.0
+        },
+        "insertion": {
+          "count": 54000.0,
+          "recall": 38066.0
+        },
+        "deletion": {
+          "count": 54000.0,
+          "recall": 9313.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 24000.0,
+          "recall": 22574.0
+        },
+        "2": {
+          "count": 24000.0,
+          "recall": 18261.0
+        },
+        "3": {
+          "count": 24000.0,
+          "recall": 14369.0
+        },
+        "4": {
+          "count": 24000.0,
+          "recall": 12014.0
+        },
+        "5": {
+          "count": 24000.0,
+          "recall": 10638.0
+        },
+        "6": {
+          "count": 24000.0,
+          "recall": 9707.0
+        },
+        "7": {
+          "count": 24000.0,
+          "recall": 8966.0
+        },
+        "8": {
+          "count": 24000.0,
+          "recall": 8387.0
+        },
+        "9": {
+          "count": 24000.0,
+          "recall": 7776.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 6000.0,
+            "recall": 5508.0
+          },
+          "2": {
+            "count": 6000.0,
+            "recall": 3892.0
+          },
+          "3": {
+            "count": 6000.0,
+            "recall": 2247.0
+          },
+          "4": {
+            "count": 6000.0,
+            "recall": 1204.0
+          },
+          "5": {
+            "count": 6000.0,
+            "recall": 648.0
+          },
+          "6": {
+            "count": 6000.0,
+            "recall": 352.0
+          },
+          "7": {
+            "count": 6000.0,
+            "recall": 193.0
+          },
+          "8": {
+            "count": 6000.0,
+            "recall": 109.0
+          },
+          "9": {
+            "count": 6000.0,
+            "recall": 73.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 6000.0,
+            "recall": 5970.0
+          },
+          "2": {
+            "count": 6000.0,
+            "recall": 5858.0
+          },
+          "3": {
+            "count": 6000.0,
+            "recall": 5809.0
+          },
+          "4": {
+            "count": 6000.0,
+            "recall": 5739.0
+          },
+          "5": {
+            "count": 6000.0,
+            "recall": 5674.0
+          },
+          "6": {
+            "count": 6000.0,
+            "recall": 5564.0
+          },
+          "7": {
+            "count": 6000.0,
+            "recall": 5542.0
+          },
+          "8": {
+            "count": 6000.0,
+            "recall": 5479.0
+          },
+          "9": {
+            "count": 6000.0,
+            "recall": 5452.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 6000.0,
+            "recall": 5891.0
+          },
+          "2": {
+            "count": 6000.0,
+            "recall": 5624.0
+          },
+          "3": {
+            "count": 6000.0,
+            "recall": 5301.0
+          },
+          "4": {
+            "count": 6000.0,
+            "recall": 4886.0
+          },
+          "5": {
+            "count": 6000.0,
+            "recall": 4296.0
+          },
+          "6": {
+            "count": 6000.0,
+            "recall": 3787.0
+          },
+          "7": {
+            "count": 6000.0,
+            "recall": 3231.0
+          },
+          "8": {
+            "count": 6000.0,
+            "recall": 2799.0
+          },
+          "9": {
+            "count": 6000.0,
+            "recall": 2251.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 6000.0,
+            "recall": 5205.0
+          },
+          "2": {
+            "count": 6000.0,
+            "recall": 2887.0
+          },
+          "3": {
+            "count": 6000.0,
+            "recall": 1012.0
+          },
+          "4": {
+            "count": 6000.0,
+            "recall": 185.0
+          },
+          "5": {
+            "count": 6000.0,
+            "recall": 20.0
+          },
+          "6": {
+            "count": 6000.0,
+            "recall": 4.0
+          },
+          "7": {
+            "count": 6000.0,
+            "recall": 0.0
+          },
+          "8": {
+            "count": 6000.0,
+            "recall": 0.0
+          },
+          "9": {
+            "count": 6000.0,
             "recall": 0.0
           }
         }
@@ -440,216 +1304,216 @@
   "symspell": {
     "SymSpell d4/p12": {
       "overall": {
-        "count": 540000.0,
-        "recall": 201906.0
+        "count": 216000.0,
+        "recall": 80990.0
       },
       "by_error_type": {
         "substitution": {
-          "count": 135000.0,
-          "recall": 51032.0
+          "count": 54000.0,
+          "recall": 20477.0
         },
         "transposition": {
-          "count": 135000.0,
-          "recall": 74967.0
+          "count": 54000.0,
+          "recall": 30094.0
         },
         "insertion": {
-          "count": 135000.0,
-          "recall": 56307.0
+          "count": 54000.0,
+          "recall": 22559.0
         },
         "deletion": {
-          "count": 135000.0,
-          "recall": 19600.0
+          "count": 54000.0,
+          "recall": 7860.0
         }
       },
       "by_edits": {
         "1": {
-          "count": 60000.0,
-          "recall": 55194.0
+          "count": 24000.0,
+          "recall": 22120.0
         },
         "2": {
-          "count": 60000.0,
-          "recall": 44148.0
+          "count": 24000.0,
+          "recall": 17626.0
         },
         "3": {
-          "count": 60000.0,
-          "recall": 35540.0
+          "count": 24000.0,
+          "recall": 14228.0
         },
         "4": {
-          "count": 60000.0,
-          "recall": 29707.0
+          "count": 24000.0,
+          "recall": 11955.0
         },
         "5": {
-          "count": 60000.0,
-          "recall": 11832.0
+          "count": 24000.0,
+          "recall": 4822.0
         },
         "6": {
-          "count": 60000.0,
-          "recall": 8765.0
+          "count": 24000.0,
+          "recall": 3546.0
         },
         "7": {
-          "count": 60000.0,
-          "recall": 6702.0
+          "count": 24000.0,
+          "recall": 2666.0
         },
         "8": {
-          "count": 60000.0,
-          "recall": 5508.0
+          "count": 24000.0,
+          "recall": 2226.0
         },
         "9": {
-          "count": 60000.0,
-          "recall": 4510.0
+          "count": 24000.0,
+          "recall": 1801.0
         }
       },
       "by_error_and_edits": {
         "substitution": {
           "1": {
-            "count": 15000.0,
-            "recall": 13934.0
+            "count": 6000.0,
+            "recall": 5592.0
           },
           "2": {
-            "count": 15000.0,
-            "recall": 11842.0
+            "count": 6000.0,
+            "recall": 4742.0
           },
           "3": {
-            "count": 15000.0,
-            "recall": 9495.0
+            "count": 6000.0,
+            "recall": 3803.0
           },
           "4": {
-            "count": 15000.0,
-            "recall": 7112.0
+            "count": 6000.0,
+            "recall": 2824.0
           },
           "5": {
-            "count": 15000.0,
-            "recall": 4276.0
+            "count": 6000.0,
+            "recall": 1746.0
           },
           "6": {
-            "count": 15000.0,
-            "recall": 2293.0
+            "count": 6000.0,
+            "recall": 928.0
           },
           "7": {
-            "count": 15000.0,
-            "recall": 1156.0
+            "count": 6000.0,
+            "recall": 471.0
           },
           "8": {
-            "count": 15000.0,
-            "recall": 614.0
+            "count": 6000.0,
+            "recall": 247.0
           },
           "9": {
-            "count": 15000.0,
-            "recall": 310.0
+            "count": 6000.0,
+            "recall": 124.0
           }
         },
         "transposition": {
           "1": {
-            "count": 15000.0,
-            "recall": 14221.0
+            "count": 6000.0,
+            "recall": 5683.0
           },
           "2": {
-            "count": 15000.0,
-            "recall": 12303.0
+            "count": 6000.0,
+            "recall": 4900.0
           },
           "3": {
-            "count": 15000.0,
-            "recall": 10654.0
+            "count": 6000.0,
+            "recall": 4276.0
           },
           "4": {
-            "count": 15000.0,
-            "recall": 9131.0
+            "count": 6000.0,
+            "recall": 3693.0
           },
           "5": {
-            "count": 15000.0,
-            "recall": 7554.0
+            "count": 6000.0,
+            "recall": 3075.0
           },
           "6": {
-            "count": 15000.0,
-            "recall": 6469.0
+            "count": 6000.0,
+            "recall": 2618.0
           },
           "7": {
-            "count": 15000.0,
-            "recall": 5545.0
+            "count": 6000.0,
+            "recall": 2195.0
           },
           "8": {
-            "count": 15000.0,
-            "recall": 4892.0
+            "count": 6000.0,
+            "recall": 1978.0
           },
           "9": {
-            "count": 15000.0,
-            "recall": 4198.0
+            "count": 6000.0,
+            "recall": 1676.0
           }
         },
         "insertion": {
           "1": {
-            "count": 15000.0,
-            "recall": 14744.0
+            "count": 6000.0,
+            "recall": 5906.0
           },
           "2": {
-            "count": 15000.0,
-            "recall": 14381.0
+            "count": 6000.0,
+            "recall": 5741.0
           },
           "3": {
-            "count": 15000.0,
-            "recall": 13928.0
+            "count": 6000.0,
+            "recall": 5566.0
           },
           "4": {
-            "count": 15000.0,
-            "recall": 13254.0
+            "count": 6000.0,
+            "recall": 5346.0
           },
           "5": {
-            "count": 15000.0,
+            "count": 6000.0,
             "recall": 0.0
           },
           "6": {
-            "count": 15000.0,
+            "count": 6000.0,
             "recall": 0.0
           },
           "7": {
-            "count": 15000.0,
+            "count": 6000.0,
             "recall": 0.0
           },
           "8": {
-            "count": 15000.0,
+            "count": 6000.0,
             "recall": 0.0
           },
           "9": {
-            "count": 15000.0,
+            "count": 6000.0,
             "recall": 0.0
           }
         },
         "deletion": {
           "1": {
-            "count": 15000.0,
-            "recall": 12295.0
+            "count": 6000.0,
+            "recall": 4939.0
           },
           "2": {
-            "count": 15000.0,
-            "recall": 5622.0
+            "count": 6000.0,
+            "recall": 2243.0
           },
           "3": {
-            "count": 15000.0,
-            "recall": 1463.0
+            "count": 6000.0,
+            "recall": 583.0
           },
           "4": {
-            "count": 15000.0,
-            "recall": 210.0
+            "count": 6000.0,
+            "recall": 92.0
           },
           "5": {
-            "count": 15000.0,
-            "recall": 2.0
-          },
-          "6": {
-            "count": 15000.0,
-            "recall": 3.0
-          },
-          "7": {
-            "count": 15000.0,
+            "count": 6000.0,
             "recall": 1.0
           },
+          "6": {
+            "count": 6000.0,
+            "recall": 0.0
+          },
+          "7": {
+            "count": 6000.0,
+            "recall": 0.0
+          },
           "8": {
-            "count": 15000.0,
-            "recall": 2.0
+            "count": 6000.0,
+            "recall": 1.0
           },
           "9": {
-            "count": 15000.0,
-            "recall": 2.0
+            "count": 6000.0,
+            "recall": 1.0
           }
         }
       }
