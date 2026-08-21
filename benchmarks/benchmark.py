@@ -12,6 +12,7 @@ from time import perf_counter
 from unicodedata import normalize
 from spellchecker import SpellChecker
 from symspellpy import SymSpell, Verbosity
+from functools import partial
 import faiss
 
 import matplotlib
@@ -22,48 +23,24 @@ DEFAULT_EDIT_LEVELS = (1, 2, 3, 4, 5, 6, 7, 8, 9)
 TYPO_TYPES = ("substitution", "transposition", "insertion", "deletion")
 
 VECFUZZ_INSTANCES = {
-    "VecFuzz Phase": VecFuzz(
-        metric=faiss.METRIC_L1,
+    "VecFuzz C10 S10": VecFuzz(
+        metric=faiss.METRIC_L2,
         vectorizers=[
-            Vectorizer.phase_position
+            Vectorizer.position_rbf.params(centers=[0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0], sigma=0.10).norm(2),
         ]
     ),
-    "VecFuzz Both": VecFuzz(
-        metric=faiss.METRIC_L1,
+    "VecFuzz C5 S18": VecFuzz(
+        metric=faiss.METRIC_L2,
         vectorizers=[
-            Vectorizer.forward_density,
-            Vectorizer.backward_density
+            Vectorizer.position_rbf.params(centers=[0.0, 0.25, 0.5, 0.75, 1.0], sigma=0.18).norm(2),
         ]
     ),
-    "VecFuzz Density": VecFuzz(
-        metric=faiss.METRIC_L1,
+    "VecFuzz C20 S5": VecFuzz(
+        metric=faiss.METRIC_L2,
         vectorizers=[
-            Vectorizer.density,
+            Vectorizer.position_rbf.params(centers=[0.0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.0], sigma=0.05).norm(2)
         ]
-    ),
-    "VecFuzz Phase Both": VecFuzz(
-        metric=faiss.METRIC_L1,
-        vectorizers=[
-            Vectorizer.phase_position,
-            Vectorizer.forward_density,
-            Vectorizer.backward_density
-        ]
-    ),
-    "VecFuzz Phase Both 2.0": VecFuzz(
-        metric=faiss.METRIC_L1,
-        vectorizers=[
-            Vectorizer.phase_position * 2.0,
-            Vectorizer.forward_density,
-            Vectorizer.backward_density
-        ]
-    ),
-    "VecFuzz Phase Density": VecFuzz(
-        metric=faiss.METRIC_L1,
-        vectorizers=[
-            Vectorizer.phase_position,
-            Vectorizer.density,
-        ]
-    ),
+    )
 }
 
 SYMSPELL_INSTANCES = {
@@ -85,19 +62,19 @@ def _plot_lines(ax, x_values, series, title, xlabel, ylabel) -> None:
         "#fb6640", 
         "#f8c421", 
         "#49cc5c", 
-        "#2c7ce5", 
+        "#19aff4", 
         "#b361ff", 
         "#f15de2",
         "#f82553", 
     ]
     for idx, (label, y_values) in enumerate(series):
-        is_vecfuzz = label == "VecFuzz"
         ax.plot(
             x_values, y_values, marker="o",
             linewidth=1.5,
             markersize=4.5,
             label=label, color=color_map.get(label, palette[idx % len(palette)]),
-            zorder=10 if is_vecfuzz else 2,
+            # zorder is set to the average of y_values to ensure that lines with higher average accuracy are drawn on top
+            zorder= sum(y_values) / len(y_values) if y_values else 0
         )
     ax.set_title(title)
     ax.set_xlabel(xlabel)

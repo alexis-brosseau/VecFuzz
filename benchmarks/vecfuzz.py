@@ -197,65 +197,109 @@ class VecFuzz:
             flat_char_indices=flat_indices
         )
 
+
 class VectorizerOp:
     """
     A callable wrapper that allows vectorizer functions to be multiplied 
     or divided by a scalar weight (e.g., `vectorizer * 2.0` or `vectorizer / 3.0`).
     """
+    
     def __init__(self, func):
         self._func = func
-        # Preserve metadata for debugging and introspection
         self.__name__ = getattr(func, '__name__', 'vectorizer')
         self.__doc__ = getattr(func, '__doc__', '')
 
     def __call__(self, ctx, *args, **kwargs):
-        # Allows passing extra kwargs (like `freqs` in phase_position)
         return self._func(ctx, *args, **kwargs)
 
     def __mul__(self, scalar):
-        """Handles `vectorizer * scalar`"""
         def scaled(ctx, *args, **kwargs):
             return self._func(ctx, *args, **kwargs) * scalar
-        
         op = VectorizerOp(scaled)
         op.__name__ = f"{self.__name__}_x{scalar}"
         return op
 
     def __rmul__(self, scalar):
-        """Handles `scalar * vectorizer`"""
         return self.__mul__(scalar)
 
     def __truediv__(self, scalar):
-        """Handles `vectorizer / scalar`"""
-        if scalar == 0:
-            raise ZeroDivisionError("Cannot divide a vectorizer by zero")
-        
+        if scalar == 0: raise ZeroDivisionError("Cannot divide vectorizer by zero")
         def scaled(ctx, *args, **kwargs):
             return self._func(ctx, *args, **kwargs) / scalar
-        
         op = VectorizerOp(scaled)
         op.__name__ = f"{self.__name__}_/{scalar}"
         return op
 
     def __rtruediv__(self, scalar):
-        """Handles `scalar / vectorizer` (less common but mathematically valid)"""
         if scalar == 0:
-            # 0 / vectorizer is always 0
             def zero_func(ctx, *args, **kwargs):
-                result = self._func(ctx, *args, **kwargs)
-                return np.zeros_like(result)
+                return np.zeros_like(self._func(ctx, *args, **kwargs))
             return VectorizerOp(zero_func)
-        
         def scaled(ctx, *args, **kwargs):
             return scalar / self._func(ctx, *args, **kwargs)
-        
         op = VectorizerOp(scaled)
         op.__name__ = f"{scalar}/{self.__name__}"
         return op
 
+    def __pow__(self, exponent):
+        """Handles `vectorizer ** exponent`"""
+        def powered(ctx, *args, **kwargs):
+            # Use np.power to handle negative bases with fractional exponents safely if needed,
+            # but standard ** is fine for positive vectors.
+            return np.power(self._func(ctx, *args, **kwargs), exponent)
+        
+        op = VectorizerOp(powered)
+        op.__name__ = f"{self.__name__}^{exponent}"
+        return op
+    
+    def norm(self, ord: int) -> "VectorizerOp":
+        """
+        Returns a new VectorizerOp that normalizes the output vector 
+        to have a unit norm (L2 by default) per row (per word).
+        
+        Args:
+            ord (int): The order of the norm. 2 for Euclidean (L2), 1 for Manhattan (L1).
+        """
+        def normed(ctx, *args, **kwargs):
+            vec = self._func(ctx, *args, **kwargs)
+            
+            # Calculate norm per row (each word's vector gets normalized independently)
+            norms = np.linalg.norm(vec, ord=ord, axis=1, keepdims=True)
+            
+            # Prevent division by zero for empty words or zero-vectors
+            norms = np.where(norms == 0, 1.0, norms)
+            
+            return vec / norms
+        
+        op = VectorizerOp(normed)
+        op.__name__ = f"norm{ord}({self.__name__})"
+        return op
+    
+    def params(self, *args, **kwargs) -> "VectorizerOp":
+        """
+        EXPLICIT CONFIGURATION MODE.
+        Binds parameters to this vectorizer and returns a new VectorizerOp.
+        """
+        # Using functools.partial is highly optimized in C
+        bound_func = partial(self._func, *args, **kwargs)
+        
+        new_op = VectorizerOp(bound_func)
+        new_op.__doc__ = self.__doc__
+        
+        # Generate a clean, readable name for debugging/introspection
+        param_strs = [repr(a) for a in args] + [f"{k}={repr(v)}" for k, v in kwargs.items()]
+        if param_strs:
+            new_op.__name__ = f"{self.__name__}({', '.join(param_strs)})"
+        else:
+            new_op.__name__ = self.__name__
+            
+        return new_op
+    
+    
 def vectorizer(func):
     """Decorator to convert a raw vectorizer function into a VectorizerOp."""
     return VectorizerOp(func)
+
 
 class Vectorizer:
 
@@ -270,7 +314,7 @@ class Vectorizer:
 
     @staticmethod
     @vectorizer
-    def backward_density(ctx: VecContext) -> np.ndarray:
+    def density_backward(ctx: VecContext) -> np.ndarray:
         """Preceding-position density: sum of positions that came before each character."""
         n = ctx.word_lengths.shape[0]
         vec = np.zeros((n, ctx.num_chars), dtype=np.float32)
@@ -281,7 +325,7 @@ class Vectorizer:
 
     @staticmethod
     @vectorizer
-    def forward_density(ctx: VecContext) -> np.ndarray:
+    def density_forward(ctx: VecContext) -> np.ndarray:
         """Succeeding-position density: sum of positions that came after each character."""
         n = ctx.word_lengths.shape[0]
         vec = np.zeros((n, ctx.num_chars), dtype=np.float32)
@@ -293,17 +337,17 @@ class Vectorizer:
     @staticmethod
     @vectorizer
     def density(ctx: VecContext) -> np.ndarray:
-        """Bi-directional position density: sum of positions that came before and after each character."""
-        n = ctx.word_lengths.shape[0]
-        vec = np.zeros((n, ctx.num_chars), dtype=np.float32)
-        pos = ctx.char_positions
-        wl = ctx.expanded_word_lengths
-        np.add.at(vec.reshape(-1), ctx.flat_char_indices, ((pos * (pos + 1) + (wl - 1 - pos) * (wl - pos)) / (wl ** 2)).astype(np.float32))
-        return vec
+        """
+            Concatenation of backward and forward density vectors.
+        """
+        
+        backward = Vectorizer.density_backward(ctx)
+        forward = Vectorizer.density_forward(ctx)
+        return np.concatenate([backward, forward], axis=1)
     
     @staticmethod
     @vectorizer
-    def avg_position(ctx: VecContext) -> np.ndarray:
+    def position_avg(ctx: VecContext) -> np.ndarray:
         """
         Average position of each character, normalized by word length.
         Positions are 1-based (idx + 1) to avoid zeros.
@@ -325,7 +369,7 @@ class Vectorizer:
 
     @staticmethod
     @vectorizer
-    def phase_position(ctx: VecContext, freqs: tuple[float, ...] = (1.0, 2.0)) -> np.ndarray:
+    def position_phase(ctx: VecContext, freqs: tuple[float, ...] = (1.0, 2.0)) -> np.ndarray:
         """
         Phase-encoded position: sinusoidal expansion of each character's position.
         
@@ -347,12 +391,57 @@ class Vectorizer:
             phase_parts.extend([cos_arr, sin_arr])
             
         return np.concatenate(phase_parts, axis=1)
+    
+    @staticmethod
+    @vectorizer
+    def position_rbf(ctx: VecContext, centers: tuple[float, ...] = (0.0, 0.25, 0.5, 0.75, 1.0), sigma: float = 0.15) -> np.ndarray:
+        """
+        Radial Basis Function (Gaussian) positional encoding.
+        
+        It uses a Gaussian kernel, which is Smooth AND Local. 
+        A deletion only shifts characters within the local "window" of the Gaussian. 
+        Dimensions far from the deletion remain mathematically untouched, keeping the 
+        L1 distance tiny while maintaining continuous positional awareness.
+        
+        Args:
+            centers (tuple[float]): The relative positions (0.0 to 1.0) to place Gaussian centers.
+            sigma (float): The width of the Gaussian. Controls how much overlap there is between centers.
+        """
+        n = ctx.word_lengths.shape[0]
+        num_centers = len(centers)
+        
+        if n == 0:
+            return np.zeros((0, ctx.num_chars * num_centers), dtype=np.float32)
+
+        vec = np.zeros((n, ctx.num_chars * num_centers), dtype=np.float32)
+        
+        # Relative positions (0.0 to 1.0)
+        rel_pos = ctx.char_positions.astype(np.float32) / ctx.expanded_word_lengths
+        
+        # Precompute the denominator for the Gaussian
+        denom = 2.0 * (sigma ** 2)
+        
+        for c_idx, center in enumerate(centers):
+            # Calculate Gaussian activation for this specific center
+            # act shape: (num_valid_chars,)
+            act = np.exp(-((rel_pos - center) ** 2) / denom)
+            
+            # Target flat index: word_id * (chars * centers) + char_id * centers + center_idx
+            target = ctx.word_ids * (ctx.num_chars * num_centers) + ctx.char_ids * num_centers + c_idx
+            
+            # Accumulate
+            np.add.at(vec.reshape(-1), target, act.astype(np.float32))
+            
+        # Normalize by word length so longer words don't dominate the magnitude
+        vec /= ctx.word_lengths[:, None]
+        
+        return vec
 
     @staticmethod
     @vectorizer
-    def adjacency(ctx: VecContext, dim: int = 192) -> np.ndarray:
+    def bigram(ctx: VecContext, dim: int = 192) -> np.ndarray:
         """
-        Adjacency-hash: hashed counts of (char, next-char) bigrams, normalized by word length.
+        Bigram frequency vectorization. Each bigram is hashed into a fixed number of buckets.
         
         Args:
             dim (int): The dimensionality of the output vector. Bigrams are hashed into this many buckets.
