@@ -58,16 +58,12 @@ Dictionary of 100k words, compared against SymSpell at three delete-distance/pre
 
 Dictionary ~160k words, non-synthetic human misspellings (includes phonetic errors, dysgraphia, multi-error handwriting slips). Tested on a Xeon E5-2690 v4.
 
-| Method          | Recall@1 (%) | Recall@5 (%) | Recall@10 (%) | Recall@25 (%) | Recall@100 (%) | Duration (s) | Build (s) | Size (MB) |
-|-----------------|--------------|--------------|---------------|---------------|----------------|--------------|-----------|-----------|
-| **VecFuzz**     | **35.06%**   | **54.27%**   | **61.20%**    | **69.67%**    | **78.86%**     | **6.128s**   | 48.687s   | 267.74MB |
-| SymSpell d2/p7  | 34.05%       | 48.92%       | 51.94%        | 54.58%        | 57.70%         | 41.686s      | **3.428s**| **190.88MB** |
-| RapidFuzz       | 32.64%       | 51.74%       | 58.54%        | 66.56%        | 76.67%         | 698.735s     | N/A       | N/A       |
-| Levenshtein     | 28.10%       | 46.73%       | 54.20%        | 62.64%        | 72.35%         | 829.648s     | N/A       | N/A       |
-
-**Takeaways:**
-- VecFuzz has the best recall at every k and is the fastest method.
-- SymSpell d2/p7 leads on build time and memory footprint at this dictionary size.
+| Method          | Recall@1 (%) | Recall@5 (%) | Recall@10 (%) | Recall@25 (%) | Recall@100 (%) | Size (MB)    |
+|-----------------|--------------|--------------|---------------|---------------|----------------|--------------|
+| **VecFuzz**     | **36.32%**   | **54.94%**   | **61.37%**    | **68.82%**    | **77.91%**     | 221.11MB     |
+| SymSpell d2/p7  | 34.05%       | 48.92%       | 51.94%        | 54.58%        | 57.70%         | **190.88MB** |
+| RapidFuzz       | 32.64%       | 51.74%       | 58.54%        | 66.56%        | 76.67%         | N/A          |
+| Levenshtein     | 28.10%       | 46.73%       | 54.20%        | 62.64%        | 72.35%         | N/A          |
 
 ## Installation
 
