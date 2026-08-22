@@ -58,7 +58,7 @@ Dictionary of 100k words, compared against SymSpell at three delete-distance/pre
 
 Dictionary ~160k words, non-synthetic human misspellings (includes phonetic errors, dysgraphia, multi-error handwriting slips). Tested on a Xeon E5-2690 v4.
 
-| Method          | Recall@1 (%) | Recall@5 (%) | Recall@10 (%) | Recall@25 (%) | Recall@100 (%) | Size (MB)    |
+| Method          | Recall@1     | Recall@5     | Recall@10     | Recall@25     | Recall@100     | Size         |
 |-----------------|--------------|--------------|---------------|---------------|----------------|--------------|
 | **VecFuzz**     | **36.32%**   | **54.94%**   | **61.37%**    | **68.82%**    | **77.91%**     | 221.11MB     |
 | SymSpell d2/p7  | 34.05%       | 48.92%       | 51.94%        | 54.58%        | 57.70%         | **190.88MB** |
