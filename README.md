@@ -56,7 +56,7 @@ Dictionary of 100k words, compared against SymSpell at three delete-distance/pre
 
 ### Real-world human errors (Birkbeck Spelling Error Corpus)
 
-Dictionary ~160k words, non-synthetic human misspellings (includes phonetic errors, dysgraphia, multi-error handwriting slips). Tested on a Xeon E5-2690 v4.
+Dictionary ~160k words, non-synthetic human misspellings (includes phonetic errors, dysgraphia, multi-error handwriting slips).
 
 | Method          | Recall@1     | Recall@5     | Recall@10     | Recall@25     | Recall@100     | Size         |
 |-----------------|--------------|--------------|---------------|---------------|----------------|--------------|
