@@ -317,18 +317,11 @@ class Vectorizer:
     
     
     # Vectorizer Configs
-    
+
     DEFAULT = [
         frequency,
         density,
         bigram,
-    ]
-    
-    BEST = [
-        frequency,
-        density,
-        bigram,
-        vectorizer(position_rbf).params(centers=[0.0, 0.2, 0.4, 0.6, 0.8, 1.0], sigma=0.12),
     ]
 
 
@@ -346,7 +339,7 @@ class VecFuzz:
         ef_construction: int = 200, 
         M: int = 32, 
         ef: int = 64, 
-        num_threads: int | None = None
+        threads: int | None = None
     ):
         """
         Initialize VecFuzz. The vectorization schema is frozen at initialization.
@@ -357,7 +350,7 @@ class VecFuzz:
             ef_construction (int): The depth of the search during index construction for FAISS HNSW.
             M (int): The number of bi-directional links created for every new element.
             ef (int): The depth of the search for FAISS HNSW.
-            num_threads (int): Number of threads used to build/search the index.
+            threads (int): Number of threads used to build/search the index.
         """
         self._chars = chars
         self._chars_len = len(chars)
@@ -367,7 +360,7 @@ class VecFuzz:
         self.ef_construction = ef_construction
         self.M = M
         self.ef = ef
-        self.num_threads = num_threads or faiss.omp_get_max_threads() or 1
+        self.threads = threads or faiss.omp_get_max_threads() or 1
         
         # Prevent any further modifications to the vectorizers list after initialization
         self._vectorizers = tuple(vectorizers)
@@ -429,7 +422,7 @@ class VecFuzz:
         if self.index is None:
             raise ValueError("The index has not been built yet. Please call the `build` method before performing lookups.")
             
-        faiss.omp_set_num_threads(self.num_threads)
+        faiss.omp_set_num_threads(self.threads)
         query_vectors = self.vectorize(queries)
         distances, labels = self.index.search(query_vectors, k)
         
@@ -438,10 +431,26 @@ class VecFuzz:
             result = [(self.entries[i], dist) for i, dist in zip(idx, dists) if i != -1]
             results.append((query, result))
         return results
+    
+    def add(self, entries: list[str]):
+        """
+        Add new entries to the existing FAISS index.
+        
+        Args:
+            entries (list[str]): A list of new strings to add to the index.
+        """
+        if self.index is None:
+            raise ValueError("The index has not been built yet. Please call the `build` method before adding entries.")
+        
+        new_vectors = self.vectorize(entries)
+        self.entries.extend(entries)
+        self.vectors = np.vstack([self.vectors, new_vectors])
+        self.index.add(new_vectors)
+        return self
 
     def _build_index(self):
         """Construct the FAISS HNSW Index based on the built corpus vectors."""
-        faiss.omp_set_num_threads(self.num_threads)
+        faiss.omp_set_num_threads(self.threads)
         dim = self.vectors.shape[1]
             
         index = faiss.index_factory(dim, f"HNSW{self.M}", self.metric)

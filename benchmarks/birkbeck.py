@@ -162,29 +162,33 @@ def run_birkbeck_benchmark(save_to_file=False):
     # Build VecFuzz index
     print("Building VecFuzz index (preprocessing)...")
     t0_build = time()
-    vecfuzz_instance = VecFuzz().build(vocab)
+    vecfuzz_instance = VecFuzz(threads=16).build(vocab)
     t1_build = time()
     vecfuzz_build_time = t1_build - t0_build
     vecfuzz_size = asizeof.asizeof(vecfuzz_instance) / (1024 * 1024)
 
-    # Build SymSpell dictionary and measure build time
-    print("Building SymSpell d2/p7 dictionary (preprocessing)...")
+    # Build SymSpell dictionary
+    print("Building SymSpell dictionary (preprocessing)...")
     t0_build = time()
-    symspell_instance_d2 = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
+    
+    # d2/p7 give same result as higher-order configs for this benchmark.
+    symspell_instance = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
+    
     for w in vocab:
         freq = filtered_dict.get(w, 1)
-        symspell_instance_d2.create_dictionary_entry(w, max(1, freq))
+        symspell_instance.create_dictionary_entry(w, max(1, freq))
     t1_build = time()
-    symspell_build_time_d2 = t1_build - t0_build
-    symspell_size_d2 = asizeof.asizeof(symspell_instance_d2) / (1024 * 1024)
+    symspell_build_time = t1_build - t0_build
+    symspell_size = asizeof.asizeof(symspell_instance) / (1024 * 1024)
 
-    # Define methods to benchmark
+    #region Methods to benchmark
     methods = [
         (candidates_vecfuzz_batch, "VecFuzz", [vecfuzz_instance], True),
-        (candidates_symspell, "SymSpell d2/p7", [symspell_instance_d2], False),
-        # (candidates_rapidfuzz, "RapidFuzz", [], False),
-        # (candidates_levenshtein, "Levenshtein", [], False),
+        (candidates_symspell, "SymSpell", [symspell_instance], False),
+        (candidates_rapidfuzz, "RapidFuzz", [], False),
+        (candidates_levenshtein, "Levenshtein", [], False),
     ]
+    #endregion
 
     print("\nStarting Benchmark on birkbeck dataset...")
     results = []
@@ -192,9 +196,9 @@ def run_birkbeck_benchmark(save_to_file=False):
         res = evaluate_simple(func, name, test_cases, vocab, args, is_batched)
         res["name"] = name
 
-        if name == "SymSpell d2/p7":
-            res["build_time"] = symspell_build_time_d2
-            res["build_size"] = symspell_size_d2
+        if name == "SymSpell":
+            res["build_time"] = symspell_build_time
+            res["build_size"] = symspell_size
         elif name == "VecFuzz":
             res["build_time"] = vecfuzz_build_time
             res["build_size"] = vecfuzz_size

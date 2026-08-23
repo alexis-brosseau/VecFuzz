@@ -12,8 +12,6 @@ from time import perf_counter
 from unicodedata import normalize
 from spellchecker import SpellChecker
 from symspellpy import SymSpell, Verbosity
-from functools import partial
-import faiss
 
 import matplotlib
 matplotlib.use("Agg")
@@ -24,12 +22,19 @@ TYPO_TYPES = ("substitution", "transposition", "insertion", "deletion")
 
 VECFUZZ_INSTANCES = {
     "VecFuzz": VecFuzz(),
-    "VecFuzz BEST": VecFuzz(vectorizers=Vectorizer.BEST),
+    
+    # Ablation instances
+    # "Frequency": VecFuzz(vectorizers=[Vectorizer.frequency]),
+    # "Density": VecFuzz(vectorizers=[Vectorizer.density]),
+    # "Postion Avg": VecFuzz(vectorizers=[Vectorizer.position_avg]),
+    # "Position Phase": VecFuzz(vectorizers=[Vectorizer.position_phase]),
+    # "Position RBF": VecFuzz(vectorizers=[Vectorizer.position_rbf]),
+    # "Bigram": VecFuzz(vectorizers=[Vectorizer.bigram]),
 }
 
 SYMSPELL_INSTANCES = {
-    # "SymSpell d2/p7": SymSpell(max_dictionary_edit_distance=2, prefix_length=7),
-    # "SymSpell d3/p9": SymSpell(max_dictionary_edit_distance=3, prefix_length=9),
+    "SymSpell d2/p7": SymSpell(max_dictionary_edit_distance=2, prefix_length=7),
+    "SymSpell d3/p9": SymSpell(max_dictionary_edit_distance=3, prefix_length=9),
     "SymSpell d4/p12": SymSpell(max_dictionary_edit_distance=4, prefix_length=12),
 }
 
@@ -325,9 +330,9 @@ def run_benchmark(
 
 def main() -> None:
     p = argparse.ArgumentParser(description="Resumable ablation benchmark for VecFuzz sub-vectors.")
-    p.add_argument("--vocab-size", type=int, default=50_000)
-    p.add_argument("--cases", type=int, default=1_000)
-    p.add_argument("--max-sessions", type=int, default=15)
+    p.add_argument("--vocab-size", type=int, default=150_000)
+    p.add_argument("--cases", type=int, default=15_000)
+    p.add_argument("--max-sessions", type=int, default=None)
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--k", type=int, default=1)
     p.add_argument("--max-words", type=int, default=None)
