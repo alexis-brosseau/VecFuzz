@@ -1,312 +1,499 @@
 from typing import Callable
+from dataclasses import dataclass
+from functools import partial
 import pickle
 import io
-import os
 import zipfile
-
 import numpy as np
 import faiss
 
 
-class VecFuzz:
+@dataclass
+class VecContext:
     """
-    VecFuzz is a class that provides functionality for vectorizing strings and performing fuzzy matching using FAISS HNSW indexing.
-    It allows for efficient similarity search and retrieval of nearest neighbors based on vector representations of strings.
+    A neutral, pre-computed representation of words.
+    Contains no vector-specific logic; purely represents the parsed characters.
     """
+    # --- Core Metadata ---
+    words: list[str]                  # The original, cleaned strings
+    num_chars: int                    # Total size of the character vocabulary
+    
+    # --- 1D Word-Level Properties ---
+    word_lengths: np.ndarray          # Shape: (batch_size,). The actual length of each word.
+    
+    # --- 2D Grid (For sequence-aware operations like bigrams) ---
+    char_matrix: np.ndarray           # Shape: (batch_size, max_len). Char IDs, -1 for pad/unknown.
+    
+    # --- 1D Flattened Arrays (For fast np.add.at on valid characters only) ---
+    word_ids: np.ndarray              # Shape: (num_valid_chars,). Which word each valid char belongs to.
+    char_ids: np.ndarray              # Shape: (num_valid_chars,). The vocabulary ID of each valid char.
+    char_positions: np.ndarray        # Shape: (num_valid_chars,). 0-based position of the char in its word.
+    expanded_word_lengths: np.ndarray # Shape: (num_valid_chars,). The word length, repeated for each valid char.
+    flat_char_indices: np.ndarray     # Shape: (num_valid_chars,). Pre-computed (word_id * num_chars + char_id).
 
-    def __init__(self, chars: str="aàbcçdeéèêëfghiïjklmnñoöpqrstuvwxyz0123456789-̧ '. ", ef_construction: int=200, M: int=32, ef: int=64, num_threads: int | None = None):
+
+class VectorizerOp:
+    """
+    A callable wrapper that allows vectorizer functions to be multiplied 
+    or divided by a scalar weight (e.g., `vectorizer * 2.0` or `vectorizer / 3.0`).
+    """
+    
+    def __init__(self, func):
+        self._func = func
+        self.__name__ = getattr(func, '__name__', 'vectorizer')
+        self.__doc__ = getattr(func, '__doc__', '')
+
+    def __call__(self, ctx, *args, **kwargs):
+        return self._func(ctx, *args, **kwargs)
+
+    def __mul__(self, scalar):
+        def scaled(ctx, *args, **kwargs):
+            return self._func(ctx, *args, **kwargs) * scalar
+        op = VectorizerOp(scaled)
+        op.__name__ = f"{self.__name__}_x{scalar}"
+        return op
+
+    def __rmul__(self, scalar):
+        return self.__mul__(scalar)
+
+    def __truediv__(self, scalar):
+        if scalar == 0: raise ZeroDivisionError("Cannot divide vectorizer by zero")
+        def scaled(ctx, *args, **kwargs):
+            return self._func(ctx, *args, **kwargs) / scalar
+        op = VectorizerOp(scaled)
+        op.__name__ = f"{self.__name__}_/{scalar}"
+        return op
+
+    def __rtruediv__(self, scalar):
+        if scalar == 0:
+            def zero_func(ctx, *args, **kwargs):
+                return np.zeros_like(self._func(ctx, *args, **kwargs))
+            return VectorizerOp(zero_func)
+        def scaled(ctx, *args, **kwargs):
+            return scalar / self._func(ctx, *args, **kwargs)
+        op = VectorizerOp(scaled)
+        op.__name__ = f"{scalar}/{self.__name__}"
+        return op
+
+    def __pow__(self, exponent):
+        """Handles `vectorizer ** exponent`"""
+        def powered(ctx, *args, **kwargs):
+            # Use np.power to handle negative bases with fractional exponents safely if needed,
+            # but standard ** is fine for positive vectors.
+            return np.power(self._func(ctx, *args, **kwargs), exponent)
+        
+        op = VectorizerOp(powered)
+        op.__name__ = f"{self.__name__}^{exponent}"
+        return op
+    
+    def norm(self, ord: int) -> "VectorizerOp":
         """
-        Initialize the FAISS index parameters.
-
+        Returns a new VectorizerOp that normalizes the output vector 
+        to have a unit norm (L2 by default) per row (per word).
+        
         Args:
-            chars (str): A string containing all valid characters for vectorization.
-            ef_construction (int, optional): The depth of the search during index construction for FAISS HNSW. Defaults to 200.
-            M (int, optional): The number of bi-directional links created for every new element during HNSW index construction. Defaults to 32.
-            ef (int, optional): The depth of the search for FAISS HNSW. Defaults to 50.
-            num_threads: Number of thread used to build the index. Default to the maximum available on the system, or 1 if the system cannot determine the number of available threads.
+            ord (int): The order of the norm. 2 for Euclidean (L2), 1 for Manhattan (L1).
+        """
+        def normed(ctx, *args, **kwargs):
+            vec = self._func(ctx, *args, **kwargs)
+            
+            # Calculate norm per row (each word's vector gets normalized independently)
+            norms = np.linalg.norm(vec, ord=ord, axis=1, keepdims=True)
+            
+            # Prevent division by zero for empty words or zero-vectors
+            norms = np.where(norms == 0, 1.0, norms)
+            
+            return vec / norms
+        
+        op = VectorizerOp(normed)
+        op.__name__ = f"norm{ord}({self.__name__})"
+        return op
+    
+    def params(self, *args, **kwargs) -> "VectorizerOp":
+        """
+        EXPLICIT CONFIGURATION MODE.
+        Binds parameters to this vectorizer and returns a new VectorizerOp.
+        """
+        # Using functools.partial is highly optimized in C
+        bound_func = partial(self._func, *args, **kwargs)
+        
+        new_op = VectorizerOp(bound_func)
+        new_op.__doc__ = self.__doc__
+        
+        # Generate a clean, readable name for debugging/introspection
+        param_strs = [repr(a) for a in args] + [f"{k}={repr(v)}" for k, v in kwargs.items()]
+        if param_strs:
+            new_op.__name__ = f"{self.__name__}({', '.join(param_strs)})"
+        else:
+            new_op.__name__ = self.__name__
+            
+        return new_op
+    
+    
+def vectorizer(func):
+    """Decorator to convert a raw vectorizer function into a VectorizerOp."""
+    return VectorizerOp(func)
+
+
+class Vectorizer:
+
+    @staticmethod
+    @vectorizer
+    def frequency(ctx: VecContext) -> np.ndarray:
+        """Character frequency, normalized by word length."""
+        n = ctx.word_lengths.shape[0]
+        vec = np.zeros((n, ctx.num_chars), dtype=np.float32)
+        np.add.at(vec.reshape(-1), ctx.flat_char_indices, (1.0 / ctx.expanded_word_lengths).astype(np.float32))
+        return vec
+
+    @staticmethod
+    @vectorizer
+    def density_backward(ctx: VecContext) -> np.ndarray:
+        """Preceding-position density: sum of positions that came before each character."""
+        n = ctx.word_lengths.shape[0]
+        vec = np.zeros((n, ctx.num_chars), dtype=np.float32)
+        pos = ctx.char_positions
+        wl = ctx.expanded_word_lengths
+        np.add.at(vec.reshape(-1), ctx.flat_char_indices, (pos * (pos + 1) / (wl ** 2)).astype(np.float32))
+        return vec
+
+    @staticmethod
+    @vectorizer
+    def density_forward(ctx: VecContext) -> np.ndarray:
+        """Succeeding-position density: sum of positions that came after each character."""
+        n = ctx.word_lengths.shape[0]
+        vec = np.zeros((n, ctx.num_chars), dtype=np.float32)
+        pos = ctx.char_positions
+        wl = ctx.expanded_word_lengths
+        np.add.at(vec.reshape(-1), ctx.flat_char_indices, ((wl - 1 - pos) * (wl - pos) / (wl ** 2)).astype(np.float32))
+        return vec
+    
+    @staticmethod
+    @vectorizer
+    def density(ctx: VecContext) -> np.ndarray:
+        """
+            Concatenation of backward and forward density vectors.
         """
         
+        backward = Vectorizer.density_backward(ctx)
+        forward = Vectorizer.density_forward(ctx)
+        return np.concatenate([backward, forward], axis=1)
+    
+    @staticmethod
+    @vectorizer
+    def position_avg(ctx: VecContext) -> np.ndarray:
+        """
+        Average position of each character, normalized by word length.
+        Positions are 1-based (idx + 1) to avoid zeros.
+        """
+        n = ctx.word_lengths.shape[0]
+        vec = np.zeros((n, ctx.num_chars), dtype=np.float32)
+        
+        pos_1_based = ctx.char_positions + 1
+        np.add.at(vec.reshape(-1), ctx.flat_char_indices, pos_1_based.astype(np.float32))
+
+        counts = np.zeros((n, ctx.num_chars), dtype=np.float32)
+        np.add.at(counts.reshape(-1), ctx.flat_char_indices, 1.0)
+        
+        mask = counts > 0
+        vec[mask] /= counts[mask]
+        vec /= ctx.word_lengths[:, None]
+        
+        return vec
+
+    @staticmethod
+    @vectorizer
+    def position_phase(ctx: VecContext, freqs: list[float] = [0.75, 2.0]) -> np.ndarray:
+        """
+        Phase-encoded position: sinusoidal expansion of each character's position.
+        
+        Args:
+            freqs (tuple[float]): Frequencies for the sinusoidal encoding. Duplicates are automatically weighted by sqrt(count).
+        """
+        n = ctx.word_lengths.shape[0]
+        pos = (ctx.char_positions + 1) / ctx.expanded_word_lengths
+        
+        # 1. Count occurrences and extract unique frequencies (preserving original order)
+        freq_counts = {}
+        unique_freqs = []
+        for f in freqs:
+            if f not in freq_counts:
+                freq_counts[f] = 0
+                unique_freqs.append(f)
+            freq_counts[f] += 1
+            
+        phase_parts = []
+        for freq in unique_freqs:
+            # 2. Calculate the L2-equivalent amplitude: sqrt(count)
+            # e.g., if 1.0 appears twice, amplitude = sqrt(2) ≈ 1.414
+            amplitude = np.sqrt(float(freq_counts[freq]))
+            
+            theta = freq * np.pi * pos
+            cos_arr = np.zeros((n, ctx.num_chars), dtype=np.float32)
+            sin_arr = np.zeros((n, ctx.num_chars), dtype=np.float32)
+            
+            # 3. Apply the amplitude scaling directly during the scatter operation
+            np.add.at(cos_arr.reshape(-1), ctx.flat_char_indices, (amplitude * np.cos(theta) / ctx.expanded_word_lengths).astype(np.float32))
+            np.add.at(sin_arr.reshape(-1), ctx.flat_char_indices, (amplitude * np.sin(theta) / ctx.expanded_word_lengths).astype(np.float32))
+            
+            phase_parts.extend([cos_arr, sin_arr])
+            
+        return np.concatenate(phase_parts, axis=1)
+    
+    @staticmethod
+    @vectorizer
+    def position_rbf(ctx: VecContext, centers: list[float] = [0.0, 0.25, 0.5, 0.75, 1.0], sigma: float = 0.18) -> np.ndarray:
+        """
+        Radial Basis Function (Gaussian) positional encoding.
+        
+        It uses a Gaussian kernel, which is Smooth AND Local. 
+        A deletion only shifts characters within the local "window" of the Gaussian. 
+        Dimensions far from the deletion remain mathematically untouched, keeping the 
+        L1 distance tiny while maintaining continuous positional awareness.
+        
+        Args:
+            centers (tuple[float]): The relative positions (0.0 to 1.0) to place Gaussian centers.
+            sigma (float): The width of the Gaussian. Controls how much overlap there is between centers.
+        """
+        n = ctx.word_lengths.shape[0]
+        num_centers = len(centers)
+        
+        if n == 0:
+            return np.zeros((0, ctx.num_chars * num_centers), dtype=np.float32)
+
+        vec = np.zeros((n, ctx.num_chars * num_centers), dtype=np.float32)
+        
+        # Relative positions (0.0 to 1.0)
+        rel_pos = ctx.char_positions.astype(np.float32) / ctx.expanded_word_lengths
+        
+        # Precompute the denominator for the Gaussian
+        denom = 2.0 * (sigma ** 2)
+        
+        for c_idx, center in enumerate(centers):
+            # Calculate Gaussian activation for this specific center
+            # act shape: (num_valid_chars,)
+            act = np.exp(-((rel_pos - center) ** 2) / denom)
+            
+            # Target flat index: word_id * (chars * centers) + char_id * centers + center_idx
+            target = ctx.word_ids * (ctx.num_chars * num_centers) + ctx.char_ids * num_centers + c_idx
+            
+            # Accumulate
+            np.add.at(vec.reshape(-1), target, act.astype(np.float32))
+            
+        # Normalize by word length so longer words don't dominate the magnitude
+        vec /= ctx.word_lengths[:, None]
+        
+        return vec
+
+    @staticmethod
+    @vectorizer
+    def bigram(ctx: VecContext, dim: int = 192) -> np.ndarray:
+        """
+        Bigram frequency vectorization. Each bigram is hashed into a fixed number of buckets.
+        
+        Args:
+            dim (int): The dimensionality of the output vector. Bigrams are hashed into this many buckets.
+        """
+        n = ctx.word_lengths.shape[0]
+        
+        # Derives bigrams purely from the neutral 2D char_matrix
+        idx_i = ctx.char_matrix[:, :-1]
+        idx_j = ctx.char_matrix[:, 1:]
+        
+        valid_pair = (idx_i >= 0) & (idx_j >= 0)
+        word_ids, col_ids = np.nonzero(valid_pair)
+        
+        ii = idx_i[word_ids, col_ids]
+        jj = idx_j[word_ids, col_ids]
+        
+        wl = ctx.word_lengths[word_ids].astype(np.float32)
+        pair_id = ii * ctx.num_chars + jj
+        bucket = pair_id % dim
+        
+        flat_adj = word_ids * dim + bucket
+        vec = np.zeros((n, dim), dtype=np.float32)
+        np.add.at(vec.reshape(-1), flat_adj, (1.0 / wl).astype(np.float32))
+        return vec
+    
+    
+    # Vectorizer Configs
+    
+    DEFAULT = [
+        frequency,
+        density,
+        bigram,
+    ]
+    
+    BEST = [
+        frequency,
+        density,
+        bigram,
+        vectorizer(position_rbf).params(centers=[0.0, 0.2, 0.4, 0.6, 0.8, 1.0], sigma=0.12),
+    ]
+
+
+class VecFuzz:
+    """
+    VecFuzz provides functionality for vectorizing strings and performing fuzzy matching 
+    using FAISS HNSW indexing. Vectorization is handled by modular, standalone functions.
+    """
+    
+    def __init__(
+        self, 
+        vectorizers: list[Callable[[VecContext], np.ndarray]] = Vectorizer.DEFAULT,
+        metric: int = faiss.METRIC_L1,
+        chars: str = "aàbcçdeéèêëfghiïjklmnñoöpqrstuvwxyz0123456789-̧ '. ", 
+        ef_construction: int = 200, 
+        M: int = 32, 
+        ef: int = 64, 
+        num_threads: int | None = None
+    ):
+        """
+        Initialize VecFuzz. The vectorization schema is frozen at initialization.
+        
+        Args:
+            chars (str): A string containing all valid characters for vectorization.
+            vectorizers (list[Callable]): List of pure functions taking VecContext -> np.ndarray.
+            ef_construction (int): The depth of the search during index construction for FAISS HNSW.
+            M (int): The number of bi-directional links created for every new element.
+            ef (int): The depth of the search for FAISS HNSW.
+            num_threads (int): Number of threads used to build/search the index.
+        """
         self._chars = chars
         self._chars_len = len(chars)
         self._char_idx = {c: i for i, c in enumerate(chars)}
         
-        self.metric = faiss.METRIC_L1
+        self.metric = metric
         self.ef_construction = ef_construction
         self.M = M
         self.ef = ef
-        self.num_threads = num_threads or os.cpu_count() or 1
+        self.num_threads = num_threads or faiss.omp_get_max_threads() or 1
+        
+        # Prevent any further modifications to the vectorizers list after initialization
+        self._vectorizers = tuple(vectorizers)
         
         self.entries = None
         self.vectors = None
         self.index = None
-        
-    def vectorize(self, word: str):
+
+    def vectorize(self, words: list[str]) -> np.ndarray:
         """
-        Warning: This method is not optimized for batch processing and may be slow for large datasets. 
-        Use vectorize_batch() for better performance. 
-        This method is provided for convenience.
+        Vectorize a list of words using the frozen list of callables.
         
-        Convert a given word into a concatenated positional/frequency representation.
-
-        Produces 5 sub-vectors, each of length self._chars_len (except the phase
-        block, which is 2*K*self._chars_len):
-
-        1. Character frequency: count of each character, normalized by word length.
-        2. Preceding-position density: for each character, a sum of positions that came before it.
-        3. Succeeding-position density: for each character, a sum of positions that came after it.
-        4. Phase-encoded position: sinusoidal expansion of each character's position(s) at a few frequencies (cos/sin pairs per band).
-        5. Adjacency-hash: fixed-size hashed counts of (char, next-char) bigrams, normalized by word length. Captures local ordering.
-        All sub-vectors are normalized by word length for scale invariance.
-
         Args:
-            word (str): The string to vectorize.
-
+            words (list[str]): A list of strings to vectorize.
+            
         Returns:
-            np.ndarray: A numpy array of type float32 representing the word.
+            np.ndarray: A 2D numpy array of shape len(words).
         """
-        word = word.strip().lower()
-        w_len = len(word)
+        ctx = self._build_context(words)
+        parts = [func(ctx) for func in self._vectorizers]
+        return np.concatenate(parts, axis=1)
 
-        if w_len == 0:
-            raise ValueError("The input word is empty and cannot be vectorized.")
-
-        vec_frq = np.zeros(self._chars_len, dtype=np.float32)  # char frequency
-        vec_pre = np.zeros(self._chars_len, dtype=np.float32)  # preceding-position density
-        vec_suc = np.zeros(self._chars_len, dtype=np.float32)  # succeeding-position density
-
-        PHASE_FREQS = [1.0, 2.0] # frequency bands (in units of pi) for phase encoding
-        num_bands = len(PHASE_FREQS)
-        vec_phase = np.zeros(2 * num_bands * self._chars_len, dtype=np.float32) # phase-encoded position
-
-        ADJ_DIM = 64
-        vec_adj = np.zeros(ADJ_DIM, dtype=np.float32)  # adjacency-hash of (char, next-char) pairs
-
-        for i, ch in enumerate(word):
-            pos = (i + 1) / w_len
-
-            if ch in self._char_idx:
-                idx = self._char_idx[ch]
-
-                vec_frq[idx] += 1 / w_len
-                vec_pre[idx] += i               * (i + 1)       / (w_len ** 2)
-                vec_suc[idx] += (w_len - 1 - i) * (w_len - i)   / (w_len ** 2)
-
-                for k, freq in enumerate(PHASE_FREQS):
-                    theta = freq * np.pi * pos
-                    vec_phase[(2 * k) * self._chars_len + idx] += np.cos(theta) / w_len
-                    vec_phase[(2 * k + 1) * self._chars_len + idx] += np.sin(theta) / w_len
-
-                if i + 1 < w_len:
-                    next_ch = word[i + 1]
-                    if next_ch in self._char_idx:
-                        next_idx = self._char_idx[next_ch]
-                        pair_id = idx * self._chars_len + next_idx
-                        bucket = pair_id % ADJ_DIM
-                        vec_adj[bucket] += 1 / w_len
-
-        vector = np.concatenate([vec_frq, vec_pre, vec_suc, vec_phase, vec_adj])
-        return vector
-    
-    def vectorize_batch(self, words: list[str]) -> np.ndarray:
-        """
-        Batch version of vectorize(). Used for building the index and looking up queries.
-        
-        Returns:
-            np.ndarray: A 2D numpy array of shape (len(words), vector_length) containing the vector representations of the input words.
-        """
-        words = [w.strip().lower() for w in words]
-
-        PHASE_FREQS = [1.0, 2.0]
-        ADJ_DIM = 64
-        chars_len = self._chars_len
-
-        n = len(words)
-        lens = np.array([len(w) for w in words], dtype=np.int64)
-        max_len = int(lens.max())
-
-        # char -> idx lookup, -1 for unknown/padding
-        idx_all = np.full((n, max_len), -1, dtype=np.int64)
-        for r, w in enumerate(words):
-            for c, ch in enumerate(w):
-                idx_all[r, c] = self._char_idx.get(ch, -1)
-
-        i = np.arange(max_len)[None, :]          # (1, max_len)
-        w_len_col = lens[:, None]                # (n, 1)
-        mask = (i < w_len_col) & (idx_all >= 0)  # valid, in-vocab positions
-
-        word_id, i_valid = np.nonzero(mask)      # flat lists of (row, col) for valid entries
-        idx = idx_all[word_id, i_valid]
-        wl = lens[word_id].astype(np.float32)
-        pos = (i_valid + 1) / wl
-
-        flat = word_id * chars_len + idx  # flat index into a (n, chars_len) row-major array
-
-        vec_frq = np.zeros((n, chars_len), dtype=np.float32)
-        vec_pre = np.zeros((n, chars_len), dtype=np.float32)
-        vec_suc = np.zeros((n, chars_len), dtype=np.float32)
-
-        np.add.at(vec_frq.reshape(-1), flat, (1.0 / wl).astype(np.float32))
-        np.add.at(vec_pre.reshape(-1), flat,
-                (i_valid * (i_valid + 1) / (wl ** 2)).astype(np.float32))
-        np.add.at(vec_suc.reshape(-1), flat,
-                ((wl - 1 - i_valid) * (wl - i_valid) / (wl ** 2)).astype(np.float32))
-
-        # phase blocks: each band's cos/sin built as its own contiguous array,
-        # then concatenated (avoids the non-contiguous-slice pitfall)
-        phase_parts = []
-        for freq in PHASE_FREQS:
-            theta = freq * np.pi * pos
-            cos_arr = np.zeros((n, chars_len), dtype=np.float32)
-            sin_arr = np.zeros((n, chars_len), dtype=np.float32)
-            np.add.at(cos_arr.reshape(-1), flat, (np.cos(theta) / wl).astype(np.float32))
-            np.add.at(sin_arr.reshape(-1), flat, (np.sin(theta) / wl).astype(np.float32))
-            phase_parts.append(cos_arr)
-            phase_parts.append(sin_arr)
-
-        vec_phase = np.concatenate(phase_parts, axis=1)
-
-        idx_i = idx_all[:, :-1]
-        idx_j = idx_all[:, 1:]
-        valid_pair = (idx_i >= 0) & (idx_j >= 0)
-
-        word_id2, i2 = np.nonzero(valid_pair)
-        ii = idx_i[word_id2, i2]
-        jj = idx_j[word_id2, i2]
-        wl2 = lens[word_id2].astype(np.float32)
-
-        pair_id = ii * chars_len + jj
-        bucket = pair_id % ADJ_DIM
-
-        flat_adj = word_id2 * ADJ_DIM + bucket
-
-        vec_adj = np.zeros((n, ADJ_DIM), dtype=np.float32)
-        np.add.at(vec_adj.reshape(-1), flat_adj, (1.0 / wl2).astype(np.float32))
-
-        return np.concatenate([vec_frq, vec_pre, vec_suc, vec_phase, vec_adj], axis=1)
-    
     def build(self, entries: list[str]):
-        """
-        Build the FAISS index using the provided entries.
-        
-        Args:
-            entries (list[str]): A list of strings to vectorize and index.
-        """
+        """Build the FAISS index using the provided entries."""
         self.entries = entries
-        self.vectors = self.vectorize_batch(entries)
+        self.vectors = self.vectorize(entries)
         self._build_index()
-        
         return self
 
-    def save(self, filepath: str="index.zip"):
-        """
-        Save the vector representations and the FAISS index to a file for later use.
-
-        Args:
-            filepath (str, optional): The path to the file where the index should be saved. Defaults to "index.zip".
-        """
-        # Serialize the FAISS index to an in-memory byte buffer
+    def save(self, filepath: str = "index.zip"):
+        """Save the vector representations and the FAISS index to a file."""
         faiss_buffer = io.BytesIO()
         writer = faiss.PyCallbackIOWriter(faiss_buffer.write)
         faiss.write_index(self.index, writer)
-        
-        # Serialize the text data and vectors via pickle
+
         metadata_buffer = io.BytesIO()
         pickle.dump({'entries': self.entries, 'vectors': self.vectors}, metadata_buffer)
-        
-        # Zip them together into the single destination file
+
         with zipfile.ZipFile(filepath, 'w', zipfile.ZIP_DEFLATED) as zf:
             zf.writestr('metadata.pkl', metadata_buffer.getvalue())
             zf.writestr('faiss.index', faiss_buffer.getvalue())
-            
         return self
 
-    def load(self, filepath: str="index.zip"):
-        """
-        Load the vector representations from a file and reconstruct the FAISS index.
-
-        Args:
-            filepath (str, optional): The path to the file from which the index should be loaded. Defaults to "index.zip".
-        """
+    def load(self, filepath: str = "index.zip"):
+        """Load the vector representations from a file and reconstruct the FAISS index."""
         with zipfile.ZipFile(filepath, 'r') as zf:
-            # Load the text data and vectors
             metadata_bytes = zf.read('metadata.pkl')
             data = pickle.loads(metadata_bytes)
             self.entries = data['entries']
             self.vectors = data['vectors']
-            
-            # 2. Load the compiled FAISS index
+
             faiss_bytes = zf.read('faiss.index')
             reader = faiss.PyCallbackIOReader(io.BytesIO(faiss_bytes).read)
             self.index = faiss.read_index(reader)
-        
         return self
-    
-    def load_or_build(self, filepath: str, entries: list[str]):
-        """
-        Load the FAISS index from a file if it exists; otherwise, build the index from the provided entries and save it.
-        
-        Args:
-            filepath (str): The path to the file where the index should be loaded from or saved to.
-            entries (list[str]): A list of strings to vectorize and index if the index file does not exist.
-        """
-        if os.path.exists(filepath):
-            return self.load(filepath)
-        else:
-            return self.build(entries).save(filepath)
 
-    def lookup(self, queries: list[str], k: int=1):
-        """
-        Perform a similarity search on the index for a given set of queries.
-
-        Args:
-            queries (list[str]): A list of string queries to look up in the index.
-            k (int, optional): The number of nearest neighbors to retrieve for each query. Defaults to 1.
-
-        Returns:
-            list[tuple[str, list[tuple[str, float]]]]: A list of tuples, where each tuple contains:
-                - The original query string
-                - A list of `k` nearest neighbors as tuples of (matched_string, distance)
-        
-        Raises:
-            ValueError: If the index has not been built yet.
-        """
+    def lookup(self, queries: list[str], k: int = 1):
+        """Perform a similarity search on the index for a given set of queries."""
         if self.index is None:
             raise ValueError("The index has not been built yet. Please call the `build` method before performing lookups.")
-        
-        faiss.omp_set_num_threads(self.num_threads) # Ensure the number of threads is set before performing the search
-        
-        query_vectors = self.vectorize_batch(queries)
+            
+        faiss.omp_set_num_threads(self.num_threads)
+        query_vectors = self.vectorize(queries)
         distances, labels = self.index.search(query_vectors, k)
         
         results = []
         for query, idx, dists in zip(queries, labels, distances):
-            result = [(self.entries[idx], dist) for idx, dist in zip(idx, dists) if idx != -1]
+            result = [(self.entries[i], dist) for i, dist in zip(idx, dists) if i != -1]
             results.append((query, result))
-        
         return results
-    
+
     def _build_index(self):
-        """
-        Construct the FAISS HNSW Index based on the built corpus vectors.
-        
-        Args:
-            metric: The FAISS metric to use (e.g. faiss.METRIC_L1).
-            ef_construction (int): The index construction depth configuration.
-            M (int): The number of bi-directional links created for every new element.
-            ef (int): The search depth configuration.
-            
-        Returns:
-            faiss.Index: The constructed FAISS index.
-        """ 
-        
-        faiss.omp_set_num_threads(self.num_threads) # Ensure the number of threads is set before building the index
-        
+        """Construct the FAISS HNSW Index based on the built corpus vectors."""
+        faiss.omp_set_num_threads(self.num_threads)
         dim = self.vectors.shape[1]
-        
+            
         index = faiss.index_factory(dim, f"HNSW{self.M}", self.metric)
         index.hnsw.efConstruction = self.ef_construction
         index.hnsw.efSearch = self.ef
         index.add(self.vectors)
-        
         self.index = index
         return index
+    
+    def _build_context(self, words: list[str]) -> VecContext:
+        """Parses strings into the shared, neutral VecContext. Happens exactly once per batch."""
+        words = [w.strip().lower() for w in words]
+        n = len(words)
+        
+        if n == 0:
+            return VecContext(
+                words=[], num_chars=self._chars_len,
+                word_lengths=np.array([], dtype=np.int64),
+                char_matrix=np.empty((0, 0), dtype=np.int64),
+                word_ids=np.array([], dtype=np.int64),
+                char_ids=np.array([], dtype=np.int64),
+                char_positions=np.array([], dtype=np.int64),
+                expanded_word_lengths=np.array([], dtype=np.float32),
+                flat_char_indices=np.array([], dtype=np.int64)
+            )
+
+        lengths = np.array([len(w) for w in words], dtype=np.int64)
+        max_len = int(lengths.max())
+        
+        # 1. Build the neutral 2D char_matrix
+        char_matrix = np.full((n, max_len), -1, dtype=np.int64)
+        for r, w in enumerate(words):
+            for c, ch in enumerate(w):
+                char_matrix[r, c] = self._char_idx.get(ch, -1)
+                
+        # 2. Extract 1D flattened arrays for valid characters only
+        i = np.arange(max_len)[None, :]
+        mask = (i < lengths[:, None]) & (char_matrix >= 0)
+        word_ids, char_positions = np.nonzero(mask)
+        
+        char_ids = char_matrix[word_ids, char_positions]
+        exp_lengths = lengths[word_ids].astype(np.float32)
+        flat_indices = word_ids * self._chars_len + char_ids
+
+        return VecContext(
+            words=words, 
+            num_chars=self._chars_len,
+            word_lengths=lengths,
+            char_matrix=char_matrix,
+            word_ids=word_ids, 
+            char_ids=char_ids, 
+            char_positions=char_positions,
+            expanded_word_lengths=exp_lengths, 
+            flat_char_indices=flat_indices
+        )

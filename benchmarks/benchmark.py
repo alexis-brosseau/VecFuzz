@@ -23,29 +23,13 @@ DEFAULT_EDIT_LEVELS = (1, 2, 3, 4, 5, 6, 7, 8, 9)
 TYPO_TYPES = ("substitution", "transposition", "insertion", "deletion")
 
 VECFUZZ_INSTANCES = {
-    "VecFuzz C10 S10": VecFuzz(
-        metric=faiss.METRIC_L2,
-        vectorizers=[
-            Vectorizer.position_rbf.params(centers=[0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0], sigma=0.10).norm(2),
-        ]
-    ),
-    "VecFuzz C5 S18": VecFuzz(
-        metric=faiss.METRIC_L2,
-        vectorizers=[
-            Vectorizer.position_rbf.params(centers=[0.0, 0.25, 0.5, 0.75, 1.0], sigma=0.18).norm(2),
-        ]
-    ),
-    "VecFuzz C20 S5": VecFuzz(
-        metric=faiss.METRIC_L2,
-        vectorizers=[
-            Vectorizer.position_rbf.params(centers=[0.0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.0], sigma=0.05).norm(2)
-        ]
-    )
+    "VecFuzz": VecFuzz(),
+    "VecFuzz BEST": VecFuzz(vectorizers=Vectorizer.BEST),
 }
 
 SYMSPELL_INSTANCES = {
-    #"SymSpell d2/p7": SymSpell(max_dictionary_edit_distance=2, prefix_length=7),
-    #"SymSpell d3/p9": SymSpell(max_dictionary_edit_distance=3, prefix_length=9),
+    # "SymSpell d2/p7": SymSpell(max_dictionary_edit_distance=2, prefix_length=7),
+    # "SymSpell d3/p9": SymSpell(max_dictionary_edit_distance=3, prefix_length=9),
     "SymSpell d4/p12": SymSpell(max_dictionary_edit_distance=4, prefix_length=12),
 }
 
@@ -59,13 +43,13 @@ def _plot_lines(ax, x_values, series, title, xlabel, ylabel) -> None:
         "SymSpell d4/p12": "#7F1D1D",
     }
     palette = [
-        "#fb6640", 
-        "#f8c421", 
         "#49cc5c", 
         "#19aff4", 
         "#b361ff", 
         "#f15de2",
         "#f82553", 
+        "#fb6640", 
+        "#f8c421", 
     ]
     for idx, (label, y_values) in enumerate(series):
         ax.plot(
