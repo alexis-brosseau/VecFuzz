@@ -69,11 +69,10 @@ This is where the Big O trade-offs become obvious. VecFuzz achieves similar look
 ### Synthetic edit-distance sweep
 
 Dictionary of 150k words, compared against SymSpell at three delete-distance/prefix-length configs (d2/p7, d3/p9, d4/p12).
-
-*   **Substitutions**: SymSpell d4/p12 (**31.3%**) leads here over VecFuzz (**24.5%**), which remains the primary area for future algorithmic improvement.
-*   **Transpositions**: VecFuzz (**87.6%**) starts near-perfect and stays well above SymSpell d4/p12 (**46.3%**).
-*   **Insertions**: VecFuzz (**78.1%**) degrades gracefully even at 9 edits. SymSpell drops to **0%** once edits exceed its configured max distance.
-*   **Deletions**: VecFuzz (**14.3%**) is ahead of SymSpell d4/p12 (**10.7%**), though both methods struggle heavily past 2-3 deletion edits.
+*   **Substitutions**: SymSpell leads over VecFuzz, which remains the primary area for future algorithmic improvement.
+*   **Transpositions**: VecFuzz starts near-perfect and stays well above SymSpell.
+*   **Insertions**: VecFuzz degrades gracefully even at 9 edits. SymSpell drops to **0%** once edits exceed its configured max distance.
+*   **Deletions**: VecFuzz is ahead of SymSpell, though both methods struggle heavily past 2-3 deletion edits.
 
 ![Accuracy by Error Type Chart](benchmark_outputs/benchmark.png)
 
