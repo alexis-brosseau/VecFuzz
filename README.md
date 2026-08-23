@@ -75,7 +75,7 @@ Dictionary of 150k words, compared against SymSpell at three delete-distance/pre
 *   **Insertions**: VecFuzz (**78.1%**) degrades gracefully even at 9 edits. SymSpell drops to **0%** once edits exceed its configured max distance.
 *   **Deletions**: VecFuzz (**14.3%**) is ahead of SymSpell d4/p12 (**10.7%**), though both methods struggle heavily past 2-3 deletion edits.
 
-![Accuracy by Error Type Chart](benchmark_outputs/accuracy_by_error_type_and_edits.png)
+![Accuracy by Error Type Chart](benchmark_outputs/benchmark.png)
 
 ## When to use this
 *   **Large dictionaries** where SymSpell-style precomputed edit indexes get too large to fit in memory.
