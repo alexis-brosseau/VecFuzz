@@ -10,9 +10,9 @@ A **fast string matching library** that turns words into compact vectors so you 
 
 Fuzzy matching has a three-way tension between speed, memory, and accuracy. VecFuzz is designed to be competitive on all three:
 
-*   **Memory ($O(N)$ vs $O(N \cdot L^d)$)**: SymSpell’s index size is explodes combinatorially based on the max word length ($L$) and max edit distance ($d$). VecFuzz scales strictly linearly $O(N)$ with your dictionary size, completely independent of typo tolerance. Memory stays flat no matter how fuzzy you need to get.
-*   **Build Speed ($O(N \log N)$ vs $O(N \cdot L^d)$)**: SymSpell has to generate and hash every possible delete variant, leading to massive build times at higher edit distances. VecFuzz vectorizes the corpus and builds a FAISS HNSW graph, operating in $O(N \log N)$ time. It’s a slower build than SymSpell's lowest config, but it doesn't exponentially punish you for higher accuracy.
-*   **Lookup Speed ($O(\log N)$ vs $O(1)$)**: SymSpell achieves $O(1)$ hash lookups while VecFuzz traverses an HNSW graph in $O(\log N)$ time, but because it uses FAISS under the hood, it is **highly parallelizable**.
+*   **Memory**: SymSpell’s index size explodes combinatorially $O(N \cdot L^d)$ based on the max word length ($L$) and max edit distance ($d$). VecFuzz scales strictly linearly $O(N)$ with your dictionary size, completely independent of typo tolerance. Memory stays flat no matter how fuzzy you need to get.
+*   **Build Speed**: SymSpell has to generate and hash every possible delete variant, leading to massive build times $O(N \cdot L^d)$ at higher edit distances ($d$). VecFuzz vectorizes the corpus and builds a FAISS HNSW graph, operating in $O(N \log N)$ time. It’s a slower build than SymSpell's lowest config, but it doesn't exponentially punish you for higher accuracy.
+*   **Lookup Speed**: SymSpell achieves $O(1)$ hash lookups while VecFuzz traverses an HNSW graph in $O(\log N)$ time, but because it uses FAISS under the hood, it is **highly parallelizable**.
 
 If your dictionary is large, your memory budget is tight, queries need to be fast, and you can tolerate a slower build, VecFuzz is a strong pick.
 
