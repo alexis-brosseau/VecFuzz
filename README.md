@@ -27,11 +27,15 @@ You can make your own vectorizer using the `@vectorizer` decorator or use some o
 1.  **Character Frequency**: How often each letter appears.
 2.  **Positional Density**: The sum of normalized positions before/after a character, capturing the "weight" of the word's structure.
 3.  **Average Position**: The mean position of each character. 
-4.  **Phase-encoded Position**: A sinusoidal (cos/sin) expansion across frequency bands to capture global positional awareness.
-5.  **Radial Basis Function (RBF)**: A smooth, local Gaussian positional encoding.
-6.  **Adjacency Bigrams**: A fixed-size hashed count of character pairs to capture local ordering.
+4.  **Phase-encoded Position**: A sinusoidal (cos/sin) expansion across frequency bands to capture global positional awareness. The default frequency bands were chosen by sweeping candidate values and keeping the set that maximized average recall across all four typo types.
+5.  **Radial Basis Function (RBF)**: A smooth, local Gaussian positional encoding. As with the phase encoding, the number and spacing of Gaussian centers were tuned by sweeping values and selecting the configuration with the best average recall across the four typo types.
+6.  **Adjacency Bigrams**: A fixed-size hashed count of character pairs to capture local ordering. The hashed dimensionality defaults to 192; this was chosen by sweeping bucket counts and observing that recall gains diminish quickly past this point.
 
 All sub-vectors are normalized by word length, so "apple" and "apples" land close together. The sub-vectors are concatenated and indexed with FAISS HNSW under Manhattan (L1) distance; a query is vectorized the same way and the nearest neighbours in the index become the top-k candidates.
+
+### The DEFAULT configuration
+
+The default configuration uses **Frequency + Density + Bigram**. It was chosen as a speed/recall Pareto point because it gives recall close to the best of any tested combination while keeping the vector short, and therefore the index fast to build and query. Swapping in **Position Phase** or **Position RBF** does raise substitution recall, since they encode positional information more richly, but this comes at a cost: both the transposition, insertion, and deletion recall drop, and build/lookup time increases, since a richer positional encoding means a longer vector for FAISS to index and search over.
 
 ## Benchmark Highlights
 
