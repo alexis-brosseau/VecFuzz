@@ -58,11 +58,11 @@ This is where the Big O trade-offs become obvious. VecFuzz achieves similar look
 | Method | Lookup (s) | Build (s) | Size (MB) |
 | :--- | :--- | :--- | :--- |
 | VecFuzz (16 threads) | **4.81** | 42.17 | 221.11 |
+| SymSpell d2/p7 | 7.38 | **2.03** | **190.88** |
+| SymSpell d3/p9 | 7.88 | 8.79 | 842.84 |
+| SymSpell d4/p12 | 12.25 | 38.82 | 3568.23 |
 | VecFuzz (4 threads) | 16.60 | 182.25 | 221.11 |
 | VecFuzz (1 thread) | 25.71 | 345.78 | 221.11 |
-| SymSpell d4/p12 | 12.25 | 38.82 | 3568.23 |
-| SymSpell d3/p9 | 7.88 | 8.79 | 842.84 |
-| SymSpell d2/p7 | 7.38 | **2.03** | **190.88** |
 | RapidFuzz | 403.63 | N/A | N/A |
 | Levenshtein | 454.25 | N/A | N/A |
 
