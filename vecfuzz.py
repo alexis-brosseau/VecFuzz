@@ -86,6 +86,59 @@ class VectorizerOp:
         op.__name__ = f"{self.__name__}^{exponent}"
         return op
     
+    def __rpow__(self, base):
+        """Handles `base ** vectorizer`"""
+        def powered(ctx, *args, **kwargs):
+            return np.power(base, self._func(ctx, *args, **kwargs))
+        
+        op = VectorizerOp(powered)
+        op.__name__ = f"{base}^{self.__name__}"
+        return op
+    
+    def __add__(self, other):
+        """Handles `vectorizer + vectorizer` or `vectorizer + scalar`"""
+        
+        if isinstance(other, VectorizerOp):
+            def added(ctx, *args, **kwargs):
+                return self._func(ctx, *args, **kwargs) + other._func(ctx, *args, **kwargs)
+            op = VectorizerOp(added)
+            op.__name__ = f"{self.__name__}_plus_{other.__name__}"
+            return op
+        else:
+            def added_scalar(ctx, *args, **kwargs):
+                return self._func(ctx, *args, **kwargs) + other
+            op = VectorizerOp(added_scalar)
+            op.__name__ = f"{self.__name__}_plus_{other}"
+            return op
+        
+    def __radd__(self, other):
+        """Handles `scalar + vectorizer`"""
+        return self.__add__(other)
+    
+    def __sub__(self, other):
+        """Handles `vectorizer - vectorizer` or `vectorizer - scalar`"""
+        
+        if isinstance(other, VectorizerOp):
+            def subtracted(ctx, *args, **kwargs):
+                return self._func(ctx, *args, **kwargs) - other._func(ctx, *args, **kwargs)
+            op = VectorizerOp(subtracted)
+            op.__name__ = f"{self.__name__}_minus_{other.__name__}"
+            return op
+        else:
+            def subtracted_scalar(ctx, *args, **kwargs):
+                return self._func(ctx, *args, **kwargs) - other
+            op = VectorizerOp(subtracted_scalar)
+            op.__name__ = f"{self.__name__}_minus_{other}"
+            return op
+        
+    def __rsub__(self, other):
+        """Handles `scalar - vectorizer`"""
+        def subtracted_scalar(ctx, *args, **kwargs):
+            return other - self._func(ctx, *args, **kwargs)
+        op = VectorizerOp(subtracted_scalar)
+        op.__name__ = f"{other}_minus_{self.__name__}"
+        return op
+    
     def norm(self, ord: int) -> "VectorizerOp":
         """
         Returns a new VectorizerOp that normalizes the output vector 
