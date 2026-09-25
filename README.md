@@ -61,7 +61,7 @@ VecFuzz achieves the best recall at every `k` threshold, comfortably beating bru
 #### 2. Performance & Footprint
 This is where the Big O trade-offs become obvious. VecFuzz achieves similar lookup speed at a fraction of the memory of higher-order SymSpell configs.
 
-**For fairness against single-threaded baselines (SymSpell, RapidFuzz, raw Levenshtein), VecFuzz is run on a single thread here.** In practice VecFuzz's build and lookup are both highly parallelizable and scale down close to linearly with additional cores. See [Speed & Threading](#speed--threading) below for the full multi-threaded picture
+**For fairness against single-threaded baselines (SymSpell, RapidFuzz, raw Levenshtein), VecFuzz is run on a single thread here.** In practice VecFuzz's build and lookup are both highly parallelizable and scale down close to linearly with additional cores. See [Speed & Threading](#speed--threading) below for the full multi-threaded picture.
 
 | Method | Lookup (s) | Build (s) | Size (MB) |
 | :--- | :--- | :--- | :--- |
