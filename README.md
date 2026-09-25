@@ -24,7 +24,7 @@ Instead of a rigid, hardcoded pipeline, VecFuzz is built on a **composable vecto
 When you initialize VecFuzz, you can pass a custom list of mathematical feature extractors via the `vectorizers` parameter. By default, it uses a highly optimized combination, but you can mix and match them to tune the model for your specific error types.
 
 You can make your own vectorizer using the `@vectorizer` decorator or use some of the premade ones :
-1.  **Character Frequency**: How often each letter appears.
+1.  **Character Frequency**: How often each letter appears (Bag-of-Characters).
 2.  **Positional Density**: The sum of normalized positions before/after a character, capturing the "weight" of the word's structure.
 3.  **Average Position**: The mean position of each character. 
 4.  **Phase-encoded Position**: A sinusoidal (cos/sin) expansion across frequency bands to capture global positional awareness. The default frequency bands were chosen by sweeping candidate values and keeping the set that maximized average recall across all four typo types.
