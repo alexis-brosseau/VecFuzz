@@ -11,7 +11,7 @@ A **fast string matching library** that turns words into compact vectors so you 
 Fuzzy matching has a three-way tension between speed, memory, and accuracy. VecFuzz is designed to be competitive on all three:
 
 *   **Memory**: SymSpell’s index size explodes combinatorially $O(N \cdot L^d)$ based on the max word length ($L$) and max edit distance ($d$). VecFuzz scales strictly linearly $O(N)$ with your dictionary size, completely independent of typo tolerance. Memory stays flat no matter how fuzzy you need to get.
-*   **Build Speed**: SymSpell has to generate and hash every possible delete variant, leading to massive build times $O(N \cdot L^d)$ at higher edit distances ($d$). VecFuzz vectorizes the corpus and builds a FAISS HNSW graph, operating in $O(N \log N)$ time. It’s a slower build than SymSpell's lowest config, but it doesn't exponentially punish you for higher accuracy.
+*   **Build Speed**: SymSpell has to generate and hash every possible delete variant, leading to massive build times $O(N \cdot L^d)$ at higher edit distances ($d$). VecFuzz vectorizes the corpus and builds a FAISS HNSW graph, operating in $O(N \log N)$ time, and that build is **highly parallelizable**: on a single thread it's slower than SymSpell's lowest config, but it scales down close to linearly with additional threads.
 *   **Lookup Speed**: SymSpell achieves $O(1)$ hash lookups while VecFuzz traverses an HNSW graph in $O(\log N)$ time, but because it uses FAISS under the hood, it is **highly parallelizable**.
 
 If your dictionary is large, your memory budget is tight, queries need to be fast, and you can tolerate a slower build, VecFuzz is a strong pick.
@@ -37,17 +37,23 @@ All sub-vectors are normalized by word length, so "apple" and "apples" land clos
 
 The default configuration uses **Frequency + Density + Bigram**. It was chosen as a speed/recall Pareto point because it gives recall close to the best of any tested combination while keeping the vector short, and therefore the index fast to build and query. Swapping in **Position Phase** or **Position RBF** does raise substitution recall, since they encode positional information more richly, but this comes at a cost: both the transposition, insertion, and deletion recall drop, and build/lookup time increases, since a richer positional encoding means a longer vector for FAISS to index and search over.
 
+### The LITE configuration
+
+LITE only uses **Density**, nothing else. It's for cases where build time, index size, or lookup latency matter more than squeezing out the last few points of recall. It trades an average of 1 points of recall for each error type, and in exchange is roughly half the build time, lookup time, and memory footprint of DEFAULT.
+
+
 ## Benchmark Highlights
 
 ### Real-world human errors (Birkbeck Spelling Error Corpus)
-Tested on a ~160k word dictionary using non-synthetic human misspellings (phonetic errors, dysgraphia, multi-error handwriting slips) on a Ryzen 9 365.
+Tested on a ~160k word dictionary using non-synthetic human misspellings (phonetic errors, dysgraphia, multi-error handwriting slips) on a Intel Xeon E5-2699 v4.
 
 #### 1. Recall Accuracy
 VecFuzz achieves the best recall at every `k` threshold, comfortably beating brute-force methods and SymSpell.
 
 | Method | Recall@1 | Recall@5 | Recall@10 | Recall@25 | Recall@100 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **VecFuzz** | **36.33%** | **54.96%** | **61.39%** | **68.83%** | **77.94%** |
+| VecFuzz DEFAULT | **36.33%** | **54.96%** | **61.39%** | **68.83%** | **77.94%** |
+| VecFuzz LITE | 34.20% | 52.47% | 59.02% | 66.58% | 75.65% |
 | SymSpell | 34.05% | 48.92% | 51.94% | 54.58% | 57.70% |
 | RapidFuzz | 32.64% | 51.74% | 58.54% | 66.56% | 76.67% |
 | Levenshtein | 28.10% | 46.73% | 54.20% | 62.64% | 72.35% |
@@ -55,16 +61,23 @@ VecFuzz achieves the best recall at every `k` threshold, comfortably beating bru
 #### 2. Performance & Footprint
 This is where the Big O trade-offs become obvious. VecFuzz achieves similar lookup speed at a fraction of the memory of higher-order SymSpell configs.
 
+**For fairness against single-threaded baselines (SymSpell, RapidFuzz, raw Levenshtein), VecFuzz is run on a single thread here.** In practice VecFuzz's build and lookup are both highly parallelizable and scale down close to linearly with additional cores. See [Speed & Threading](#speed--threading) below for the full multi-threaded picture
+
 | Method | Lookup (s) | Build (s) | Size (MB) |
 | :--- | :--- | :--- | :--- |
-| VecFuzz (16 threads) | **4.81** | 42.17 | 221.11 |
-| SymSpell d2/p7 | 7.38 | **2.03** | **190.88** |
-| SymSpell d3/p9 | 7.88 | 8.79 | 842.84 |
-| SymSpell d4/p12 | 12.25 | 38.82 | 3568.23 |
-| VecFuzz (4 threads) | 16.60 | 182.25 | 221.11 |
-| VecFuzz (1 thread) | 25.71 | 345.78 | 221.11 |
-| RapidFuzz | 403.63 | N/A | N/A |
-| Levenshtein | 454.25 | N/A | N/A |
+| VecFuzz LITE                 | **20.829s**  | 223.771s  | **103.32**|
+| SymSpell d2/p7               | 37.718s      | **3.063s**| 190.88    |
+| SymSpell d3/p9               | 37.644s      | 13.729s   | 842.84    |
+| VecFuzz DEFAULT              | 37.874s      | 464.179s  | 221.11    |
+| SymSpell d4/p12              | 46.588s      | 51.406s   | 3568.23   |
+| RapidFuzz                    | 645.669s     | N/A       | N/A       |
+| Levenshtein                  | 794.216s     | N/A       | N/A       |
+
+### Speed & Threading
+
+Both build and lookup are backed by FAISS and scale well with available cores. Measured on a 150k-word dictionary for build time, and looking up 15k queries against that index for lookup time.
+
+![VecFuzz compute time by number of threads](benchmark_outputs/benchmark_speed_k1.png)
 
 ### Synthetic edit-distance sweep
 
@@ -74,7 +87,7 @@ Dictionary of 150k words, compared against SymSpell at three delete-distance/pre
 *   **Insertions**: VecFuzz degrades gracefully even at 9 edits. SymSpell drops to **0%** once edits exceed its configured max distance.
 *   **Deletions**: VecFuzz is ahead of SymSpell, though both methods struggle heavily past 2-3 deletion edits.
 
-![Accuracy by Error Type Chart](benchmark_outputs/benchmark.png)
+![Accuracy by Error Type Chart](benchmark_outputs/benchmark_accuracy_k1.png)
 
 ## When to use this
 *   **Large dictionaries** where SymSpell-style precomputed edit indexes get too large to fit in memory.

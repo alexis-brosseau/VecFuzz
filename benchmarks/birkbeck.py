@@ -161,11 +161,18 @@ def run_birkbeck_benchmark(save_to_file=False):
 
     # Build VecFuzz index
     print("Building VecFuzz index (preprocessing)...")
+    
     t0_build = time()
-    vecfuzz_instance = VecFuzz(threads=16).build(vocab)
+    vecfuzz_DEFAULT_instance = VecFuzz(vectorizers=Vectorizer.DEFAULT, threads=1).build(vocab)
     t1_build = time()
-    vecfuzz_build_time = t1_build - t0_build
-    vecfuzz_size = asizeof.asizeof(vecfuzz_instance) / (1024 * 1024)
+    vecfuzz_DEFAULT_build_time = t1_build - t0_build
+    vecfuzz_DEFAULT_size = asizeof.asizeof(vecfuzz_DEFAULT_instance) / (1024 * 1024)
+    
+    t0_build = time()
+    vecfuzz_LITE_instance = VecFuzz(vectorizers=Vectorizer.LITE, threads=1).build(vocab)
+    t1_build = time()
+    vecfuzz_LITE_build_time = t1_build - t0_build
+    vecfuzz_LITE_size = asizeof.asizeof(vecfuzz_LITE_instance) / (1024 * 1024)
 
     # Build SymSpell dictionary
     print("Building SymSpell dictionary (preprocessing)...")
@@ -183,7 +190,8 @@ def run_birkbeck_benchmark(save_to_file=False):
 
     #region Methods to benchmark
     methods = [
-        (candidates_vecfuzz_batch, "VecFuzz", [vecfuzz_instance], True),
+        (candidates_vecfuzz_batch, "VecFuzz DEFAULT", [vecfuzz_DEFAULT_instance], True),
+        (candidates_vecfuzz_batch, "VecFuzz LITE", [vecfuzz_LITE_instance], True),
         (candidates_symspell, "SymSpell", [symspell_instance], False),
         (candidates_rapidfuzz, "RapidFuzz", [], False),
         (candidates_levenshtein, "Levenshtein", [], False),
@@ -199,29 +207,17 @@ def run_birkbeck_benchmark(save_to_file=False):
         if name == "SymSpell":
             res["build_time"] = symspell_build_time
             res["build_size"] = symspell_size
-        elif name == "VecFuzz":
-            res["build_time"] = vecfuzz_build_time
-            res["build_size"] = vecfuzz_size
+        elif name == "VecFuzz DEFAULT":
+            res["build_time"] = vecfuzz_DEFAULT_build_time
+            res["build_size"] = vecfuzz_DEFAULT_size
+        elif name == "VecFuzz LITE":
+            res["build_time"] = vecfuzz_LITE_build_time
+            res["build_size"] = vecfuzz_LITE_size
         else:
             res["build_time"] = 0.0
             res["build_size"] = 0.0
 
         results.append(res)
-
-    metrics_to_rank = [
-        ("recall1", True),
-        ("recall5", True),
-        ("recall10", True),
-        ("recall25", True),
-        ("recall100", True),
-        ("time_sec", False),
-    ]
-    medals = {r["name"]: {} for r in results}
-    for key, higher_is_better in metrics_to_rank:
-        sorted_res = sorted(results, key=lambda x: x[key], reverse=higher_is_better)
-        for i, rank_medal in enumerate(["🥇", "🥈", "🥉"]):
-            if i < len(sorted_res):
-                medals[sorted_res[i]["name"]][key] = " " + rank_medal
 
     headers = [
         "Method",
@@ -239,12 +235,12 @@ def run_birkbeck_benchmark(save_to_file=False):
         rows.append(
             [
                 r["name"],
-                f"{r['recall1'] * 100:.2f}%{medals[r['name']].get('recall1', '')}",
-                f"{r['recall5'] * 100:.2f}%{medals[r['name']].get('recall5', '')}",
-                f"{r['recall10'] * 100:.2f}%{medals[r['name']].get('recall10', '')}",
-                f"{r['recall25'] * 100:.2f}%{medals[r['name']].get('recall25', '')}",
-                f"{r['recall100'] * 100:.2f}%{medals[r['name']].get('recall100', '')}",
-                f"{r['time_sec']:.3f}s{medals[r['name']].get('time_sec', '')}",
+                f"{r['recall1'] * 100:.2f}%",
+                f"{r['recall5'] * 100:.2f}%",
+                f"{r['recall10'] * 100:.2f}%",
+                f"{r['recall25'] * 100:.2f}%",
+                f"{r['recall100'] * 100:.2f}%",
+                f"{r['time_sec']:.3f}s",
                 f"{r['build_time']:.3f}s" if r["build_time"] > 0 else "N/A",
                 f"{r['build_size']:.2f}" if r["build_size"] > 0 else "N/A",
             ]

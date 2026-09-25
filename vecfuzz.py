@@ -47,6 +47,7 @@ class VectorizerOp:
         return self._func(ctx, *args, **kwargs)
 
     def __mul__(self, scalar):
+        """Handles `vectorizer * scalar`"""
         def scaled(ctx, *args, **kwargs):
             return self._func(ctx, *args, **kwargs) * scalar
         op = VectorizerOp(scaled)
@@ -54,9 +55,11 @@ class VectorizerOp:
         return op
 
     def __rmul__(self, scalar):
+        """Handles `scalar * vectorizer`"""
         return self.__mul__(scalar)
 
     def __truediv__(self, scalar):
+        """Handles `vectorizer / scalar`"""
         if scalar == 0: raise ZeroDivisionError("Cannot divide vectorizer by zero")
         def scaled(ctx, *args, **kwargs):
             return self._func(ctx, *args, **kwargs) / scalar
@@ -65,6 +68,7 @@ class VectorizerOp:
         return op
 
     def __rtruediv__(self, scalar):
+        """Handles `scalar / vectorizer`"""
         if scalar == 0:
             def zero_func(ctx, *args, **kwargs):
                 return np.zeros_like(self._func(ctx, *args, **kwargs))
@@ -201,19 +205,8 @@ class Vectorizer:
 
     @staticmethod
     @vectorizer
-    def density_backward(ctx: VecContext) -> np.ndarray:
-        """Preceding-position density: sum of positions that came before each character."""
-        n = ctx.word_lengths.shape[0]
-        vec = np.zeros((n, ctx.num_chars), dtype=np.float32)
-        pos = ctx.char_positions
-        wl = ctx.expanded_word_lengths
-        np.add.at(vec.reshape(-1), ctx.flat_char_indices, (pos * (pos + 1) / (wl ** 2)).astype(np.float32))
-        return vec
-
-    @staticmethod
-    @vectorizer
-    def density_forward(ctx: VecContext) -> np.ndarray:
-        """Succeeding-position density: sum of positions that came after each character."""
+    def density_start(ctx: VecContext) -> np.ndarray:
+        """Start-position density: a quadratic function peaking at the start of the word."""
         n = ctx.word_lengths.shape[0]
         vec = np.zeros((n, ctx.num_chars), dtype=np.float32)
         pos = ctx.char_positions
@@ -223,14 +216,41 @@ class Vectorizer:
     
     @staticmethod
     @vectorizer
+    def density_mid(ctx: VecContext) -> np.ndarray:
+        """
+        Mid-position density: a quadratic function peaking at the center of the word.
+        """
+        n = ctx.word_lengths.shape[0]
+        pos = ctx.char_positions
+        wl = ctx.expanded_word_lengths
+        r = (pos.astype(np.float32) + 0.5) / wl
+        vec = np.zeros((n, ctx.num_chars), dtype=np.float32)
+        weight = 2.0 * r * (1.0 - r)
+        np.add.at(vec.reshape(-1), ctx.flat_char_indices, weight.astype(np.float32))
+        return vec
+    
+    @staticmethod
+    @vectorizer
+    def density_end(ctx: VecContext) -> np.ndarray:
+        """End-position density: a quadratic function peaking at the end of the word."""
+        n = ctx.word_lengths.shape[0]
+        vec = np.zeros((n, ctx.num_chars), dtype=np.float32)
+        pos = ctx.char_positions
+        wl = ctx.expanded_word_lengths
+        np.add.at(vec.reshape(-1), ctx.flat_char_indices, (pos * (pos + 1) / (wl ** 2)).astype(np.float32))
+        return vec
+    
+    @staticmethod
+    @vectorizer
     def density(ctx: VecContext) -> np.ndarray:
         """
-            Concatenation of backward and forward density vectors.
+            Concatenation of start and end density vectors.
         """
         
-        backward = Vectorizer.density_backward(ctx)
-        forward = Vectorizer.density_forward(ctx)
-        return np.concatenate([backward, forward], axis=1)
+        start = Vectorizer.density_start(ctx)
+        mid = Vectorizer.density_mid(ctx)
+        end = Vectorizer.density_end(ctx)
+        return np.concatenate([start, mid, end], axis=1)
     
     @staticmethod
     @vectorizer
@@ -373,10 +393,14 @@ class Vectorizer:
 
     DEFAULT = [
         frequency,
-        density,
+        density_start,
+        density_end,
         bigram,
     ]
 
+    LITE = [
+        density,
+    ]
 
 class VecFuzz:
     """

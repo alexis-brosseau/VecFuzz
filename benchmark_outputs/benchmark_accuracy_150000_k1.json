@@ -4,7 +4,7 @@
   "seed_base": 0,
   "sessions_run": 20,
   "vecfuzz": {
-    "VecFuzz": {
+    "VecFuzz DEFAULT": {
       "overall": {
         "count": 10800000.0,
         "recall": 5522706.0
@@ -219,163 +219,379 @@
           }
         }
       }
-    }
-  },
-  "symspell": {
-    "SymSpell d2/p7": {
+    },
+    "VecFuzz LITE": {
       "overall": {
         "count": 10800000.0,
-        "recall": 2288341.0
+        "recall": 5404146.0
       },
       "by_error_type": {
         "substitution": {
           "count": 2700000.0,
-          "recall": 549760.0
+          "recall": 602051.0
         },
         "transposition": {
           "count": 2700000.0,
-          "recall": 923834.0
+          "recall": 2366469.0
         },
         "insertion": {
           "count": 2700000.0,
-          "recall": 562200.0
+          "recall": 2080760.0
         },
         "deletion": {
           "count": 2700000.0,
-          "recall": 252547.0
+          "recall": 354866.0
         }
       },
       "by_edits": {
         "1": {
           "count": 1200000.0,
-          "recall": 999928.0
+          "recall": 1058838.0
         },
         "2": {
           "count": 1200000.0,
-          "recall": 753013.0
+          "recall": 833242.0
         },
         "3": {
           "count": 1200000.0,
-          "recall": 168850.0
+          "recall": 663176.0
         },
         "4": {
           "count": 1200000.0,
-          "recall": 124496.0
+          "recall": 568366.0
         },
         "5": {
           "count": 1200000.0,
-          "recall": 67374.0
+          "recall": 518433.0
         },
         "6": {
           "count": 1200000.0,
-          "recall": 63971.0
+          "recall": 480479.0
         },
         "7": {
           "count": 1200000.0,
-          "recall": 41339.0
+          "recall": 452792.0
         },
         "8": {
           "count": 1200000.0,
-          "recall": 40393.0
+          "recall": 425677.0
         },
         "9": {
           "count": 1200000.0,
-          "recall": 28977.0
+          "recall": 403143.0
         }
       },
       "by_error_and_edits": {
         "substitution": {
           "1": {
             "count": 300000.0,
-            "recall": 257529.0
+            "recall": 255012.0
           },
           "2": {
             "count": 300000.0,
-            "recall": 203593.0
+            "recall": 169010.0
           },
           "3": {
             "count": 300000.0,
-            "recall": 59771.0
+            "recall": 90725.0
           },
           "4": {
             "count": 300000.0,
-            "recall": 18706.0
+            "recall": 45087.0
           },
           "5": {
             "count": 300000.0,
-            "recall": 6170.0
+            "recall": 22030.0
           },
           "6": {
             "count": 300000.0,
-            "recall": 2405.0
+            "recall": 10832.0
           },
           "7": {
             "count": 300000.0,
-            "recall": 939.0
+            "recall": 5314.0
           },
           "8": {
             "count": 300000.0,
-            "recall": 434.0
+            "recall": 2641.0
           },
           "9": {
             "count": 300000.0,
-            "recall": 213.0
+            "recall": 1400.0
           }
         },
         "transposition": {
           "1": {
             "count": 300000.0,
-            "recall": 264120.0
+            "recall": 297978.0
           },
           "2": {
             "count": 300000.0,
-            "recall": 212952.0
+            "recall": 284933.0
           },
           "3": {
             "count": 300000.0,
-            "recall": 109079.0
+            "recall": 278434.0
           },
           "4": {
             "count": 300000.0,
-            "recall": 105790.0
+            "recall": 267946.0
           },
           "5": {
             "count": 300000.0,
-            "recall": 61204.0
+            "recall": 262115.0
           },
           "6": {
             "count": 300000.0,
-            "recall": 61566.0
+            "recall": 252814.0
           },
           "7": {
             "count": 300000.0,
-            "recall": 40400.0
+            "recall": 247368.0
           },
           "8": {
             "count": 300000.0,
-            "recall": 39959.0
+            "recall": 239766.0
           },
           "9": {
             "count": 300000.0,
-            "recall": 28764.0
+            "recall": 235115.0
           }
         },
         "insertion": {
           "1": {
             "count": 300000.0,
-            "recall": 288179.0
+            "recall": 285891.0
           },
           "2": {
             "count": 300000.0,
-            "recall": 274021.0
+            "recall": 278391.0
           },
           "3": {
             "count": 300000.0,
-            "recall": 0.0
+            "recall": 265707.0
           },
           "4": {
             "count": 300000.0,
-            "recall": 0.0
+            "recall": 250468.0
+          },
+          "5": {
+            "count": 300000.0,
+            "recall": 233680.0
+          },
+          "6": {
+            "count": 300000.0,
+            "recall": 216734.0
+          },
+          "7": {
+            "count": 300000.0,
+            "recall": 200059.0
+          },
+          "8": {
+            "count": 300000.0,
+            "recall": 183229.0
+          },
+          "9": {
+            "count": 300000.0,
+            "recall": 166601.0
+          }
+        },
+        "deletion": {
+          "1": {
+            "count": 300000.0,
+            "recall": 219957.0
+          },
+          "2": {
+            "count": 300000.0,
+            "recall": 100908.0
+          },
+          "3": {
+            "count": 300000.0,
+            "recall": 28310.0
+          },
+          "4": {
+            "count": 300000.0,
+            "recall": 4865.0
+          },
+          "5": {
+            "count": 300000.0,
+            "recall": 608.0
+          },
+          "6": {
+            "count": 300000.0,
+            "recall": 99.0
+          },
+          "7": {
+            "count": 300000.0,
+            "recall": 51.0
+          },
+          "8": {
+            "count": 300000.0,
+            "recall": 41.0
+          },
+          "9": {
+            "count": 300000.0,
+            "recall": 27.0
+          }
+        }
+      }
+    }
+  },
+  "symspell": {
+        "SymSpell d4/p12": {
+      "overall": {
+        "count": 10800000.0,
+        "recall": 3450271.0
+      },
+      "by_error_type": {
+        "substitution": {
+          "count": 2700000.0,
+          "recall": 845895.0
+        },
+        "transposition": {
+          "count": 2700000.0,
+          "recall": 1251503.0
+        },
+        "insertion": {
+          "count": 2700000.0,
+          "recall": 1062598.0
+        },
+        "deletion": {
+          "count": 2700000.0,
+          "recall": 290275.0
+        }
+      },
+      "by_edits": {
+        "1": {
+          "count": 1200000.0,
+          "recall": 1010873.0
+        },
+        "2": {
+          "count": 1200000.0,
+          "recall": 765096.0
+        },
+        "3": {
+          "count": 1200000.0,
+          "recall": 605438.0
+        },
+        "4": {
+          "count": 1200000.0,
+          "recall": 501804.0
+        },
+        "5": {
+          "count": 1200000.0,
+          "recall": 183072.0
+        },
+        "6": {
+          "count": 1200000.0,
+          "recall": 133844.0
+        },
+        "7": {
+          "count": 1200000.0,
+          "recall": 101629.0
+        },
+        "8": {
+          "count": 1200000.0,
+          "recall": 80877.0
+        },
+        "9": {
+          "count": 1200000.0,
+          "recall": 67638.0
+        }
+      },
+      "by_error_and_edits": {
+        "substitution": {
+          "1": {
+            "count": 300000.0,
+            "recall": 257252.0
+          },
+          "2": {
+            "count": 300000.0,
+            "recall": 203247.0
+          },
+          "3": {
+            "count": 300000.0,
+            "recall": 152383.0
+          },
+          "4": {
+            "count": 300000.0,
+            "recall": 110142.0
+          },
+          "5": {
+            "count": 300000.0,
+            "recall": 62420.0
+          },
+          "6": {
+            "count": 300000.0,
+            "recall": 32398.0
+          },
+          "7": {
+            "count": 300000.0,
+            "recall": 16032.0
+          },
+          "8": {
+            "count": 300000.0,
+            "recall": 7939.0
+          },
+          "9": {
+            "count": 300000.0,
+            "recall": 4082.0
+          }
+        },
+        "transposition": {
+          "1": {
+            "count": 300000.0,
+            "recall": 264810.0
+          },
+          "2": {
+            "count": 300000.0,
+            "recall": 215057.0
+          },
+          "3": {
+            "count": 300000.0,
+            "recall": 180142.0
+          },
+          "4": {
+            "count": 300000.0,
+            "recall": 147370.0
+          },
+          "5": {
+            "count": 300000.0,
+            "recall": 120639.0
+          },
+          "6": {
+            "count": 300000.0,
+            "recall": 101430.0
+          },
+          "7": {
+            "count": 300000.0,
+            "recall": 85585.0
+          },
+          "8": {
+            "count": 300000.0,
+            "recall": 72927.0
+          },
+          "9": {
+            "count": 300000.0,
+            "recall": 63543.0
+          }
+        },
+        "insertion": {
+          "1": {
+            "count": 300000.0,
+            "recall": 288037.0
+          },
+          "2": {
+            "count": 300000.0,
+            "recall": 273773.0
+          },
+          "3": {
+            "count": 300000.0,
+            "recall": 258417.0
+          },
+          "4": {
+            "count": 300000.0,
+            "recall": 242371.0
           },
           "5": {
             "count": 300000.0,
@@ -401,39 +617,39 @@
         "deletion": {
           "1": {
             "count": 300000.0,
-            "recall": 190100.0
+            "recall": 200774.0
           },
           "2": {
             "count": 300000.0,
-            "recall": 62447.0
+            "recall": 73019.0
           },
           "3": {
             "count": 300000.0,
-            "recall": 0.0
+            "recall": 14496.0
           },
           "4": {
             "count": 300000.0,
-            "recall": 0.0
+            "recall": 1921.0
           },
           "5": {
             "count": 300000.0,
-            "recall": 0.0
+            "recall": 13.0
           },
           "6": {
             "count": 300000.0,
-            "recall": 0.0
+            "recall": 16.0
           },
           "7": {
             "count": 300000.0,
-            "recall": 0.0
+            "recall": 12.0
           },
           "8": {
             "count": 300000.0,
-            "recall": 0.0
+            "recall": 11.0
           },
           "9": {
             "count": 300000.0,
-            "recall": 0.0
+            "recall": 13.0
           }
         }
       }
@@ -654,160 +870,160 @@
         }
       }
     },
-    "SymSpell d4/p12": {
+    "SymSpell d2/p7": {
       "overall": {
         "count": 10800000.0,
-        "recall": 3450271.0
+        "recall": 2288341.0
       },
       "by_error_type": {
         "substitution": {
           "count": 2700000.0,
-          "recall": 845895.0
+          "recall": 549760.0
         },
         "transposition": {
           "count": 2700000.0,
-          "recall": 1251503.0
+          "recall": 923834.0
         },
         "insertion": {
           "count": 2700000.0,
-          "recall": 1062598.0
+          "recall": 562200.0
         },
         "deletion": {
           "count": 2700000.0,
-          "recall": 290275.0
+          "recall": 252547.0
         }
       },
       "by_edits": {
         "1": {
           "count": 1200000.0,
-          "recall": 1010873.0
+          "recall": 999928.0
         },
         "2": {
           "count": 1200000.0,
-          "recall": 765096.0
+          "recall": 753013.0
         },
         "3": {
           "count": 1200000.0,
-          "recall": 605438.0
+          "recall": 168850.0
         },
         "4": {
           "count": 1200000.0,
-          "recall": 501804.0
+          "recall": 124496.0
         },
         "5": {
           "count": 1200000.0,
-          "recall": 183072.0
+          "recall": 67374.0
         },
         "6": {
           "count": 1200000.0,
-          "recall": 133844.0
+          "recall": 63971.0
         },
         "7": {
           "count": 1200000.0,
-          "recall": 101629.0
+          "recall": 41339.0
         },
         "8": {
           "count": 1200000.0,
-          "recall": 80877.0
+          "recall": 40393.0
         },
         "9": {
           "count": 1200000.0,
-          "recall": 67638.0
+          "recall": 28977.0
         }
       },
       "by_error_and_edits": {
         "substitution": {
           "1": {
             "count": 300000.0,
-            "recall": 257252.0
+            "recall": 257529.0
           },
           "2": {
             "count": 300000.0,
-            "recall": 203247.0
+            "recall": 203593.0
           },
           "3": {
             "count": 300000.0,
-            "recall": 152383.0
+            "recall": 59771.0
           },
           "4": {
             "count": 300000.0,
-            "recall": 110142.0
+            "recall": 18706.0
           },
           "5": {
             "count": 300000.0,
-            "recall": 62420.0
+            "recall": 6170.0
           },
           "6": {
             "count": 300000.0,
-            "recall": 32398.0
+            "recall": 2405.0
           },
           "7": {
             "count": 300000.0,
-            "recall": 16032.0
+            "recall": 939.0
           },
           "8": {
             "count": 300000.0,
-            "recall": 7939.0
+            "recall": 434.0
           },
           "9": {
             "count": 300000.0,
-            "recall": 4082.0
+            "recall": 213.0
           }
         },
         "transposition": {
           "1": {
             "count": 300000.0,
-            "recall": 264810.0
+            "recall": 264120.0
           },
           "2": {
             "count": 300000.0,
-            "recall": 215057.0
+            "recall": 212952.0
           },
           "3": {
             "count": 300000.0,
-            "recall": 180142.0
+            "recall": 109079.0
           },
           "4": {
             "count": 300000.0,
-            "recall": 147370.0
+            "recall": 105790.0
           },
           "5": {
             "count": 300000.0,
-            "recall": 120639.0
+            "recall": 61204.0
           },
           "6": {
             "count": 300000.0,
-            "recall": 101430.0
+            "recall": 61566.0
           },
           "7": {
             "count": 300000.0,
-            "recall": 85585.0
+            "recall": 40400.0
           },
           "8": {
             "count": 300000.0,
-            "recall": 72927.0
+            "recall": 39959.0
           },
           "9": {
             "count": 300000.0,
-            "recall": 63543.0
+            "recall": 28764.0
           }
         },
         "insertion": {
           "1": {
             "count": 300000.0,
-            "recall": 288037.0
+            "recall": 288179.0
           },
           "2": {
             "count": 300000.0,
-            "recall": 273773.0
+            "recall": 274021.0
           },
           "3": {
             "count": 300000.0,
-            "recall": 258417.0
+            "recall": 0.0
           },
           "4": {
             "count": 300000.0,
-            "recall": 242371.0
+            "recall": 0.0
           },
           "5": {
             "count": 300000.0,
@@ -833,39 +1049,39 @@
         "deletion": {
           "1": {
             "count": 300000.0,
-            "recall": 200774.0
+            "recall": 190100.0
           },
           "2": {
             "count": 300000.0,
-            "recall": 73019.0
+            "recall": 62447.0
           },
           "3": {
             "count": 300000.0,
-            "recall": 14496.0
+            "recall": 0.0
           },
           "4": {
             "count": 300000.0,
-            "recall": 1921.0
+            "recall": 0.0
           },
           "5": {
             "count": 300000.0,
-            "recall": 13.0
+            "recall": 0.0
           },
           "6": {
             "count": 300000.0,
-            "recall": 16.0
+            "recall": 0.0
           },
           "7": {
             "count": 300000.0,
-            "recall": 12.0
+            "recall": 0.0
           },
           "8": {
             "count": 300000.0,
-            "recall": 11.0
+            "recall": 0.0
           },
           "9": {
             "count": 300000.0,
-            "recall": 13.0
+            "recall": 0.0
           }
         }
       }

@@ -12,6 +12,7 @@ from time import perf_counter
 from unicodedata import normalize
 from spellchecker import SpellChecker
 from symspellpy import SymSpell, Verbosity
+import faiss
 
 import matplotlib
 matplotlib.use("Agg")
@@ -20,32 +21,76 @@ import matplotlib.pyplot as plt
 DEFAULT_EDIT_LEVELS = (1, 2, 3, 4, 5, 6, 7, 8, 9)
 TYPO_TYPES = ("substitution", "transposition", "insertion", "deletion")
 
+def _make_vecfuzz(vectorizers=Vectorizer.DEFAULT):
+    return VecFuzz(vectorizers=vectorizers, metric=faiss.METRIC_L1)
+
 VECFUZZ_INSTANCES = {
-    "VecFuzz": VecFuzz(),
+    "VecFuzz DEFAULT": _make_vecfuzz(vectorizers=Vectorizer.DEFAULT),
+    "VecFuzz LITE": _make_vecfuzz(vectorizers=Vectorizer.LITE),
     
     # Ablation instances
-    # "Frequency": VecFuzz(vectorizers=[Vectorizer.frequency]),
-    # "Density": VecFuzz(vectorizers=[Vectorizer.density]),
-    # "Postion Avg": VecFuzz(vectorizers=[Vectorizer.position_avg]),
-    # "Position Phase": VecFuzz(vectorizers=[Vectorizer.position_phase]),
-    # "Position RBF": VecFuzz(vectorizers=[Vectorizer.position_rbf]),
-    # "Bigram": VecFuzz(vectorizers=[Vectorizer.bigram]),
+    # "Frequency": _make_vecfuzz(vectorizers=[Vectorizer.frequency]),
+    # "Density": _make_vecfuzz(vectorizers=[Vectorizer.density]),
+    # "Postion Avg": _make_vecfuzz(vectorizers=[Vectorizer.position_avg]),
+    # "Position Phase": _make_vecfuzz(vectorizers=[Vectorizer.position_phase]),
+    # "Position RBF": _make_vecfuzz(vectorizers=[Vectorizer.position_rbf]),
+    # "Bigram": _make_vecfuzz(vectorizers=[Vectorizer.bigram]),
+    
+    # Dual Ablation instances
+    # "Freq + Density": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.density]),
+    # "Freq + Pos Avg": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_avg]),
+    # "Freq + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_phase]),
+    # "Freq + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_rbf]),
+    # "Freq + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.bigram]),
+    # "Density + Pos Avg": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_avg]),
+    # "Density + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_phase]),
+    # "Density + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_rbf]),
+    # "Density + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.bigram]),
+    # "Pos Avg + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.position_phase]),
+    # "Pos Avg + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.position_rbf]),
+    # "Pos Avg + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.bigram]),
+    # "Pos Phase + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.position_phase, Vectorizer.position_rbf]),
+    # "Pos Phase + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.position_phase, Vectorizer.bigram]),
+    # "Pos RBF + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.position_rbf, Vectorizer.bigram]),
+    
+    # Triple Ablation instances
+    # "Freq + Density + Pos Avg": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.density, Vectorizer.position_avg]),
+    # "Freq + Density + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.density, Vectorizer.position_phase]),
+    # "Freq + Density + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.density, Vectorizer.position_rbf]),
+    # "Freq + Density + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.density, Vectorizer.bigram]),
+    # "Freq + Pos Avg + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_avg, Vectorizer.position_phase]),
+    # "Freq + Pos Avg + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_avg, Vectorizer.position_rbf]),
+    # "Freq + Pos Avg + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_avg, Vectorizer.bigram]),
+    # "Freq + Pos Phase + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_phase, Vectorizer.position_rbf]),
+    # "Freq + Pos Phase + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_phase, Vectorizer.bigram]),
+    # "Freq + Pos RBF + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_rbf, Vectorizer.bigram]),
+    # "Density + Pos Avg + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_avg, Vectorizer.position_phase]),
+    # "Density + Pos Avg + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_avg, Vectorizer.position_rbf]),
+    # "Density + Pos Avg + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_avg, Vectorizer.bigram]),
+    # "Density + Pos Phase + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_phase, Vectorizer.position_rbf]),
+    # "Density + Pos Phase + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_phase, Vectorizer.bigram]),
+    # "Density + Pos RBF + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_rbf, Vectorizer.bigram]),
+    # "Pos Avg + Pos Phase + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.position_phase, Vectorizer.position_rbf]),
+    # "Pos Avg + Pos Phase + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.position_phase, Vectorizer.bigram]),
+    # "Pos Avg + Pos RBF + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.position_rbf, Vectorizer.bigram]),
+    # "Pos Phase + Pos RBF + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.position_phase, Vectorizer.position_rbf, Vectorizer.bigram]),
 }
 
 SYMSPELL_INSTANCES = {
-    "SymSpell d2/p7": SymSpell(max_dictionary_edit_distance=2, prefix_length=7),
-    "SymSpell d3/p9": SymSpell(max_dictionary_edit_distance=3, prefix_length=9),
     "SymSpell d4/p12": SymSpell(max_dictionary_edit_distance=4, prefix_length=12),
+    "SymSpell d3/p9": SymSpell(max_dictionary_edit_distance=3, prefix_length=9),
+    "SymSpell d2/p7": SymSpell(max_dictionary_edit_distance=2, prefix_length=7),
 }
 
 _stop_requested = False
 
 def _plot_lines(ax, x_values, series, title, xlabel, ylabel) -> None:
     color_map = {
-        "VecFuzz": "#1D4ED8",
-        "SymSpell d2/p7": "#FCA5A5",
-        "SymSpell d3/p9": "#EF4444",
+        "VecFuzz DEFAULT": "#1D4ED8",
+        "VecFuzz LITE": "#3B82F6",
         "SymSpell d4/p12": "#7F1D1D",
+        "SymSpell d3/p9": "#EF4444",
+        "SymSpell d2/p7": "#FCA5A5",
     }
     palette = [
         "#49cc5c", 
@@ -63,7 +108,7 @@ def _plot_lines(ax, x_values, series, title, xlabel, ylabel) -> None:
             markersize=4.5,
             label=label, color=color_map.get(label, palette[idx % len(palette)]),
             # zorder is set to the average of y_values to ensure that lines with higher average accuracy are drawn on top
-            zorder= sum(y_values) / len(y_values) if y_values else 0
+            zorder= len(series) - idx
         )
     ax.set_title(title)
     ax.set_xlabel(xlabel)
@@ -115,11 +160,11 @@ def plot(state: dict[str, object], k: int, output_dir: str = "benchmark_outputs"
         ax.set_ylim(0, 1)
 
     fig.suptitle(
-        f"Recall@1 accuracy by error type and number of edits (Higher is better)",
+        f"Recall@{k} accuracy by error type and number of edits (Higher is better)",
         y=1.02, fontsize=14,
     )
     fig.tight_layout()
-    path = out / "benchmark.png"
+    path = out / f"benchmark_accuracy_k{k}.png"
     fig.savefig(path, dpi=180, bbox_inches="tight")
     plt.close(fig)
     return path
@@ -244,7 +289,7 @@ def lookup_symspell(instance, queries, k: int = 1):
 
 def _handle_sigint(signum, frame):
     global _stop_requested
-    print("\n[ablation] Pause requested - finishing current session, then saving...", flush=True)
+    print("\n[benchmark] Pause requested. Finishing current session, then saving...", flush=True)
     _stop_requested = True
 
 def run_benchmark(
@@ -258,7 +303,7 @@ def run_benchmark(
 ) -> dict[str, object]:
     signal.signal(signal.SIGINT, _handle_sigint)
 
-    path = Path(f"{output_dir}/benchmark_{vocab_size}_k{k}.json")
+    path = Path(f"{output_dir}/benchmark_accuracy_{vocab_size}_k{k}.json")
     state = load_json(path) if resume else None
 
     vocab = load_vocabulary(max_words=vocab_size, seed=seed)
@@ -290,10 +335,8 @@ def run_benchmark(
     print("[benchmark] Starting sessions...", flush=True)
     session = 0
     try:
-        while max_sessions is None or session < max_sessions:
-            if _stop_requested:
-                break
-
+        while ((max_sessions is None) or (session < max_sessions)) and (not _stop_requested):
+            
             session_seed = state["seed_base"] + state["sessions_run"]
             per_combo = max(1, cases_per_edit_level)
             cases = generate_error_cases(subset, per_combo, DEFAULT_EDIT_LEVELS, session_seed)
@@ -321,7 +364,6 @@ def run_benchmark(
             )
         else:
             path = plot(state, k, output_dir)
-            print(f"[benchmark] Figure written to {path}")
     finally:
         pass
 
@@ -329,10 +371,10 @@ def run_benchmark(
     return state
 
 def main() -> None:
-    p = argparse.ArgumentParser(description="Resumable ablation benchmark for VecFuzz sub-vectors.")
+    p = argparse.ArgumentParser(description="Resumable benchmark for VecFuzz sub-vectors.")
     p.add_argument("--vocab-size", type=int, default=150_000)
     p.add_argument("--cases", type=int, default=15_000)
-    p.add_argument("--max-sessions", type=int, default=None)
+    p.add_argument("--max-sessions", type=int, default=10)
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--k", type=int, default=1)
     p.add_argument("--max-words", type=int, default=None)
