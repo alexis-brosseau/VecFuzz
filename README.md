@@ -45,7 +45,7 @@ LITE only uses **Density**, nothing else. It's for cases where build time, index
 ## Benchmark Highlights
 
 ### Real-world human errors (Birkbeck Spelling Error Corpus)
-Tested on a ~160k word dictionary using non-synthetic human misspellings (phonetic errors, dysgraphia, multi-error handwriting slips) on a Intel Xeon E5-2699 v4.
+Tested on a ~160k word dictionary using 36k non-synthetic human misspellings (phonetic errors, dysgraphia, multi-error handwriting slips) on a Intel Xeon E5-2699 v4.
 
 #### 1. Recall Accuracy
 VecFuzz achieves the best recall at every `k` threshold, comfortably beating brute-force methods and SymSpell.
