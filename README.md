@@ -66,8 +66,8 @@ This is where the Big O trade-offs become obvious. VecFuzz achieves similar look
 | Method | Lookup (s) | Build (s) | Size (MB) |
 | :--- | :--- | :--- | :--- |
 | VecFuzz LITE                 | **20.829s**  | 223.771s  | **103.32**|
-| SymSpell d2/p7               | 37.718s      | **3.063s**| 190.88    |
-| SymSpell d3/p9               | 37.644s      | 13.729s   | 842.84    |
+| SymSpell d2/p7               | 37.644s      | **3.063s**| 190.88    |
+| SymSpell d3/p9               | 37.718s      | 13.729s   | 842.84    |
 | VecFuzz DEFAULT              | 37.874s      | 464.179s  | 221.11    |
 | SymSpell d4/p12              | 46.588s      | 51.406s   | 3568.23   |
 | RapidFuzz                    | 645.669s     | N/A       | N/A       |
