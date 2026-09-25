@@ -75,7 +75,7 @@ This is where the Big O trade-offs become obvious. VecFuzz achieves similar look
 
 ### Speed & Threading
 
-Both build and lookup are backed by FAISS and scale well with available cores. Measured on a 150k-word dictionary for build time, and looking up 15k queries against that index for lookup time.
+Both build and lookup are backed by FAISS and scale well with available cores. Measured on a 150k-word dictionary for build time, and looking up 15k queries against that index for lookup time. The LITE configuration is roughly 2x faster than the DEFAULT one.
 
 ![VecFuzz compute time by number of threads](benchmark_outputs/benchmark_speed_k1.png)
 
