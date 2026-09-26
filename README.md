@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 
-A **fast string matching library** that turns words into compact vectors so you can find the closest match, even when the query is riddled with typos! It delivers high recall on human misspellings while keeping memory usage flat and having sub-millisecond lookup speeds.
+A **fast fuzzy search library** that turns words into compact vectors so you can find the closest match, even when the query is riddled with typos! It delivers high recall on human misspellings while keeping memory usage flat and having sub-millisecond lookup speeds.
 
 
 ## The trade-off
