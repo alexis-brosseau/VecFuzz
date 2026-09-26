@@ -445,7 +445,7 @@ class Vectorizer:
     DEFAULT = [
         bernstein.__func__.params(degree=0).norm(1),
         bernstein.__func__.params(degree=2, indices=[0, 2]),
-        bigram,
+        ngram.__func__.params(n=2, dim=192),
     ]
 
     LITE = [
