@@ -24,22 +24,21 @@ Instead of a rigid, hardcoded pipeline, VecFuzz is built on a **composable vecto
 When you initialize VecFuzz, you can pass a custom list of mathematical feature extractors via the `vectorizers` parameter. By default, it uses a highly optimized combination, but you can mix and match them to tune the model for your specific error types.
 
 You can make your own vectorizer using the `@vectorizer` decorator or use some of the premade ones :
-1.  **Character Frequency**: How often each letter appears.
-2.  **Positional Density**: The sum of normalized positions before/after a character, capturing the "weight" of the word's structure.
-3.  **Average Position**: The mean position of each character. 
+1.  **Length**: The length of the string as a single scalar feature.
+2.  **Bernstein**: Represents how each character is distributed across a word using Bernstein basis polynomials. The degree controls the resolution of the representation, and specific basis polynomials can optionally be selected with `indices`.
 4.  **Phase-encoded Position**: A sinusoidal (cos/sin) expansion across frequency bands to capture global positional awareness. The default frequency bands were chosen by sweeping candidate values and keeping the set that maximized average recall across all four typo types.
 5.  **Radial Basis Function (RBF)**: A smooth, local Gaussian positional encoding. As with the phase encoding, the number and spacing of Gaussian centers were tuned by sweeping values and selecting the configuration with the best average recall across the four typo types.
-6.  **Adjacency Bigrams**: A fixed-size hashed count of character pairs to capture local ordering. The hashed dimensionality defaults to 192; this was chosen by sweeping bucket counts and observing that recall gains diminish quickly past this point.
+6.  **Bigrams**: A fixed-size hashed count of character pairs to capture local ordering. The hashed dimensionality defaults to 192; this was chosen by sweeping bucket counts and observing that recall gains diminish quickly past this point.
 
-All sub-vectors are normalized by word length, so "apple" and "apples" land close together. The sub-vectors are concatenated and indexed with FAISS HNSW under Manhattan (L1) distance; a query is vectorized the same way and the nearest neighbours in the index become the top-k candidates.
+The sub-vectors are concatenated and indexed with FAISS HNSW under Manhattan (L1) distance; a query is vectorized the same way and the nearest neighbours in the index become the top-k candidates.
 
 ### The DEFAULT configuration
 
-The default configuration uses **Frequency + Density + Bigram**. It was chosen as a speed/recall Pareto point because it gives recall close to the best of any tested combination while keeping the vector short, and therefore the index fast to build and query. Swapping in **Position Phase** or **Position RBF** does raise substitution recall, since they encode positional information more richly, but this comes at a cost: both the transposition, insertion, and deletion recall drop, and build/lookup time increases, since a richer positional encoding means a longer vector for FAISS to index and search over.
+The DEFAULT configuration uses **L1-normalized degree-0 Bernstein + the first and last degree-2 Bernstein polynomials + Bigram**. The normalized degree-0 component is equivalent to character frequency (Bag-of-Characters), while the two degree-2 components capture character density toward the beginning and end of the word. This configuration was chosen as a speed/recall Pareto point because it gives recall close to the best of any tested combination while keeping the vector short, and therefore the index fast to build and query. Swapping in **Position Phase** or **Position RBF** does raise substitution recall, since they encode positional information more richly, but this comes at a cost: both the transposition, insertion, and deletion recall drop, and build/lookup time increases, since a richer positional encoding means a longer vector for FAISS to index and search over.
 
 ### The LITE configuration
 
-LITE only uses **Density**, nothing else. It's for cases where build time, index size, or lookup latency matter more than squeezing out the last few points of recall. It trades an average of 1 points of recall for each error type, and in exchange is roughly half the build time, lookup time, and memory footprint of DEFAULT.
+The LITE configuration only uses **all degree-2 Bernstein basis polynomials**, nothing else. It's for cases where build time, index size, or lookup latency matter more than squeezing out the last few points of recall. It trades an average of 1 points of recall for each error type, and in exchange is roughly half the build time, lookup time, and memory footprint of DEFAULT.
 
 
 ## Benchmark Highlights
@@ -61,7 +60,7 @@ VecFuzz achieves the best recall at every `k` threshold, comfortably beating bru
 #### 2. Performance & Footprint
 This is where the Big O trade-offs become obvious. VecFuzz achieves similar lookup speed at a fraction of the memory of higher-order SymSpell configs.
 
-**For fairness against single-threaded baselines (SymSpell, RapidFuzz, raw Levenshtein), VecFuzz is run on a single thread here.** In practice VecFuzz's build and lookup are both highly parallelizable and scale down close to linearly with additional cores. See [Speed & Threading](#speed--threading) below for the full multi-threaded picture.
+**For fairness against single-threaded baselines (SymSpell, RapidFuzz, Levenshtein), VecFuzz is run on a single thread.** In practice VecFuzz's build and lookup are both **highly parallelizable** and scale down with additional cores. See [Speed & Threading](#speed--threading) below for the full multi-threaded picture.
 
 | Method | Lookup (s) | Build (s) | Size (MB) |
 | :--- | :--- | :--- | :--- |

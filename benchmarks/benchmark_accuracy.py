@@ -30,22 +30,22 @@ VECFUZZ_INSTANCES = {
     
     # Ablation instances
     # "Frequency": _make_vecfuzz(vectorizers=[Vectorizer.frequency]),
-    # "Density": _make_vecfuzz(vectorizers=[Vectorizer.density]),
+    # "Bernstein": _make_vecfuzz(vectorizers=[Vectorizer.bernstein.params(degree=2)]),
     # "Postion Avg": _make_vecfuzz(vectorizers=[Vectorizer.position_avg]),
     # "Position Phase": _make_vecfuzz(vectorizers=[Vectorizer.position_phase]),
     # "Position RBF": _make_vecfuzz(vectorizers=[Vectorizer.position_rbf]),
     # "Bigram": _make_vecfuzz(vectorizers=[Vectorizer.bigram]),
     
     # Dual Ablation instances
-    # "Freq + Density": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.density]),
+    # "Freq + Bernstein": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.bernstein.params(degree=2)]),
     # "Freq + Pos Avg": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_avg]),
     # "Freq + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_phase]),
     # "Freq + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_rbf]),
     # "Freq + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.bigram]),
-    # "Density + Pos Avg": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_avg]),
-    # "Density + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_phase]),
-    # "Density + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_rbf]),
-    # "Density + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.bigram]),
+    # "Bernstein + Pos Avg": _make_vecfuzz(vectorizers=[Vectorizer.bernstein.params(degree=2), Vectorizer.position_avg]),
+    # "Bernstein + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.bernstein.params(degree=2), Vectorizer.position_phase]),
+    # "Bernstein + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.bernstein.params(degree=2), Vectorizer.position_rbf]),
+    # "Bernstein + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.bernstein.params(degree=2), Vectorizer.bigram]),
     # "Pos Avg + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.position_phase]),
     # "Pos Avg + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.position_rbf]),
     # "Pos Avg + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.bigram]),
@@ -54,22 +54,22 @@ VECFUZZ_INSTANCES = {
     # "Pos RBF + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.position_rbf, Vectorizer.bigram]),
     
     # Triple Ablation instances
-    # "Freq + Density + Pos Avg": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.density, Vectorizer.position_avg]),
-    # "Freq + Density + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.density, Vectorizer.position_phase]),
-    # "Freq + Density + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.density, Vectorizer.position_rbf]),
-    # "Freq + Density + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.density, Vectorizer.bigram]),
+    # "Freq + Bernstein + Pos Avg": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.bernstein.params(degree=2), Vectorizer.position_avg]),
+    # "Freq + Bernstein + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.bernstein.params(degree=2), Vectorizer.position_phase]),
+    # "Freq + Bernstein + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.bernstein.params(degree=2), Vectorizer.position_rbf]),
+    # "Freq + Bernstein + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.bernstein.params(degree=2), Vectorizer.bigram]),
     # "Freq + Pos Avg + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_avg, Vectorizer.position_phase]),
     # "Freq + Pos Avg + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_avg, Vectorizer.position_rbf]),
     # "Freq + Pos Avg + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_avg, Vectorizer.bigram]),
     # "Freq + Pos Phase + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_phase, Vectorizer.position_rbf]),
     # "Freq + Pos Phase + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_phase, Vectorizer.bigram]),
     # "Freq + Pos RBF + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_rbf, Vectorizer.bigram]),
-    # "Density + Pos Avg + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_avg, Vectorizer.position_phase]),
-    # "Density + Pos Avg + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_avg, Vectorizer.position_rbf]),
-    # "Density + Pos Avg + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_avg, Vectorizer.bigram]),
-    # "Density + Pos Phase + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_phase, Vectorizer.position_rbf]),
-    # "Density + Pos Phase + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_phase, Vectorizer.bigram]),
-    # "Density + Pos RBF + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_rbf, Vectorizer.bigram]),
+    # "Bernstein + Pos Avg + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.bernstein.params(degree=2), Vectorizer.position_avg, Vectorizer.position_phase]),
+    # "Bernstein + Pos Avg + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.bernstein.params(degree=2), Vectorizer.position_avg, Vectorizer.position_rbf]),
+    # "Bernstein + Pos Avg + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.bernstein.params(degree=2), Vectorizer.position_avg, Vectorizer.bigram]),
+    # "Bernstein + Pos Phase + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.bernstein.params(degree=2), Vectorizer.position_phase, Vectorizer.position_rbf]),
+    # "Bernstein + Pos Phase + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.bernstein.params(degree=2), Vectorizer.position_phase, Vectorizer.bigram]),
+    # "Bernstein + Pos RBF + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.bernstein.params(degree=2), Vectorizer.position_rbf, Vectorizer.bigram]),
     # "Pos Avg + Pos Phase + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.position_phase, Vectorizer.position_rbf]),
     # "Pos Avg + Pos Phase + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.position_phase, Vectorizer.bigram]),
     # "Pos Avg + Pos RBF + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.position_rbf, Vectorizer.bigram]),
@@ -374,7 +374,7 @@ def main() -> None:
     p = argparse.ArgumentParser(description="Resumable benchmark for VecFuzz sub-vectors.")
     p.add_argument("--vocab-size", type=int, default=150_000)
     p.add_argument("--cases", type=int, default=15_000)
-    p.add_argument("--max-sessions", type=int, default=10)
+    p.add_argument("--max-sessions", type=int, default=1)
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--k", type=int, default=1)
     p.add_argument("--max-words", type=int, default=None)
@@ -384,7 +384,7 @@ def main() -> None:
     args = p.parse_args()
 
     if args.plot:
-        state = load_json(Path(f"{args.output_dir}/benchmark_{args.vocab_size}_k{args.k}.json"))
+        state = load_json(Path(f"{args.output_dir}/benchmark_accuracy_{args.vocab_size}_k{args.k}.json"))
         if state is None:
             raise SystemExit(f"No state file at {args.output_dir} to plot.")
         path = plot(state, args.k, args.output_dir)
