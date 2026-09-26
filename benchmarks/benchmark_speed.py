@@ -25,53 +25,6 @@ def _make_vecfuzz(vectorizers=Vectorizer.DEFAULT):
 VECFUZZ_INSTANCES = {
     "VecFuzz DEFAULT": _make_vecfuzz(vectorizers=Vectorizer.DEFAULT),
     "VecFuzz LITE": _make_vecfuzz(vectorizers=Vectorizer.LITE),
-    
-    # Ablation instances
-    # "Frequency": _make_vecfuzz(vectorizers=[Vectorizer.frequency]),
-    # "Density": _make_vecfuzz(vectorizers=[Vectorizer.density]),
-    # "Postion Avg": _make_vecfuzz(vectorizers=[Vectorizer.position_avg]),
-    # "Position Phase": _make_vecfuzz(vectorizers=[Vectorizer.position_phase]),
-    # "Position RBF": _make_vecfuzz(vectorizers=[Vectorizer.position_rbf]),
-    # "Bigram": _make_vecfuzz(vectorizers=[Vectorizer.bigram]),
-    
-    # Dual Ablation instances
-    # "Freq + Density": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.density]),
-    # "Freq + Pos Avg": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_avg]),
-    # "Freq + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_phase]),
-    # "Freq + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_rbf]),
-    # "Freq + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.bigram]),
-    # "Density + Pos Avg": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_avg]),
-    # "Density + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_phase]),
-    # "Density + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_rbf]),
-    # "Density + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.bigram]),
-    # "Pos Avg + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.position_phase]),
-    # "Pos Avg + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.position_rbf]),
-    # "Pos Avg + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.bigram]),
-    # "Pos Phase + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.position_phase, Vectorizer.position_rbf]),
-    # "Pos Phase + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.position_phase, Vectorizer.bigram]),
-    # "Pos RBF + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.position_rbf, Vectorizer.bigram]),
-    
-    # Triple Ablation instances
-    # "Freq + Density + Pos Avg": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.density, Vectorizer.position_avg]),
-    # "Freq + Density + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.density, Vectorizer.position_phase]),
-    # "Freq + Density + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.density, Vectorizer.position_rbf]),
-    # "Freq + Density + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.density, Vectorizer.bigram]),
-    # "Freq + Pos Avg + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_avg, Vectorizer.position_phase]),
-    # "Freq + Pos Avg + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_avg, Vectorizer.position_rbf]),
-    # "Freq + Pos Avg + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_avg, Vectorizer.bigram]),
-    # "Freq + Pos Phase + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_phase, Vectorizer.position_rbf]),
-    # "Freq + Pos Phase + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_phase, Vectorizer.bigram]),
-    # "Freq + Pos RBF + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.frequency, Vectorizer.position_rbf, Vectorizer.bigram]),
-    # "Density + Pos Avg + Pos Phase": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_avg, Vectorizer.position_phase]),
-    # "Density + Pos Avg + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_avg, Vectorizer.position_rbf]),
-    # "Density + Pos Avg + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_avg, Vectorizer.bigram]),
-    # "Density + Pos Phase + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_phase, Vectorizer.position_rbf]),
-    # "Density + Pos Phase + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_phase, Vectorizer.bigram]),
-    # "Density + Pos RBF + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.density, Vectorizer.position_rbf, Vectorizer.bigram]),
-    # "Pos Avg + Pos Phase + Pos RBF": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.position_phase, Vectorizer.position_rbf]),
-    # "Pos Avg + Pos Phase + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.position_phase, Vectorizer.bigram]),
-    # "Pos Avg + Pos RBF + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.position_avg, Vectorizer.position_rbf, Vectorizer.bigram]),
-    # "Pos Phase + Pos RBF + Bigram": _make_vecfuzz(vectorizers=[Vectorizer.position_phase, Vectorizer.position_rbf, Vectorizer.bigram]),
 }
 
 
