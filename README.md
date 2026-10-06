@@ -100,7 +100,7 @@ Dictionary of 150k words, compared against SymSpell at three delete-distance/pre
 ## Installation
 
 No pip package yet, the project is under active development. Import it directly as `from vecfuzz import VecFuzz` after placing `vecfuzz.py` in your working directory.
-Clone or download this repository, make sure you have Python 3.8 or newer, and install the required dependencies.
+Clone or download this repository, make sure you have Python 3.10 or newer, and install the required dependencies.
 
 ### Dependencies:
 
