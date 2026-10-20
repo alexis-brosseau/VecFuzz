@@ -493,7 +493,6 @@ class VecFuzz:
         self._vectorizers = tuple(vectorizers)
         
         self.entries = None
-        self.vectors = None
         self.index = None
 
     def vectorize(self, words: list[str]) -> np.ndarray:
@@ -512,36 +511,9 @@ class VecFuzz:
 
     def build(self, entries: list[str]):
         """Build the FAISS index using the provided entries."""
+        vectors = self.vectorize(entries)
+        self._build_index(vectors)
         self.entries = entries
-        self.vectors = self.vectorize(entries)
-        self._build_index()
-        return self
-
-    def save(self, filepath: str = "index.zip"):
-        """Save the vector representations and the FAISS index to a file."""
-        faiss_buffer = io.BytesIO()
-        writer = faiss.PyCallbackIOWriter(faiss_buffer.write)
-        faiss.write_index(self.index, writer)
-
-        metadata_buffer = io.BytesIO()
-        pickle.dump({'entries': self.entries, 'vectors': self.vectors}, metadata_buffer)
-
-        with zipfile.ZipFile(filepath, 'w', zipfile.ZIP_DEFLATED) as zf:
-            zf.writestr('metadata.pkl', metadata_buffer.getvalue())
-            zf.writestr('faiss.index', faiss_buffer.getvalue())
-        return self
-
-    def load(self, filepath: str = "index.zip"):
-        """Load the vector representations from a file and reconstruct the FAISS index."""
-        with zipfile.ZipFile(filepath, 'r') as zf:
-            metadata_bytes = zf.read('metadata.pkl')
-            data = pickle.loads(metadata_bytes)
-            self.entries = data['entries']
-            self.vectors = data['vectors']
-
-            faiss_bytes = zf.read('faiss.index')
-            reader = faiss.PyCallbackIOReader(io.BytesIO(faiss_bytes).read)
-            self.index = faiss.read_index(reader)
         return self
 
     def lookup(self, queries: list[str], k: int = 1):
@@ -570,20 +542,19 @@ class VecFuzz:
             raise ValueError("The index has not been built yet. Please call the `build` method before adding entries.")
         
         new_vectors = self.vectorize(entries)
-        self.entries.extend(entries)
-        self.vectors = np.vstack([self.vectors, new_vectors])
         self.index.add(new_vectors)
+        self.entries.extend(entries)
         return self
 
-    def _build_index(self):
+    def _build_index(self, vectors: np.ndarray):
         """Construct the FAISS HNSW Index based on the built corpus vectors."""
         faiss.omp_set_num_threads(self.threads)
-        dim = self.vectors.shape[1]
+        dim = vectors.shape[1]
             
         index = faiss.index_factory(dim, f"HNSW{self.M}", self.metric)
         index.hnsw.efConstruction = self.ef_construction
         index.hnsw.efSearch = self.ef
-        index.add(self.vectors)
+        index.add(vectors)
         self.index = index
         return index
     

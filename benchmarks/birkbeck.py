@@ -168,11 +168,17 @@ def run_birkbeck_benchmark(save_to_file=False):
     vecfuzz_DEFAULT_build_time = t1_build - t0_build
     vecfuzz_DEFAULT_size = asizeof.asizeof(vecfuzz_DEFAULT_instance) / (1024 * 1024)
     
+    vecfuzz_DEFAULT_serialized = faiss.serialize_index(vecfuzz_DEFAULT_instance.index)
+    vecfuzz_DEFAULT_size += vecfuzz_DEFAULT_serialized.nbytes / (1024 * 1024)
+    
     t0_build = time()
     vecfuzz_LITE_instance = VecFuzz(vectorizers=Vectorizer.LITE, threads=1).build(vocab)
     t1_build = time()
     vecfuzz_LITE_build_time = t1_build - t0_build
     vecfuzz_LITE_size = asizeof.asizeof(vecfuzz_LITE_instance) / (1024 * 1024)
+    
+    vecfuzz_LITE_serialized = faiss.serialize_index(vecfuzz_LITE_instance.index)
+    vecfuzz_LITE_size += vecfuzz_LITE_serialized.nbytes / (1024 * 1024)
 
     # Build SymSpell dictionary
     print("Building SymSpell dictionary (preprocessing)...")

@@ -51,8 +51,8 @@ VecFuzz achieves the best recall at every `k` threshold, comfortably beating bru
 
 | Method | Recall@1 | Recall@5 | Recall@10 | Recall@25 | Recall@100 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| VecFuzz DEFAULT | **36.33%** | **54.96%** | **61.39%** | **68.83%** | **77.94%** |
-| VecFuzz LITE | 34.20% | 52.47% | 59.02% | 66.58% | 75.65% |
+| VecFuzz DEFAULT | **36.34%** | **54.92%** | **61.28%** | **68.95%** | **78.10%** |
+| VecFuzz LITE | 34.13% | 52.32% | 58.71% | 66.49% | 75.69% |
 | SymSpell | 34.05% | 48.92% | 51.94% | 54.58% | 57.70% |
 | RapidFuzz | 32.64% | 51.74% | 58.54% | 66.56% | 76.67% |
 | Levenshtein | 28.10% | 46.73% | 54.20% | 62.64% | 72.35% |
@@ -64,10 +64,10 @@ This is where the Big O trade-offs become obvious. VecFuzz achieves similar look
 
 | Method | Lookup (s) | Build (s) | Size (MB) |
 | :--- | :--- | :--- | :--- |
-| VecFuzz LITE                 | **20.829s**  | 223.771s  | **103.32**|
+| VecFuzz LITE                 | **20.829s**  | 223.771s  | **145.06**|
 | SymSpell d2/p7               | 37.644s      | **3.063s**| 190.88    |
 | SymSpell d3/p9               | 37.718s      | 13.729s   | 842.84    |
-| VecFuzz DEFAULT              | 37.874s      | 464.179s  | 221.11    |
+| VecFuzz DEFAULT              | 37.874s      | 464.179s  | 262.86    |
 | SymSpell d4/p12              | 46.588s      | 51.406s   | 3568.23   |
 | RapidFuzz                    | 645.669s     | N/A       | N/A       |
 | Levenshtein                  | 794.216s     | N/A       | N/A       |
@@ -148,18 +148,6 @@ Candidates for 'orng':
   -> orange (L1 distance: 3.5833)
   -> banana (L1 distance: 8.4722)
   -> apple (L1 distance: 9.2500)
-```
-
-### How to save and load an index:
-Building the FAISS index is the only slow part of the setup. To avoid waiting on every startup, you can build the index once, save it to disk, and load it instantly later. For exemple, the ~160k word dictionary used in the Birkbeck benchmark takes about 5 seconds to save and 0.75 seconds to load it back into memory.
-
-```python
-from vecfuzz import VecFuzz
-vecfuzz = VecFuzz().build(["..."]).save("index.zip")
-
-# later, or in another process
-from vecfuzz import VecFuzz
-vecfuzz = VecFuzz().load("index.zip")
 ```
 
 ## Contributing
