@@ -31,10 +31,9 @@ def candidates_rapidfuzz(query, vocab, k=100):
 
 def candidates_symspell(query, vocab, symspell_instance, k=100):
     """SymSpell: use its built-in lookup, return Recall@k candidates."""
-    suggestions = symspell_instance.lookup(query, Verbosity.ALL, max_edit_distance=2)
+    suggestions = symspell_instance.lookup(query, Verbosity.ALL)
     # suggestions are already sorted by (distance, frequency)
     return [s.term for s in suggestions[:k]]
-
 
 def candidates_vecfuzz_batch(queries, vocab, vecfuzz_instance, k=100):
     """VecFuzz batched lookup. Returns list of candidate lists."""
@@ -180,25 +179,46 @@ def run_birkbeck_benchmark(save_to_file=False):
     vecfuzz_LITE_serialized = faiss.serialize_index(vecfuzz_LITE_instance.index)
     vecfuzz_LITE_size += vecfuzz_LITE_serialized.nbytes / (1024 * 1024)
 
-    # Build SymSpell dictionary
-    print("Building SymSpell dictionary (preprocessing)...")
+    # Build SymSpell dictionaies
+    print("Building SymSpell dictionaries (preprocessing)...")
     t0_build = time()
-    
-    # d2/p7 give same result as higher-order configs for this benchmark.
-    symspell_instance = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
+    symspell_instance_d2 = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
     
     for w in vocab:
         freq = filtered_dict.get(w, 1)
-        symspell_instance.create_dictionary_entry(w, max(1, freq))
+        symspell_instance_d2.create_dictionary_entry(w, max(1, freq))
     t1_build = time()
-    symspell_build_time = t1_build - t0_build
-    symspell_size = asizeof.asizeof(symspell_instance) / (1024 * 1024)
+    symspell_d2_build_time = t1_build - t0_build
+    symspell_d2_size = asizeof.asizeof(symspell_instance_d2) / (1024 * 1024)
+
+    t0_build = time()
+    symspell_instance_d3 = SymSpell(max_dictionary_edit_distance=3, prefix_length=9)
+    
+    for w in vocab:
+        freq = filtered_dict.get(w, 1)
+        symspell_instance_d3.create_dictionary_entry(w, max(1, freq))
+    t1_build = time()
+    symspell_d3_build_time = t1_build - t0_build
+    symspell_d3_size = asizeof.asizeof(symspell_instance_d3) / (1024 * 1024)
+
+    t0_build = time()
+    symspell_instance_d4 = SymSpell(max_dictionary_edit_distance=4, prefix_length=12)
+    
+    for w in vocab:
+        freq = filtered_dict.get(w, 1)
+        symspell_instance_d4.create_dictionary_entry(w, max(1, freq))
+    t1_build = time()
+    symspell_d4_build_time = t1_build - t0_build
+    symspell_d4_size = asizeof.asizeof(symspell_instance_d4) / (1024 * 1024)
+
 
     #region Methods to benchmark
     methods = [
         (candidates_vecfuzz_batch, "VecFuzz DEFAULT", [vecfuzz_DEFAULT_instance], True),
         (candidates_vecfuzz_batch, "VecFuzz LITE", [vecfuzz_LITE_instance], True),
-        (candidates_symspell, "SymSpell", [symspell_instance], False),
+        (candidates_symspell, "SymSpell d2/p7", [symspell_instance_d2], False),
+        (candidates_symspell, "SymSpell d3/p9", [symspell_instance_d3], False),
+        (candidates_symspell, "SymSpell d4/p12", [symspell_instance_d4], False),
         (candidates_rapidfuzz, "RapidFuzz", [], False),
         (candidates_levenshtein, "Levenshtein", [], False),
     ]
@@ -207,12 +227,19 @@ def run_birkbeck_benchmark(save_to_file=False):
     print("\nStarting Benchmark on birkbeck dataset...")
     results = []
     for func, name, args, is_batched in methods:
+        print(f"Evaluating {name}...", end="\r", flush=True)
         res = evaluate_simple(func, name, test_cases, vocab, args, is_batched)
         res["name"] = name
 
-        if name == "SymSpell":
-            res["build_time"] = symspell_build_time
-            res["build_size"] = symspell_size
+        if name == "SymSpell d2/p7":
+            res["build_time"] = symspell_d2_build_time
+            res["build_size"] = symspell_d2_size
+        elif name == "SymSpell d3/p9":
+            res["build_time"] = symspell_d3_build_time
+            res["build_size"] = symspell_d3_size
+        elif name == "SymSpell d4/p12":
+            res["build_time"] = symspell_d4_build_time
+            res["build_size"] = symspell_d4_size
         elif name == "VecFuzz DEFAULT":
             res["build_time"] = vecfuzz_DEFAULT_build_time
             res["build_size"] = vecfuzz_DEFAULT_size

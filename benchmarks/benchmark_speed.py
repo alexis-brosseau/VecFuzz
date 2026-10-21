@@ -235,7 +235,7 @@ def main() -> None:
     parser.add_argument("--k", type=int, default=1)
     parser.add_argument("--max-words", type=int, default=None)
     parser.add_argument("--max-threads", type=int, default=20)
-    parser.add_argument("--resume", action="store_true", help="Resume from existing state file if present.")
+    parser.add_argument("--resume", action="store_false", help="Resume from existing state file if present.")
     parser.add_argument("--plot", action="store_false", help="Render the existing state file and exit.")
     parser.add_argument("--output-dir", default="benchmark_outputs")
     args = parser.parse_args()

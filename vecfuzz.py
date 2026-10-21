@@ -200,6 +200,87 @@ class Vectorizer:
     def length(ctx: VecContext) -> np.ndarray:
         """Returns a vector of the lengths of each word."""
         return ctx.word_lengths.astype(np.float32).reshape(-1, 1)
+
+    @staticmethod
+    @vectorizer
+    def ngram(
+        ctx: VecContext,
+        n: int = 2,
+        dim: int = 192,
+    ) -> np.ndarray:
+        """
+        Hashed n-gram frequency vectorization.
+
+        Each contiguous n-gram is encoded as an integer and mapped into
+        a fixed-dimensional vector.
+
+        Args:
+            n:
+                Size of the n-gram.
+                1 = unigram
+                2 = bigram
+                3 = trigram
+
+            dim:
+                Number of output dimensions / hashing buckets.
+                If dim >= num_chars ** n, the mapping is collision-free.
+        """
+        if n < 1:
+            raise ValueError("n must be >= 1")
+
+        n_words = ctx.word_lengths.shape[0]
+
+        if n_words == 0:
+            return np.zeros((0, dim), dtype=np.float32)
+
+        max_len = ctx.char_matrix.shape[1]
+
+        if max_len < n:
+            return np.zeros((n_words, dim), dtype=np.float32)
+
+        width = max_len - n + 1
+
+        # Every possible n-gram window starts as valid.
+        valid = np.ones((n_words, width), dtype=bool)
+
+        # Encode each n-gram as a base-num_chars integer.
+        ngram_ids = np.zeros((n_words, width), dtype=np.int64)
+
+        for offset in range(n):
+            chars = ctx.char_matrix[:, offset : offset + width]
+
+            valid &= chars >= 0
+
+            ngram_ids *= ctx.num_chars
+            ngram_ids += np.where(chars >= 0, chars, 0)
+
+        word_ids, positions = np.nonzero(valid)
+
+        if len(word_ids) == 0:
+            return np.zeros((n_words, dim), dtype=np.float32)
+
+        ids = ngram_ids[word_ids, positions]
+
+        # Hash into output dimensions.
+        buckets = ids % dim
+
+        vec = np.zeros((n_words, dim), dtype=np.float32)
+
+        flat_indices = word_ids * dim + buckets
+
+        # Normalize by the number of n-gram windows in each sequence.
+        denominators = np.maximum(
+            ctx.word_lengths[word_ids] - n + 1,
+            1,
+        ).astype(np.float32)
+
+        np.add.at(
+            vec.reshape(-1),
+            flat_indices,
+            1.0 / denominators,
+        )
+
+        return vec
     
     @staticmethod
     @vectorizer
@@ -356,87 +437,6 @@ class Vectorizer:
         # Normalize by word length so longer words don't dominate the magnitude
         vec /= ctx.word_lengths[:, None]
         
-        return vec
-
-    @staticmethod
-    @vectorizer
-    def ngram(
-        ctx: VecContext,
-        n: int = 2,
-        dim: int = 192,
-    ) -> np.ndarray:
-        """
-        Hashed n-gram frequency vectorization.
-
-        Each contiguous n-gram is encoded as an integer and mapped into
-        a fixed-dimensional vector.
-
-        Args:
-            n:
-                Size of the n-gram.
-                1 = unigram
-                2 = bigram
-                3 = trigram
-
-            dim:
-                Number of output dimensions / hashing buckets.
-                If dim >= num_chars ** n, the mapping is collision-free.
-        """
-        if n < 1:
-            raise ValueError("n must be >= 1")
-
-        n_words = ctx.word_lengths.shape[0]
-
-        if n_words == 0:
-            return np.zeros((0, dim), dtype=np.float32)
-
-        max_len = ctx.char_matrix.shape[1]
-
-        if max_len < n:
-            return np.zeros((n_words, dim), dtype=np.float32)
-
-        width = max_len - n + 1
-
-        # Every possible n-gram window starts as valid.
-        valid = np.ones((n_words, width), dtype=bool)
-
-        # Encode each n-gram as a base-num_chars integer.
-        ngram_ids = np.zeros((n_words, width), dtype=np.int64)
-
-        for offset in range(n):
-            chars = ctx.char_matrix[:, offset : offset + width]
-
-            valid &= chars >= 0
-
-            ngram_ids *= ctx.num_chars
-            ngram_ids += np.where(chars >= 0, chars, 0)
-
-        word_ids, positions = np.nonzero(valid)
-
-        if len(word_ids) == 0:
-            return np.zeros((n_words, dim), dtype=np.float32)
-
-        ids = ngram_ids[word_ids, positions]
-
-        # Hash into output dimensions.
-        buckets = ids % dim
-
-        vec = np.zeros((n_words, dim), dtype=np.float32)
-
-        flat_indices = word_ids * dim + buckets
-
-        # Normalize by the number of n-gram windows in each sequence.
-        denominators = np.maximum(
-            ctx.word_lengths[word_ids] - n + 1,
-            1,
-        ).astype(np.float32)
-
-        np.add.at(
-            vec.reshape(-1),
-            flat_indices,
-            1.0 / denominators,
-        )
-
         return vec
     
     
