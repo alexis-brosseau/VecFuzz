@@ -1,9 +1,6 @@
 from typing import Callable
 from dataclasses import dataclass
 from functools import partial
-import pickle
-import io
-import zipfile
 import numpy as np
 import faiss
 from math import comb
