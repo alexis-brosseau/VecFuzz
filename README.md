@@ -70,9 +70,9 @@ This is where the Big O trade-offs become obvious. VecFuzz achieves much faster 
 | VecFuzz DEFAULT              | 37.874s      | 464.179s  | 262.86    |
 | SymSpell d2/p7               | 38.353s      | **3.248s**| 190.88    |
 | SymSpell d3/p9               | 387.666s     | 13.393s   | 842.84    |
-| SymSpell d4/p12              | 2293.383s    | 52.310s   | 3568.23   |
 | RapidFuzz                    | 645.669s     | N/A       | N/A       |
 | Levenshtein                  | 794.216s     | N/A       | N/A       |
+| SymSpell d4/p12              | 2293.383s    | 52.310s   | 3568.23   |
 
 ### Speed & Threading
 
