@@ -17,7 +17,7 @@ from spellchecker import SpellChecker
 from vecfuzz import VecFuzz, Vectorizer
 
 
-DEFAULT_MAX_THREADS = faiss.omp_get_max_threads() or 1
+MAX_THREADS = faiss.omp_get_max_threads() or 1
 
 def _make_vecfuzz(vectorizers=Vectorizer.DEFAULT):
     return VecFuzz(vectorizers=vectorizers, metric=faiss.METRIC_L1)
@@ -122,7 +122,7 @@ def plot(state: dict[str, object], k: int, output_dir: str = "benchmark_outputs"
     axes[1].set_title("Lookup time")
     axes[1].set_ylabel("Average time (seconds)")
     for axis in axes:
-        axis.set_xlabel("FAISS threads")
+        axis.set_xlabel("Threads")
         axis.set_xticks(thread_counts)
         axis.grid(True, alpha=0.25)
         axis.legend(frameon=False)
@@ -143,7 +143,7 @@ def run_benchmark(
     k: int = 1,
     resume: bool = False,
     output_dir: str = "benchmark_outputs",
-    max_threads: int = DEFAULT_MAX_THREADS,
+    max_threads: int = MAX_THREADS,
 ) -> dict[str, object]:
     if max_threads < 1:
         raise ValueError("max_threads must be at least 1")
@@ -234,9 +234,9 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--k", type=int, default=1)
     parser.add_argument("--max-words", type=int, default=None)
-    parser.add_argument("--max-threads", type=int, default=20)
+    parser.add_argument("--max-threads", type=int, default=8)
     parser.add_argument("--resume", action="store_false", help="Resume from existing state file if present.")
-    parser.add_argument("--plot", action="store_false", help="Render the existing state file and exit.")
+    parser.add_argument("--plot", action="store_true", help="Render the existing state file and exit.")
     parser.add_argument("--output-dir", default="benchmark_outputs")
     args = parser.parse_args()
 
@@ -245,7 +245,7 @@ def main() -> None:
         state = load_json(state_path)
         if state is None:
             raise SystemExit(f"No state file at {state_path} to plot.")
-        path = plot(state, args.output_dir)
+        path = plot(state, args.k, args.output_dir)
         print(f"[benchmark] Figure written to {path}")
         return
 

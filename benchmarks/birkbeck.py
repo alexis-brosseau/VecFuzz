@@ -10,6 +10,7 @@ from spellchecker import SpellChecker
 from rapidfuzz import fuzz, process
 from rapidfuzz.distance import Levenshtein
 from symspellpy import SymSpell, Verbosity
+from symspellpy.editdistance import EditDistance, DistanceAlgorithm
 from unicodedata import normalize, combining, east_asian_width
 from pympler import asizeof
 import faiss
@@ -182,7 +183,7 @@ def run_birkbeck_benchmark(save_to_file=False):
     # Build SymSpell dictionaies
     print("Building SymSpell dictionaries (preprocessing)...")
     t0_build = time()
-    symspell_instance_d2 = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
+    symspell_instance_d2 = SymSpell(max_dictionary_edit_distance=2, prefix_length=7, distance_comparer=EditDistance(DistanceAlgorithm.DAMERAU_OSA_FAST))
     
     for w in vocab:
         freq = filtered_dict.get(w, 1)
@@ -192,7 +193,7 @@ def run_birkbeck_benchmark(save_to_file=False):
     symspell_d2_size = asizeof.asizeof(symspell_instance_d2) / (1024 * 1024)
 
     t0_build = time()
-    symspell_instance_d3 = SymSpell(max_dictionary_edit_distance=3, prefix_length=9)
+    symspell_instance_d3 = SymSpell(max_dictionary_edit_distance=3, prefix_length=9, distance_comparer=EditDistance(DistanceAlgorithm.DAMERAU_OSA_FAST))
     
     for w in vocab:
         freq = filtered_dict.get(w, 1)
@@ -202,7 +203,7 @@ def run_birkbeck_benchmark(save_to_file=False):
     symspell_d3_size = asizeof.asizeof(symspell_instance_d3) / (1024 * 1024)
 
     t0_build = time()
-    symspell_instance_d4 = SymSpell(max_dictionary_edit_distance=4, prefix_length=12)
+    symspell_instance_d4 = SymSpell(max_dictionary_edit_distance=4, prefix_length=12, distance_comparer=EditDistance(DistanceAlgorithm.DAMERAU_OSA_FAST))
     
     for w in vocab:
         freq = filtered_dict.get(w, 1)

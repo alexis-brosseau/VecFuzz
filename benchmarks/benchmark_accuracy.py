@@ -331,7 +331,7 @@ def main() -> None:
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--k", type=int, default=1)
     p.add_argument("--max-words", type=int, default=None)
-    p.add_argument("--resume", action="store_true", help="Resume from existing state file if present.")
+    p.add_argument("--resume", action="store_false", help="Resume from existing state file if present.")
     p.add_argument("--plot", action="store_true", help="Just render the accuracy figure from existing state and exit.")
     p.add_argument("--output-dir", default="benchmark_outputs")
     args = p.parse_args()

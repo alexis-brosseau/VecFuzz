@@ -64,15 +64,15 @@ This is where the Big O trade-offs become obvious. VecFuzz achieves much faster 
 
 **For fairness against single-threaded baselines (SymSpell, RapidFuzz, Levenshtein), VecFuzz is run on a single thread.** In practice VecFuzz's build and lookup are both **highly parallelizable** and scale down with additional cores. See [Speed & Threading](#speed--threading).
 
-| Method | Lookup (s) | Build (s) | Size (MB) |
+| Method | Duration (s) | Build (s) | Size (MB) |
 | :--- | :--- | :--- | :--- |
-| VecFuzz LITE                 | **20.829s**  | 223.771s  | **145.06**|
-| VecFuzz DEFAULT              | 37.874s      | 464.179s  | 262.86    |
-| SymSpell d2/p7               | 38.353s      | **3.248s**| 190.88    |
-| SymSpell d3/p9               | 387.666s     | 13.393s   | 842.84    |
-| RapidFuzz                    | 645.669s     | N/A       | N/A       |
-| Levenshtein                  | 794.216s     | N/A       | N/A       |
-| SymSpell d4/p12              | 2293.383s    | 52.310s   | 3568.23   |
+| VecFuzz LITE    | **7.381s** | 64.983s    | **145.06** |
+| VecFuzz DEFAULT | 10.475s    | 127.104s   | 262.86     |
+| SymSpell d2/p7  | 16.247s    | **2.627s** | 190.88     |
+| SymSpell d3/p9  | 134.303s   | 11.845s    | 842.84     |
+| RapidFuzz       | 425.209s   | N/A        | N/A        |
+| Levenshtein     | 529.528s   | N/A        | N/A        |
+| SymSpell d4/p12 | 723.114s   | 46.340s    | 3568.23    |
 
 ### Speed & Threading
 

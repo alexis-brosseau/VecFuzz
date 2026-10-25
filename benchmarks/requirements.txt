@@ -3,5 +3,5 @@ numpy
 matplotlib
 pympler
 pyspellchecker
-symspellpy
+symspellpy[editdistpy]
 rapidfuzz
