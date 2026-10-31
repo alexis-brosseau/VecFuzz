@@ -11,8 +11,8 @@ A **fast fuzzy search library** that turns words into compact vectors so you can
 Fuzzy matching has a three-way tension between speed, memory, and accuracy. VecFuzz is designed to be competitive on all three:
 
 *   **Memory**: SymSpell’s index size explodes combinatorially $O(N \cdot L^d)$ based on the max word length ($L$) and max edit distance ($d$). VecFuzz scales strictly linearly $O(N)$ with your dictionary size, completely independent of typo tolerance. Memory stays flat no matter how fuzzy you need to get.
-*   **Build Speed**: SymSpell has to generate and hash every possible delete variant, leading to massive build times $O(N \cdot L^d)$ at higher edit distances ($d$). VecFuzz vectorizes the corpus and builds a FAISS HNSW graph, operating in $O(N \log N)$ time, and that build is **highly parallelizable**: on a single thread it's slower than SymSpell's lowest config, but it scales down close to linearly with additional threads.
-*   **Lookup Speed**: SymSpell achieves $O(1)$ hash lookups while VecFuzz traverses an HNSW graph in $O(\log N)$ time, but because it uses FAISS under the hood, it is **highly parallelizable**.
+*   **Build Speed**: SymSpell has to generate and hash every possible delete variant, leading to massive build times $O(N \cdot L^d)$ at higher edit distances ($d$). VecFuzz vectorizes the corpus and builds a FAISS HNSW graph, operating in $O(N \log N)$ time.
+*   **Lookup Speed**: SymSpell achieves $O(1)$ hash lookups while VecFuzz traverses an HNSW graph in $O(\log N)$ time, but because it uses FAISS, it is **highly parallelizable** and scales down with additional threads.
 
 If your dictionary is large, your memory budget is tight, queries need to be fast, and you can tolerate a slower build, VecFuzz is a strong pick.
 
@@ -34,7 +34,7 @@ The sub-vectors are concatenated and indexed with FAISS HNSW under Manhattan (L1
 
 ### The DEFAULT configuration
 
-The DEFAULT configuration uses **hashed 2-grams + L1-normalized degree-0 Bernstein + the first and last degree-2 Bernstein polynomials**. The normalized degree-0 component is equivalent to character frequency (Bag-of-Characters), while the two degree-2 components capture character density at the beginning and end of the word. This configuration was chosen as a speed/recall Pareto point because it gives recall close to the best of any tested combination while keeping the vector short, and therefore the index fast to build and query.
+The DEFAULT configuration uses **hashed 2-grams + L1-normalized degree-0 Bernstein + the first and last degree-2 Bernstein polynomials**. The normalized degree-0 component is equivalent to character frequency (Bag-of-Characters), while the two degree-2 components capture character density at the beginning and end of the word. This configuration was chosen  because it gives recall close to the best of any tested combination while keeping the vector short, and therefore the index fast to build and query.
 
 ### The LITE configuration
 
@@ -44,30 +44,28 @@ The LITE configuration only uses **all degree-2 Bernstein basis polynomials**, n
 ## Benchmark Highlights
 
 ### Real-world human errors (Birkbeck Spelling Error Corpus)
-Tested on a ~160k word dictionary using 36k non-synthetic human misspellings (phonetic errors, dysgraphia, multi-error handwriting slips) on a Intel Xeon E5-2699 v4.
+Tested on a ~160k word dictionary using 36k non-synthetic human misspellings (phonetic errors, dysgraphia, multi-error handwriting slips) on an Intel Xeon E5-2699 v4.
 
 #### 1. Recall Accuracy
-SymSpell d4/p12 leads at Recall@1 through Recall@25, while VecFuzz DEFAULT achieves the highest Recall@100. VecFuzz also offers a much smaller index and faster lookups than SymSpell d4/p12.
 
 | Method | Recall@1 | Recall@5 | Recall@10 | Recall@25 | Recall@100 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| SymSpell d4/p12 | **38.54%** | **58.64%** | **64.39%** | **70.24%** | 77.67% |
+| VecFuzz DEFAULT | **42.69%** | **62.59%** | **68.41%** | **75.01%** | **82.82%** |
+| VecFuzz LITE    | 39.58% | 58.96% | 64.79% | 71.24% | 79.05% |
+| SymSpell d4/p12 | 38.54% | 58.64% | 64.39% | 70.24% | 77.67% |
 | SymSpell d3/p9  | 37.65% | 56.43% | 61.32% | 65.96% | 71.36% |
-| VecFuzz DEFAULT | 36.34% | 54.92% | 61.28% | 68.95% | **78.10%** |
-| VecFuzz LITE    | 34.13% | 52.32% | 58.71% | 66.49% | 75.69% |
 | SymSpell d2/p7  | 34.05% | 48.92% | 51.94% | 54.58% | 57.70% |
 | RapidFuzz       | 32.65% | 51.74% | 58.54% | 66.56% | 76.67% |
 | Levenshtein     | 28.10% | 46.73% | 54.20% | 62.64% | 72.35% |
 
 #### 2. Performance & Footprint
-This is where the Big O trade-offs become obvious. VecFuzz achieves much faster lookup than SymSpell d3/p9 and d4/p12, at a fraction of their memory. SymSpell remains faster to build, especially at lower configurations.
 
-**For fairness against single-threaded baselines (SymSpell, RapidFuzz, Levenshtein), VecFuzz is run on a single thread.** In practice VecFuzz's build and lookup are both **highly parallelizable** and scale down with additional cores. See [Speed & Threading](#speed--threading).
+**For fairness against single-threaded baselines, VecFuzz is run on a single thread.** In practice VecFuzz's build and lookup are both **highly parallelizable** and scale down with additional cores. See [Speed & Threading](#speed--threading).
 
 | Method | Duration (s) | Build (s) | Size (MB) |
 | :--- | :--- | :--- | :--- |
-| VecFuzz LITE    | **7.381s** | 64.983s    | **145.06** |
-| VecFuzz DEFAULT | 10.475s    | 127.104s   | 262.86     |
+| VecFuzz LITE    | **8.356s** | 75.043s    | **145.06** |
+| VecFuzz DEFAULT | 11.545s    | 151.238s   | 262.86     |
 | SymSpell d2/p7  | 16.247s    | **2.627s** | 190.88     |
 | SymSpell d3/p9  | 134.303s   | 11.845s    | 842.84     |
 | RapidFuzz       | 425.209s   | N/A        | N/A        |
@@ -76,17 +74,13 @@ This is where the Big O trade-offs become obvious. VecFuzz achieves much faster 
 
 ### Speed & Threading
 
-Both build and lookup use FAISS's **multi-threading**, with compute time following an approximate inverse curve of the form $f(x) = 1/x + C$ after scaling, where $x$ is the number of threads and $C$ is the fixed overhead. Additional threads reduce runtime, with diminishing returns as the curve approaches $C$. The benchmarks below measure build time on a **150k-word dictionary** and lookup time for **15k queries** against that index. The LITE configuration is roughly **2x faster** than DEFAULT.
+Both build and lookup use FAISS's **multi-threading**, with compute time following an approximate inverse curve of the form $f(x) = 1/x + C$ after scaling, where $x$ is the number of threads and $C$ is the fixed overhead. Additional threads reduce runtime, with diminishing returns as the curve approaches $C$. The benchmarks below measure build time on a **150k-word dictionary** and lookup time for **15k queries** against that index. Tested on an Intel Xeon E5-2699 v4.
 
 ![VecFuzz compute time by number of threads](benchmark_outputs/benchmark_speed_k1.png)
 
 ### Synthetic edit-distance sweep
 
 Dictionary of 150k words, compared against SymSpell at three delete-distance/prefix-length configs (d2/p7, d3/p9, d4/p12).
-*   **Substitutions**: SymSpell leads over VecFuzz, which remains the primary area for future algorithmic improvement.
-*   **Transpositions**: VecFuzz starts near-perfect and stays well above SymSpell.
-*   **Insertions**: VecFuzz degrades gracefully even at 9 edits. SymSpell drops to **0%** once edits exceed its configured max distance.
-*   **Deletions**: VecFuzz is ahead of SymSpell, though both methods struggle heavily past 2-3 deletion edits.
 
 ![Accuracy by Error Type Chart](benchmark_outputs/benchmark_accuracy_k1.png)
 

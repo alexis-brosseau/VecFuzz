@@ -1,10 +1,10 @@
 from typing import Callable
 from dataclasses import dataclass
 from functools import partial
+import unicodedata
 import numpy as np
 import faiss
 from math import comb
-
 
 @dataclass
 class VecContext:
@@ -20,7 +20,7 @@ class VecContext:
     word_lengths: np.ndarray          # Shape: (batch_size,). The actual length of each word.
     
     # --- 2D Grid (For sequence-aware operations like bigrams) ---
-    char_matrix: np.ndarray           # Shape: (batch_size, max_len). Char IDs, -1 for pad/unknown.
+    char_matrix: np.ndarray           # Shape: (batch_size, max_len). -1 for padding/unmapped chars.
     
     # --- 1D Flattened Arrays (For fast np.add.at on valid characters only) ---
     word_ids: np.ndarray              # Shape: (num_valid_chars,). Which word each valid char belongs to.
@@ -28,6 +28,7 @@ class VecContext:
     char_positions: np.ndarray        # Shape: (num_valid_chars,). 0-based position of the char in its word.
     expanded_word_lengths: np.ndarray # Shape: (num_valid_chars,). The word length, repeated for each valid char.
     flat_char_indices: np.ndarray     # Shape: (num_valid_chars,). Pre-computed (word_id * num_chars + char_id).
+    word_frequencies: np.ndarray | None = None  # Raw frequencies; omitted means uniform.
 
 
 class VectorizerOp:
@@ -435,20 +436,30 @@ class Vectorizer:
         vec /= ctx.word_lengths[:, None]
         
         return vec
-    
+
+    @staticmethod
+    @vectorizer
+    def frequency(ctx: VecContext) -> np.ndarray:
+        """A one-dimensional log-frequency channel for optional prior weighting."""
+        frequencies = ctx.word_frequencies
+        if frequencies is None:
+            frequencies = np.ones(len(ctx.words), dtype=np.float32)
+        return np.log1p(frequencies).astype(np.float32).reshape(-1, 1)
     
     # Vectorizer Configs
 
     DEFAULT = [
+        frequency.__func__ * 0.25,
         bernstein.__func__.params(degree=0).norm(1),
         bernstein.__func__.params(degree=2, indices=[0, 2]),
         ngram.__func__.params(n=2, dim=192),
     ]
 
     LITE = [
+        frequency.__func__ * 0.175,
         bernstein.__func__.params(degree=2),
     ]
-
+    
 class VecFuzz:
     """
     VecFuzz provides functionality for vectorizing strings and performing fuzzy matching 
@@ -459,7 +470,7 @@ class VecFuzz:
         self, 
         vectorizers: list[Callable[[VecContext], np.ndarray]] = Vectorizer.DEFAULT,
         metric: int = faiss.METRIC_L1,
-        chars: str = "aàbcçdeéèêëfghiïjklmnñoöpqrstuvwxyz0123456789-̧ '. ", 
+        chars: str = "",
         ef_construction: int = 200, 
         M: int = 32, 
         ef: int = 64, 
@@ -469,16 +480,18 @@ class VecFuzz:
         Initialize VecFuzz. The vectorization schema is frozen at initialization.
         
         Args:
-            chars (str): A string containing all valid characters for vectorization.
+            chars (str | None): Known characters to encode exactly. Pass None to
+                build an exact character set from the initial build() dictionary.
+                Characters outside that set are ignored by character features.
             vectorizers (list[Callable]): List of pure functions taking VecContext -> np.ndarray.
             ef_construction (int): The depth of the search during index construction for FAISS HNSW.
             M (int): The number of bi-directional links created for every new element.
             ef (int): The depth of the search for FAISS HNSW.
             threads (int): Number of threads used to build/search the index.
         """
-        self._chars = chars
-        self._chars_len = len(chars)
-        self._char_idx = {c: i for i, c in enumerate(chars)}
+        self._chars = self._unique_chars(chars or "")
+        self._chars_len = len(self._chars)
+        self._char_idx = {c: i for i, c in enumerate(self._chars)}
         
         self.metric = metric
         self.ef_construction = ef_construction
@@ -490,27 +503,48 @@ class VecFuzz:
         self._vectorizers = tuple(vectorizers)
         
         self.entries = None
+        self.frequencies: list[float] = []
         self.index = None
 
-    def vectorize(self, words: list[str]) -> np.ndarray:
+    def vectorize(
+        self,
+        words: list[str],
+        frequencies: list[float] | np.ndarray | None = None,
+    ) -> np.ndarray:
         """
         Vectorize a list of words using the frozen list of callables.
         
         Args:
             words (list[str]): A list of strings to vectorize.
+            frequencies: Optional raw non-negative frequencies for the words.
+                If omitted, every word receives frequency 1.
             
         Returns:
             np.ndarray: A 2D numpy array of shape len(words).
         """
-        ctx = self._build_context(words)
+        word_frequencies = self._validated_frequencies(frequencies, len(words))
+        ctx = self._build_context(words, word_frequencies)
         parts = [func(ctx) for func in self._vectorizers]
         return np.concatenate(parts, axis=1)
 
-    def build(self, entries: list[str]):
-        """Build the FAISS index using the provided entries."""
-        vectors = self.vectorize(entries)
+    def build(
+        self,
+        entries: list[str],
+        frequencies: list[float] | np.ndarray | None = None,
+    ):
+        """Build the FAISS index using entries and optional aligned frequencies."""
+        normalized_entries = [self._normalize_word(word) for word in entries]
+
+        if not self._chars:
+            self._chars = "".join(sorted({char for e in normalized_entries for char in e}))
+            self._chars_len = len(self._chars)
+            self._char_idx = {char: i for i, char in enumerate(self._chars)}
+
+        word_frequencies = self._validated_frequencies(frequencies, len(entries))
+        vectors = self.vectorize(normalized_entries, word_frequencies)
         self._build_index(vectors)
-        self.entries = entries
+        self.entries = list(entries)
+        self.frequencies = word_frequencies.tolist()
         return self
 
     def lookup(self, queries: list[str], k: int = 1):
@@ -519,7 +553,9 @@ class VecFuzz:
             raise ValueError("The index has not been built yet. Please call the `build` method before performing lookups.")
             
         faiss.omp_set_num_threads(self.threads)
-        query_vectors = self.vectorize(queries)
+        query_frequency = max(self.frequencies, default=1.0)
+        query_frequencies = [query_frequency] * len(queries)
+        query_vectors = self.vectorize(queries, query_frequencies)
         distances, labels = self.index.search(query_vectors, k)
         
         results = []
@@ -528,19 +564,27 @@ class VecFuzz:
             results.append((query, result))
         return results
     
-    def add(self, entries: list[str]):
+    def add(
+        self,
+        entries: list[str],
+        frequencies: list[float] | np.ndarray | None = None,
+    ):
         """
         Add new entries to the existing FAISS index.
         
         Args:
             entries (list[str]): A list of new strings to add to the index.
+            frequencies: Optional raw non-negative frequencies aligned with entries.
         """
         if self.index is None:
             raise ValueError("The index has not been built yet. Please call the `build` method before adding entries.")
         
-        new_vectors = self.vectorize(entries)
+        normalized_entries = [self._normalize_word(word) for word in entries]
+        word_frequencies = self._validated_frequencies(frequencies, len(entries))
+        new_vectors = self.vectorize(normalized_entries, word_frequencies)
         self.index.add(new_vectors)
         self.entries.extend(entries)
+        self.frequencies.extend(word_frequencies.tolist())
         return self
 
     def _build_index(self, vectors: np.ndarray):
@@ -555,10 +599,16 @@ class VecFuzz:
         self.index = index
         return index
     
-    def _build_context(self, words: list[str]) -> VecContext:
+    def _build_context(
+        self,
+        words: list[str],
+        word_frequencies: np.ndarray | None = None,
+    ) -> VecContext:
         """Parses strings into the shared, neutral VecContext. Happens exactly once per batch."""
-        words = [w.strip().lower() for w in words]
+        words = [self._normalize_word(w) for w in words]
         n = len(words)
+        if word_frequencies is None:
+            word_frequencies = np.ones(n, dtype=np.float32)
         
         if n == 0:
             return VecContext(
@@ -569,7 +619,8 @@ class VecFuzz:
                 char_ids=np.array([], dtype=np.int64),
                 char_positions=np.array([], dtype=np.int64),
                 expanded_word_lengths=np.array([], dtype=np.float32),
-                flat_char_indices=np.array([], dtype=np.int64)
+                flat_char_indices=np.array([], dtype=np.int64),
+                word_frequencies=np.array([], dtype=np.float32),
             )
 
         lengths = np.array([len(w) for w in words], dtype=np.int64)
@@ -599,5 +650,30 @@ class VecFuzz:
             char_ids=char_ids, 
             char_positions=char_positions,
             expanded_word_lengths=exp_lengths, 
-            flat_char_indices=flat_indices
+            flat_char_indices=flat_indices,
+            word_frequencies=word_frequencies,
         )
+
+    @staticmethod
+    def _normalize_word(word: str) -> str:
+        """Apply syntax-neutral Unicode normalization and case normalization."""
+        return unicodedata.normalize("NFC", word.strip().lower())
+
+    @staticmethod
+    def _unique_chars(chars: str) -> str:
+        normalized = unicodedata.normalize("NFC", chars.lower())
+        return "".join(dict.fromkeys(normalized))
+
+    @staticmethod
+    def _validated_frequencies(
+        frequencies: list[float] | np.ndarray | None,
+        expected_length: int,
+    ) -> np.ndarray:
+        if frequencies is None:
+            return np.ones(expected_length, dtype=np.float32)
+        values = np.asarray(frequencies, dtype=np.float64)
+        if values.ndim != 1 or len(values) != expected_length:
+            raise ValueError("frequencies must contain exactly one value per entry")
+        if not np.all(np.isfinite(values)) or np.any(values < 0):
+            raise ValueError("frequencies must be finite, non-negative numbers")
+        return values.astype(np.float32)

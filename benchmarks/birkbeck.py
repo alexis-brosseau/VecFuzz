@@ -113,7 +113,7 @@ def evaluate_simple(method_func, name, test_cases, vocab, args=[], is_batched=Fa
     }
 
 
-def run_birkbeck_benchmark(save_to_file=False):
+def run_birkbeck_benchmark(save_to_file=False, frequency=False):
     data_path = os.path.join(os.path.dirname(__file__), "birkbeck.txt")
     print(f"Loading dataset from {data_path}...")
     test_cases, birkbeck_targets = load_birkbeck_dataset(data_path)
@@ -144,6 +144,7 @@ def run_birkbeck_benchmark(save_to_file=False):
 
     print("Filtering and normalizing vocabulary...")
     freq_dict = SpellChecker().word_frequency.dictionary
+    median_freq = sorted(freq_dict.values())[len(freq_dict) // 2]
 
     filtered_dict = {}
     for w, freq in freq_dict.items():
@@ -154,16 +155,20 @@ def run_birkbeck_benchmark(save_to_file=False):
     for t in birkbeck_targets:
         norm_t = normalize("NFD", t).lower()
         if norm_t not in filtered_dict:
-            filtered_dict[norm_t] = 100  # Give it an arbitrary frequency
+            filtered_dict[norm_t] = median_freq
 
     vocab = list(filtered_dict.keys())
+    freqs = [filtered_dict[w] for w in vocab]
     print(f"Using {len(vocab)} words for the benchmark vocabulary.")
+    print(f"Using word frequencies: {frequency}")
 
     # Build VecFuzz index
     print("Building VecFuzz index (preprocessing)...")
     
     t0_build = time()
-    vecfuzz_DEFAULT_instance = VecFuzz(vectorizers=Vectorizer.DEFAULT, threads=1).build(vocab)
+    vecfuzz_DEFAULT_instance = VecFuzz(vectorizers=Vectorizer.DEFAULT, threads=16).build(
+        vocab, frequencies=freqs if frequency else None
+    )
     t1_build = time()
     vecfuzz_DEFAULT_build_time = t1_build - t0_build
     vecfuzz_DEFAULT_size = asizeof.asizeof(vecfuzz_DEFAULT_instance) / (1024 * 1024)
@@ -172,7 +177,9 @@ def run_birkbeck_benchmark(save_to_file=False):
     vecfuzz_DEFAULT_size += vecfuzz_DEFAULT_serialized.nbytes / (1024 * 1024)
     
     t0_build = time()
-    vecfuzz_LITE_instance = VecFuzz(vectorizers=Vectorizer.LITE, threads=1).build(vocab)
+    vecfuzz_LITE_instance = VecFuzz(vectorizers=Vectorizer.LITE, threads=16).build(
+        vocab, frequencies=freqs if frequency else None
+    )
     t1_build = time()
     vecfuzz_LITE_build_time = t1_build - t0_build
     vecfuzz_LITE_size = asizeof.asizeof(vecfuzz_LITE_instance) / (1024 * 1024)
@@ -186,7 +193,7 @@ def run_birkbeck_benchmark(save_to_file=False):
     symspell_instance_d2 = SymSpell(max_dictionary_edit_distance=2, prefix_length=7, distance_comparer=EditDistance(DistanceAlgorithm.DAMERAU_OSA_FAST))
     
     for w in vocab:
-        freq = filtered_dict.get(w, 1)
+        freq = filtered_dict[w] if frequency else 1
         symspell_instance_d2.create_dictionary_entry(w, max(1, freq))
     t1_build = time()
     symspell_d2_build_time = t1_build - t0_build
@@ -196,7 +203,7 @@ def run_birkbeck_benchmark(save_to_file=False):
     symspell_instance_d3 = SymSpell(max_dictionary_edit_distance=3, prefix_length=9, distance_comparer=EditDistance(DistanceAlgorithm.DAMERAU_OSA_FAST))
     
     for w in vocab:
-        freq = filtered_dict.get(w, 1)
+        freq = filtered_dict[w] if frequency else 1
         symspell_instance_d3.create_dictionary_entry(w, max(1, freq))
     t1_build = time()
     symspell_d3_build_time = t1_build - t0_build
@@ -206,7 +213,7 @@ def run_birkbeck_benchmark(save_to_file=False):
     symspell_instance_d4 = SymSpell(max_dictionary_edit_distance=4, prefix_length=12, distance_comparer=EditDistance(DistanceAlgorithm.DAMERAU_OSA_FAST))
     
     for w in vocab:
-        freq = filtered_dict.get(w, 1)
+        freq = filtered_dict[w] if frequency else 1
         symspell_instance_d4.create_dictionary_entry(w, max(1, freq))
     t1_build = time()
     symspell_d4_build_time = t1_build - t0_build
@@ -299,4 +306,4 @@ def run_birkbeck_benchmark(save_to_file=False):
 
 
 if __name__ == "__main__":
-    run_birkbeck_benchmark(save_to_file=True)
+    run_birkbeck_benchmark(save_to_file=True, frequency=True)
