@@ -30,6 +30,11 @@ def candidates_rapidfuzz(query, vocab, k=100):
     return [match[0] for match in results]
 
 
+def order_vocabulary_by_frequency(vocab, frequencies):
+    frequency_by_word = dict(zip(vocab, frequencies))
+    return sorted(vocab, key=lambda word: frequency_by_word[word], reverse=True)
+
+
 def candidates_symspell(query, vocab, symspell_instance, k=100):
     """SymSpell: use its built-in lookup, return Recall@k candidates."""
     suggestions = symspell_instance.lookup(query, Verbosity.ALL)
@@ -159,6 +164,7 @@ def run_birkbeck_benchmark(save_to_file=False, frequency=False):
 
     vocab = list(filtered_dict.keys())
     freqs = [filtered_dict[w] for w in vocab]
+    ranked_vocab = order_vocabulary_by_frequency(vocab, freqs) if frequency else vocab
     print(f"Using {len(vocab)} words for the benchmark vocabulary.")
     print(f"Using word frequencies: {frequency}")
 
@@ -166,7 +172,7 @@ def run_birkbeck_benchmark(save_to_file=False, frequency=False):
     print("Building VecFuzz index (preprocessing)...")
     
     t0_build = time()
-    vecfuzz_DEFAULT_instance = VecFuzz(vectorizers=Vectorizer.DEFAULT, threads=16).build(
+    vecfuzz_DEFAULT_instance = VecFuzz(vectorizers=Vectorizer.DEFAULT, threads=1).build(
         vocab, frequencies=freqs if frequency else None
     )
     t1_build = time()
@@ -177,7 +183,7 @@ def run_birkbeck_benchmark(save_to_file=False, frequency=False):
     vecfuzz_DEFAULT_size += vecfuzz_DEFAULT_serialized.nbytes / (1024 * 1024)
     
     t0_build = time()
-    vecfuzz_LITE_instance = VecFuzz(vectorizers=Vectorizer.LITE, threads=16).build(
+    vecfuzz_LITE_instance = VecFuzz(vectorizers=Vectorizer.LITE, threads=1).build(
         vocab, frequencies=freqs if frequency else None
     )
     t1_build = time()
@@ -222,21 +228,21 @@ def run_birkbeck_benchmark(save_to_file=False, frequency=False):
 
     #region Methods to benchmark
     methods = [
-        (candidates_vecfuzz_batch, "VecFuzz DEFAULT", [vecfuzz_DEFAULT_instance], True),
-        (candidates_vecfuzz_batch, "VecFuzz LITE", [vecfuzz_LITE_instance], True),
-        (candidates_symspell, "SymSpell d2/p7", [symspell_instance_d2], False),
-        (candidates_symspell, "SymSpell d3/p9", [symspell_instance_d3], False),
-        (candidates_symspell, "SymSpell d4/p12", [symspell_instance_d4], False),
-        (candidates_rapidfuzz, "RapidFuzz", [], False),
-        (candidates_levenshtein, "Levenshtein", [], False),
+        (candidates_vecfuzz_batch, "VecFuzz DEFAULT", vocab, [vecfuzz_DEFAULT_instance], True),
+        (candidates_vecfuzz_batch, "VecFuzz LITE", vocab, [vecfuzz_LITE_instance], True),
+        (candidates_symspell, "SymSpell d2/p7", vocab, [symspell_instance_d2], False),
+        (candidates_symspell, "SymSpell d3/p9", vocab, [symspell_instance_d3], False),
+        (candidates_symspell, "SymSpell d4/p12", vocab, [symspell_instance_d4], False),
+        (candidates_rapidfuzz, "RapidFuzz", ranked_vocab, [], False),
+        (candidates_levenshtein, "Levenshtein", ranked_vocab, [], False),
     ]
     #endregion
 
     print("\nStarting Benchmark on birkbeck dataset...")
     results = []
-    for func, name, args, is_batched in methods:
+    for func, name, method_vocab, args, is_batched in methods:
         print(f"Evaluating {name}...", end="\r", flush=True)
-        res = evaluate_simple(func, name, test_cases, vocab, args, is_batched)
+        res = evaluate_simple(func, name, test_cases, method_vocab, args, is_batched)
         res["name"] = name
 
         if name == "SymSpell d2/p7":

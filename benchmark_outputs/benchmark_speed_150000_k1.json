@@ -13,17 +13,7 @@
     7,
     8,
     9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    19,
-    20
+    10
   ],
   "sessions_run": 10,
   "measurements": {
@@ -31,403 +21,203 @@
       "1": {
         "build": {
           "count": 10.0,
-          "total_seconds": 4369.52878540002
+          "total_seconds": 1250.1552715508733
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 169.92684350001218
+          "total_seconds": 55.92859772394877
         }
       },
       "2": {
         "build": {
           "count": 10.0,
-          "total_seconds": 2219.9990876999946
+          "total_seconds": 688.8490176108899
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 87.20341450000706
+          "total_seconds": 31.496783150010742
         }
       },
       "3": {
         "build": {
           "count": 10.0,
-          "total_seconds": 1555.1006400000042
+          "total_seconds": 489.9077059160918
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 61.268619100010255
+          "total_seconds": 22.729278117069043
         }
       },
       "4": {
         "build": {
           "count": 10.0,
-          "total_seconds": 1203.8046538000199
+          "total_seconds": 387.9351503698854
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 47.56199420000485
+          "total_seconds": 18.328770731925033
         }
       },
       "5": {
         "build": {
           "count": 10.0,
-          "total_seconds": 992.5697320999898
+          "total_seconds": 325.8170674268622
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 39.569215800001984
+          "total_seconds": 15.617915460839868
         }
       },
       "6": {
         "build": {
           "count": 10.0,
-          "total_seconds": 853.2092382999836
+          "total_seconds": 284.259844211163
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 34.189411499974085
+          "total_seconds": 13.947077492950484
         }
       },
       "7": {
         "build": {
           "count": 10.0,
-          "total_seconds": 754.6850263000088
+          "total_seconds": 254.89331839384977
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 30.410556299990276
+          "total_seconds": 12.88288237398956
         }
       },
       "8": {
         "build": {
           "count": 10.0,
-          "total_seconds": 682.9260372999997
+          "total_seconds": 233.04360925918445
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 27.557789500016952
+          "total_seconds": 12.186143642175011
         }
       },
       "9": {
         "build": {
           "count": 10.0,
-          "total_seconds": 623.1383263999887
+          "total_seconds": 219.41612904390786
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 25.25562469997385
+          "total_seconds": 11.801302541978657
         }
       },
       "10": {
         "build": {
           "count": 10.0,
-          "total_seconds": 569.1910676999687
+          "total_seconds": 209.89417170872912
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 23.14441509997414
+          "total_seconds": 11.567602439085022
         }
-      },
-      "11": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 523.5254720999947
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 21.241614800033858
-        }
-      },
-      "12": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 484.77815310000733
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 19.766992100005154
-        }
-      },
-      "13": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 445.39553859998705
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 18.587948299988057
-        }
-      },
-      "14": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 418.1502121000085
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 17.450658100031433
-        }
-      },
-      "15": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 392.41310369998973
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 16.588808999978937
-        }
-      },
-      "16": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 371.8244000999548
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 15.72787169998628
-        }
-      },
-      "17": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 357.28125409998756
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 15.14961469998525
-        }
-      },
-      "18": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 335.2252318999963
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 14.489945700013777
-        }
-      },
-      "19": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 318.85419480000564
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 14.127250000005006
-        }
-      },
-      "20": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 306.76345310002216
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 13.68859820002399
-        }
-      }
+      }      
     },
     "VecFuzz LITE": {
       "1": {
         "build": {
           "count": 10.0,
-          "total_seconds": 2136.1543553000083
+          "total_seconds": 623.314420855022
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 85.99820670003828
+          "total_seconds": 27.49991395266261
         }
       },
       "2": {
         "build": {
           "count": 10.0,
-          "total_seconds": 1079.3203627999465
+          "total_seconds": 336.88546147430316
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 44.08300210002926
+          "total_seconds": 15.000001430278644
         }
       },
       "3": {
         "build": {
           "count": 10.0,
-          "total_seconds": 756.0155699000024
+          "total_seconds": 234.5880863009952
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 30.854933300011908
+          "total_seconds": 10.615429157973267
         }
       },
       "4": {
         "build": {
           "count": 10.0,
-          "total_seconds": 582.4911033999815
+          "total_seconds": 181.80398433131631
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 23.870996499972534
+          "total_seconds": 8.3375772399595
         }
       },
       "5": {
         "build": {
           "count": 10.0,
-          "total_seconds": 484.807641899999
+          "total_seconds": 149.55536578816827
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 19.736691500002053
+          "total_seconds": 6.957880651927553
         }
       },
       "6": {
         "build": {
           "count": 10.0,
-          "total_seconds": 416.03845230001025
+          "total_seconds": 128.13264815392904
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 16.998344399951748
+          "total_seconds": 5.98316379042808
         }
       },
       "7": {
         "build": {
           "count": 10.0,
-          "total_seconds": 363.2014729999937
+          "total_seconds": 111.95875024120323
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 15.105615899999975
+          "total_seconds": 5.281604813062586
         }
       },
       "8": {
         "build": {
           "count": 10.0,
-          "total_seconds": 326.13872630000697
+          "total_seconds": 99.96587039798032
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 13.669890399978613
+          "total_seconds": 4.72121798992157
         }
       },
       "9": {
         "build": {
           "count": 10.0,
-          "total_seconds": 297.7044088000257
+          "total_seconds": 90.94905060681049
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 12.592192500000237
+          "total_seconds": 4.3848135869484395
         }
       },
       "10": {
         "build": {
           "count": 10.0,
-          "total_seconds": 269.3644292000099
+          "total_seconds": 83.32480778510217
         },
         "lookup": {
           "count": 10.0,
-          "total_seconds": 11.427436199985095
-        }
-      },
-      "11": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 245.01384600000165
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 10.541166400013026
-        }
-      },
-      "12": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 227.33673910000653
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 9.798729000016465
-        }
-      },
-      "13": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 211.14141460000246
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 9.142422199991415
-        }
-      },
-      "14": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 197.96440959999745
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 8.616498399962438
-        }
-      },
-      "15": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 185.81521900001098
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 8.121675000016694
-        }
-      },
-      "16": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 175.0021209000115
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 7.719765700006974
-        }
-      },
-      "17": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 164.06338170000527
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 7.299479199966299
-        }
-      },
-      "18": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 158.38177290000021
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 7.040777000001981
-        }
-      },
-      "19": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 149.14225649998116
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 6.6966800000082
-        }
-      },
-      "20": {
-        "build": {
-          "count": 10.0,
-          "total_seconds": 140.83280139999988
-        },
-        "lookup": {
-          "count": 10.0,
-          "total_seconds": 6.505596000017249
+          "total_seconds": 4.036179979098961
         }
       }
     }

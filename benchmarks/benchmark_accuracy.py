@@ -227,10 +227,10 @@ def lookup_vecfuzz(instance, queries, k: int = 1):
     results = instance.lookup(list(queries), k)
     return [[w for w, _d in c] for _q, c in results]
 
-def build_symspell(instance, vocab: list[str], frequencies: dict[str, int]):
+def build_symspell(instance, vocab: list[str]):
     t0 = perf_counter()
     for word in vocab:
-        instance.create_dictionary_entry(word, max(1, frequencies.get(word, 1)))
+        instance.create_dictionary_entry(word, 1)
     return instance, perf_counter() - t0
 
 def lookup_symspell(instance, queries, k: int = 1):
@@ -260,7 +260,6 @@ def run_benchmark(
     state = load_json(path) if resume else None
 
     vocab = load_vocabulary(max_words=vocab_size, seed=seed)
-    frequencies = SpellChecker().word_frequency.dictionary
     subset = vocab[:vocab_size]
 
     if state is None:
@@ -283,7 +282,7 @@ def run_benchmark(
 
     print("[benchmark] Building indexes...", flush=True)
     vecfuzz_instances = {label: build_vecfuzz(instance, subset)[0] for label, instance in VECFUZZ_INSTANCES.items()}
-    symspell_instances = {label: build_symspell(instance, subset, frequencies)[0] for label, instance in SYMSPELL_INSTANCES.items()}
+    symspell_instances = {label: build_symspell(instance, subset)[0] for label, instance in SYMSPELL_INSTANCES.items()}
     
     print("[benchmark] Starting sessions...", flush=True)
     session = 0
@@ -327,11 +326,11 @@ def main() -> None:
     p = argparse.ArgumentParser(description="Resumable benchmark for VecFuzz sub-vectors.")
     p.add_argument("--vocab-size", type=int, default=150_000)
     p.add_argument("--cases", type=int, default=15_000)
-    p.add_argument("--max-sessions", type=int, default=1)
+    p.add_argument("--max-sessions", type=int, default=10)
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--k", type=int, default=1)
     p.add_argument("--max-words", type=int, default=None)
-    p.add_argument("--resume", action="store_false", help="Resume from existing state file if present.")
+    p.add_argument("--resume", action="store_true", help="Resume from existing state file if present.")
     p.add_argument("--plot", action="store_true", help="Just render the accuracy figure from existing state and exit.")
     p.add_argument("--output-dir", default="benchmark_outputs")
     args = p.parse_args()
