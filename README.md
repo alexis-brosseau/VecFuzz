@@ -55,8 +55,8 @@ This error corpus was tested using word frequencies from the dictionary (pyspell
 | VecFuzz DEFAULT | **42.69%**| **62.59%**| **68.41%**| **75.01%**| **82.82%** |
 | VecFuzz LITE    | 39.58%    | 58.95%    | 64.78%    | 71.23%    | 79.04% |
 | SymSpell d4/p12 | 38.50%    | 58.60%    | 64.36%    | 70.23%    | 77.65% |
-| SymSpell d3/p9  | 37.62%    | 56.38%    | 61.29%    | 65.95%    | 71.34% |
 | Levenshtein     | 37.31%    | 57.74%    | 63.88%    | 70.40%    | 79.13% |
+| SymSpell d3/p9  | 37.62%    | 56.38%    | 61.29%    | 65.95%    | 71.34% |
 | RapidFuzz       | 35.77%    | 54.89%    | 61.45%    | 69.50%    | 79.09% |
 | SymSpell d2/p7  | 34.02%    | 48.88%    | 51.90%    | 54.57%    | 57.69% |
 
@@ -67,8 +67,8 @@ This error corpus was tested using word frequencies from the dictionary (pyspell
 | Method | Duration (s) | Build (s) | Size (MB) |
 | :--- | :--- | :--- | :--- |
 | VecFuzz LITE    | **7.552s** | 68.578s    | **145.06** |
-| VecFuzz DEFAULT | 10.576s    | 141.115s   | 262.86     |
 | SymSpell d2/p7  | 17.421s    | **2.955s** | 190.88     |
+| VecFuzz DEFAULT | 10.576s    | 141.115s   | 262.86     |
 | SymSpell d3/p9  | 142.215s   | 12.457s    | 842.84     |
 | RapidFuzz       | 554.347s   | N/A        | N/A        |
 | Levenshtein     | 685.318s   | N/A        | N/A        |
